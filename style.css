@@ -1,0 +1,146 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  background: url('bgpic.png') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  position: relative;
+}
+
+/* Blurred Background Effect */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  z-index: -1;
+}
+
+/* Login Container */
+.login-container {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 15px;
+  padding: 30px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Header with Logo */
+.login-header {
+  background: #0a1f5b;
+  color: white;
+  padding: 10px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Logo */
+.login-header img {
+  width: 40px;
+  position: absolute;
+  left: 15px;
+}
+
+.login-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Center Logo */
+.logo {
+  width: 60px;
+  margin-top: 10px;
+}
+
+/* Login Title */
+.login-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Form Styles */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+}
+
+/* Labels */
+label {
+  font-size: 14px;
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Input Fields */
+.input-field {
+  width: 100%;
+  height: 45px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  font-size: 14px;
+  outline: none;
+  background: #f5f5f5;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.input-field::placeholder {
+  color: #999;
+}
+
+/* Input Focus Effect */
+.input-field:focus {
+  border: 2px solid #172A69;
+  background: #ffffff;
+}
+
+/* Login Button */
+.login-button {
+  width: 100%;
+  height: 45px;
+  border: none;
+  border-radius: 25px;
+  background-color: #000066;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.login-button:hover {
+  background-color: #001a4d;
+}
+
+/* Back to Homepage */
+.back-link {
+  display: block;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
