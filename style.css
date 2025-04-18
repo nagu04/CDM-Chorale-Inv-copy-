@@ -1,6 +1,6 @@
 /* Global Styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: Tahoma, sans-serif;
   background: url('bgpic.png') no-repeat center center fixed;
   background-size: cover;
   display: flex;
@@ -28,24 +28,25 @@ body::before {
 .login-container {
   background: rgba(255, 255, 255, 0.85);
   border-radius: 15px;
-  padding: 30px;
+  padding: 0;
   width: 400px;
   text-align: center;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
   position: relative;
+  overflow: hidden;
 }
 
 /* Header with Logo */
 .login-header {
   background: #0a1f5b;
   color: white;
-  padding: 10px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  padding: 15px 10px;
+  border-radius: 0;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;
 }
 
 /* Logo */
@@ -63,44 +64,46 @@ body::before {
 
 /* Center Logo */
 .logo {
-  width: 60px;
-  margin-top: 10px;
+  width: 80px;
+  margin: 20px auto;
+  display: block;
 }
 
 /* Login Title */
 .login-title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
-  margin-top: 10px;
+  margin: 20px 0;
 }
 
 /* Form Styles */
 .login-form {
   display: flex;
   flex-direction: column;
-  margin-top: 15px;
+  margin: 20px 30px 30px;
 }
 
 /* Labels */
 label {
-  font-size: 14px;
+  font-size: 16px;
   text-align: left;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 /* Input Fields */
 .input-field {
   width: 100%;
-  height: 45px;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 25px;
-  font-size: 14px;
+  height: 50px;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  font-size: 16px;
   outline: none;
   background: #f5f5f5;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   text-align: left;
+  box-sizing: border-box;
 }
 
 .input-field::placeholder {
@@ -116,12 +119,12 @@ label {
 /* Login Button */
 .login-button {
   width: 100%;
-  height: 45px;
+  height: 50px;
   border: none;
-  border-radius: 25px;
-  background-color: #000066;
+  border-radius: 30px;
+  background-color: #0a1f5b;
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;

@@ -29,7 +29,8 @@
     <div class="main-content">
         <!-- Header -->
         <div class="header">
-            <h2>Inventory System</h2>
+        <img src="picture-1.png" alt="Logo" class="header-logo">
+            <h2>CDM Chorale Inventory System</h2>
             <a href="index.php" class="logout">Log Out</a>
         </div>
 

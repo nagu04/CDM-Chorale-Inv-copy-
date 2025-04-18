@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Valid login
         $_SESSION['username'] = $username;
         // Redirect to admin page
-        header("Location: instruments.php");
+        header("Location: admin_page.php");
         exit();
     } else {
         // Invalid login

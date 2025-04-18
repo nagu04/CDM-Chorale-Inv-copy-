@@ -30,7 +30,7 @@
         <!-- Header -->
         <div class="header">
             <img src="picture-1.png" alt="Logo" class="header-logo">
-            <h2>Inventory System</h2>
+            <h2>CDM Chorale Inventory System</h2>
             
             <a href="index.php" class="logout">Log Out</a>
         </div>
