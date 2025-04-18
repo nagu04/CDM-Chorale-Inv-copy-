@@ -60,6 +60,80 @@
             ?>
         </div>
     </div>
+    
+    <!-- Modal -->
+    <div id="borrowModal" class="modal">
+        <div class="modal-content">
+            <h2>Borrow item</h2>
+            <form>
+                <div class="form-group">
+                    <label for="borrowedBy">Borrowed by:</label>
+                    <input type="text" id="borrowedBy" name="borrowedBy">
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date">
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <input type="text" id="category" name="category">
+                </div>
+                
+                <div class="form-group">
+                    <label for="itemName">Item name:</label>
+                    <input type="text" id="itemName" name="itemName">
+                </div>
+                
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sn">SN:</label>
+                    <input type="text" id="sn" name="sn">
+                </div>
+                
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <input type="text" id="status" name="status">
+                </div>
+                
+                <div class="form-group">
+                    <label for="remarks">Remarks:</label>
+                    <textarea id="remarks" name="remarks" rows="4"></textarea>
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    // Get the modal
+    var modal = document.getElementById("borrowModal");
+
+    // Get all buttons that should open the modal
+    var btns = document.getElementsByClassName("borrow-btn");
+
+    // When the user clicks on a button, open the modal
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].onclick = function() {
+            modal.style.display = "block";
+        }
+    }
+
+    // When the user clicks anywhere outside of the modal content, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    </script>
 </body>
 </html>
 
