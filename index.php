@@ -1,3 +1,36 @@
+<?php
+session_start();
+include 'db_connect.php';
+
+$error = "";
+
+// Check if form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Prepare SQL statement to prevent SQL injection
+    $stmt = $conn->prepare("SELECT * FROM login WHERE username = ? AND password = ?");
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Check if credentials match
+    if ($result->num_rows > 0) {
+        // Valid login
+        $_SESSION['username'] = $username;
+        // Redirect to admin page
+        header("Location: instruments.php");
+        exit();
+    } else {
+        // Invalid login
+        $error = "Invalid username or password";
+    }
+    
+    $stmt->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +51,11 @@
 
         <div class="login-title">LOGIN</div>
 
-        <form class="login-form" action="admin_page.php" method="POST">
+        <?php if (!empty($error)): ?>
+        <div class="error-message"><?php echo $error; ?></div>
+        <?php endif; ?>
+
+        <form class="login-form" action="" method="POST">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" class="input-field" placeholder="Enter your username" required>
 
@@ -27,8 +64,6 @@
 
             <button type="submit" class="login-button">Log In</button>
         </form>
-
-   
     </div>
 </body>
 </html>
