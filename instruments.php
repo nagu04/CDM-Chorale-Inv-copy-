@@ -23,6 +23,12 @@
         <a href="members.php" class="icon-btn">
             <i class="fas fa-user"></i>
         </a>
+        <a href="report.php" class="icon-btn">
+            <i class="fas fa-file-alt"></i>
+        </a>
+        <a href="history.php" class="icon-btn">
+            <i class="fas fa-clock"></i>
+        </a>
     </div>
 
     <!-- Main Content -->
@@ -65,40 +71,40 @@
     <div id="borrowModal" class="modal">
         <div class="modal-content">
             <h2>Borrow item</h2>
-            <form>
+            <form action="history.php" method="POST">
                 <div class="form-group">
                     <label for="borrowedBy">Borrowed by:</label>
-                    <input type="text" id="borrowedBy" name="borrowedBy">
+                    <input type="text" id="borrowedBy" name="borrowedBy" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="date">Date:</label>
-                    <input type="date" id="date" name="date">
+                    <input type="date" id="date" name="date" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="category">Category:</label>
-                    <input type="text" id="category" name="category">
+                    <input type="text" id="category" name="category" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="itemName">Item name:</label>
-                    <input type="text" id="itemName" name="itemName">
+                    <input type="text" id="itemName" name="itemName" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity">
+                    <input type="number" id="quantity" name="quantity" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="sn">SN:</label>
-                    <input type="text" id="sn" name="sn">
+                    <input type="text" id="sn" name="sn" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="status">Status:</label>
-                    <input type="text" id="status" name="status">
+                    <input type="text" id="status" name="status" required>
                 </div>
                 
                 <div class="form-group">

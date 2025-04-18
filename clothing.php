@@ -23,6 +23,12 @@
         <a href="members.php" class="icon-btn">
             <i class="fas fa-user"></i>
         </a>
+        <a href="report.php" class="icon-btn">
+            <i class="fas fa-file-alt"></i>
+        </a>
+        <a href="history.php" class="icon-btn">
+            <i class="fas fa-clock"></i>
+        </a>
     </div>
 
     <!-- Main Content -->

@@ -31,8 +31,8 @@
         </a>
     </div>
 
-   <!-- Main Content -->
-   <div class="main-content">
+    <!-- Main Content -->
+    <div class="main-content">
         <!-- Header -->
         <div class="header">
             <img src="picture-1.png" alt="Logo" class="header-logo">
@@ -41,39 +41,12 @@
             <a href="index.php" class="logout">Log Out</a>
         </div>
 
-        <!-- Card Section -->
-        <div class="card-container">
-            <?php
-            include 'db_connect.php';
-            // Fetch instruments from database
-            $sql = "SELECT * FROM accessories";
-            $result = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<div class='card'>";
-                    echo "<img src='keyboard.jpg' alt='Instrument'>"; // Placeholder image
-                    echo "<h3>" . $row["deco_name"] . "</h3>";
-                    echo "<p>Condition: " . $row["condition"] . "</p>";
-                    echo "<p>Quantity: " . $row["quantity"] . "</p>";
-                    echo "<button class='borrow-btn'>Borrow</button>";
-                    echo "</div>";
-                }
-            } else {
-                echo "<p>No instruments found</p>";
-            }
-            $conn->close();
-            ?>
-        </div>
-    </div>
-    
-    <!-- Modal -->
-    <div id="borrowModal" class="modal">
+        
         <div class="modal-content">
-            <h2>Borrow item</h2>
+            <h2>Report item</h2>
             <form>
                 <div class="form-group">
-                    <label for="borrowedBy">Borrowed by:</label>
+                    <label for="borrowedBy">Reported by:</label>
                     <input type="text" id="borrowedBy" name="borrowedBy">
                 </div>
                 
@@ -117,29 +90,7 @@
                 </div>
             </form>
         </div>
-    </div>
-
-    <script>
-    // Get the modal
-    var modal = document.getElementById("borrowModal");
-
-    // Get all buttons that should open the modal
-    var btns = document.getElementsByClassName("borrow-btn");
-
-    // When the user clicks on a button, open the modal
-    for (var i = 0; i < btns.length; i++) {
-        btns[i].onclick = function() {
-            modal.style.display = "block";
-        }
-    }
-
-    // When the user clicks anywhere outside of the modal content, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-    </script>
+   
 </body>
 </html>
 
