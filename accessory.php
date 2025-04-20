@@ -68,7 +68,7 @@
     </div>
     
     <!-- Modal -->
-    <div id="borrowModal" class="modal">
+    <div id="accessoriesBorrowModal" class="modal">
         <div class="modal-content">
             <h2>Borrow item</h2>
             <form>
@@ -121,7 +121,7 @@
 
     <script>
     // Get the modal
-    var modal = document.getElementById("borrowModal");
+    var modal = document.getElementById("accessoriesBorrowModal");
 
     // Get all buttons that should open the modal
     var btns = document.getElementsByClassName("borrow-btn");

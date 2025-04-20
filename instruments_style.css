@@ -112,8 +112,6 @@ h3 {
     background-color: #000044;
 }
 
-
-
 /* Card Container */
 .card-container {
     background-color: rgba(5, 5, 5, 0.637); /* Light gray background */
@@ -191,22 +189,29 @@ h3 {
     height: 100%;
     background-color: rgba(0,0,0,0.5);
     overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
-    background-color: #ddd;
-    margin: 5% auto;
-    padding: 20px;
-    width: 450px;
+    background-color: #e6e6e6;
+    padding: 30px;
+    width: 500px;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+    margin: 0;
+    transform: translateY(0);
 }
 
 .modal-content h2 {
     text-align: center;
-    font-size: 22px;
-    margin-bottom: 20px;
+    font-size: 18px;
+    margin-bottom: 25px;
     color: #000;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .form-group {
@@ -218,40 +223,103 @@ h3 {
 .form-group label {
     width: 100px;
     text-align: left;
-    font-weight: bold;
-    margin-right: 10px;
+    font-weight: normal;
+    margin-right: 15px;
     color: #000;
 }
 
-.form-group input, .form-group textarea {
+.form-group input {
     flex-grow: 1;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
+    height: 25px;
 }
 
 .form-group textarea {
-    height: 100px;
-    resize: vertical;
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    height: 150px;
+    resize: none;
+}
+
+/* Special styling for quantity and SN fields */
+.form-group.quantity-sn {
+    display: flex;
+    gap: 20px;
+}
+
+.form-group.quantity-sn .quantity-group,
+.form-group.quantity-sn .sn-group {
+    display: flex;
+    align-items: center;
+}
+
+.form-group.quantity-sn .quantity-group {
+    width: 40%;
+}
+
+.form-group.quantity-sn .sn-group {
+    width: 60%;
+}
+
+.form-group.quantity-sn label {
+    width: auto;
+    margin-right: 10px;
+}
+
+.form-group.quantity-sn input {
+    width: 100%;
 }
 
 .submit-container {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 25px;
 }
 
 .submit-btn {
     background-color: #ffcc00;
     color: #000;
     border: none;
-    padding: 10px 25px;
+    padding: 8px 25px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    display: inline-block;
 }
 
 .submit-btn:hover {
     background-color: #e6b800;
+}
+
+/* Action Buttons */
+.edit-btn, .remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0 5px;
+    font-size: 16px;
+    transition: transform 0.2s;
+}
+
+.edit-btn {
+    color: #ffcc00;
+}
+
+.remove-btn {
+    color: #ff4444;
+}
+
+.edit-btn:hover, .remove-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Table Action Column */
+td:last-child {
+    text-align: center;
+    white-space: nowrap;
 }

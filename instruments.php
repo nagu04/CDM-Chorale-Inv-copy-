@@ -68,10 +68,11 @@
     </div>
 
     <!-- Modal -->
-    <div id="borrowModal" class="modal">
+    <div id="instrumentsBorrowModal" class="modal">
         <div class="modal-content">
-            <h2>Borrow item</h2>
-            <form action="history.php" method="POST">
+            <h2>BORROW ITEM</h2>
+            <form action="save_history.php" method="POST">
+                <input type="hidden" name="type" value="BORROW">
                 <div class="form-group">
                     <label for="borrowedBy">Borrowed by:</label>
                     <input type="text" id="borrowedBy" name="borrowedBy" required>
@@ -121,7 +122,7 @@
 
     <script>
     // Get the modal
-    var modal = document.getElementById("borrowModal");
+    var modal = document.getElementById("instrumentsBorrowModal");
 
     // Get all buttons that should open the modal
     var btns = document.getElementsByClassName("borrow-btn");
@@ -129,7 +130,7 @@
     // When the user clicks on a button, open the modal
     for (var i = 0; i < btns.length; i++) {
         btns[i].onclick = function() {
-            modal.style.display = "block";
+            modal.style.display = "flex";
         }
     }
 

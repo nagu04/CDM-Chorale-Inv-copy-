@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,59 +45,58 @@
             <a href="index.php" class="logout">Log Out</a>
         </div>
 
-        
-        <div class="modal-content">
-            <h2>Report item</h2>
-            <form>
-                <div class="form-group">
-                    <label for="borrowedBy">Reported by:</label>
-                    <input type="text" id="borrowedBy" name="borrowedBy">
-                </div>
-                
-                <div class="form-group">
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date">
-                </div>
-                
-                <div class="form-group">
-                    <label for="category">Category:</label>
-                    <input type="text" id="category" name="category">
-                </div>
-                
-                <div class="form-group">
-                    <label for="itemName">Item name:</label>
-                    <input type="text" id="itemName" name="itemName">
-                </div>
-                
-                <div class="form-group">
-                    <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity">
-                </div>
-                
-                <div class="form-group">
-                    <label for="sn">SN:</label>
-                    <input type="text" id="sn" name="sn">
-                </div>
-                
-                <div class="form-group">
-                    <label for="status">Status:</label>
-                    <input type="text" id="status" name="status">
-                </div>
-                
-                <div class="form-group">
-                    <label for="remarks">Remarks:</label>
-                    <textarea id="remarks" name="remarks" rows="4"></textarea>
-                </div>
-                
-                <div class="submit-container">
-                    <button type="submit" class="submit-btn">Submit</button>
-                </div>
-            </form>
+        <!-- Report Form -->
+        <div style="display: flex; justify-content: center; align-items: start; padding-top: 20px;">
+            <div class="modal-content" style="margin: 0;">
+                <h2 style="text-align: center; text-transform: uppercase;">Report item</h2>
+                <form action="save_history.php" method="POST">
+                    <input type="hidden" name="type" value="REPORT">
+                    <div class="form-group">
+                        <label for="borrowedBy">Reported by:</label>
+                        <input type="text" id="borrowedBy" name="borrowedBy" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <input type="text" id="category" name="category" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="itemName">Item name:</label>
+                        <input type="text" id="itemName" name="itemName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sn">SN:</label>
+                        <input type="text" id="sn" name="sn">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="status">Status:</label>
+                        <input type="text" id="status" name="status" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="remarks">Remarks:</label>
+                        <textarea id="remarks" name="remarks" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="submit-container">
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
-   
+    </div>
 </body>
 </html>
-
-<?php
-
-?>

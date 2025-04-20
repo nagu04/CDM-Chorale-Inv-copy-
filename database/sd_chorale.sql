@@ -172,6 +172,27 @@ LOCK TABLES `members` WRITE;
 INSERT INTO `members` VALUES (1,'Hans Sese',2,'CPE','Admin'),(2,'Vince Luces',2,'AC','Admin'),(3,'Gian Mustar',3,'ME','Member'),(4,'Gavrel Rodriguez',4,'ECE','Member');
 /*!40000 ALTER TABLE `members` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `history`
+--
+
+DROP TABLE IF EXISTS `history`;
+CREATE TABLE `history` (
+  `history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` enum('BORROW','REPORT') NOT NULL,
+  `borrowed_by` varchar(100) NOT NULL,
+  `date` date NOT NULL,
+  `category` varchar(50) NOT NULL,
+  `item_name` varchar(100) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `sn` varchar(50) DEFAULT NULL,
+  `status` varchar(50) NOT NULL,
+  `remarks` text,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`history_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
