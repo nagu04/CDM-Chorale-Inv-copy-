@@ -66,7 +66,15 @@
             ?>
         </div>
     </div>
-    
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+            <button class="add-button" id="addButton">
+                <i class="fas fa-plus"></i> Add
+            </button>
+            <button class="delete-button" id="deleteButton">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </div>
     <!-- Modal -->
     <div id="accessoriesBorrowModal" class="modal">
         <div class="modal-content">
