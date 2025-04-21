@@ -1,3 +1,8 @@
+<?php
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,9 +73,9 @@
     </div>
 
     <!-- Modal -->
-    <div id="instrumentsBorrowModal" class="modal">
+    <div id="borrowModal" class="modal">
         <div class="modal-content">
-            <h2>BORROW ITEM</h2>
+            <h2>Borrow item</h2>
             <form action="save_history.php" method="POST">
                 <input type="hidden" name="type" value="BORROW">
                 <div class="form-group">
@@ -85,7 +90,11 @@
                 
                 <div class="form-group">
                     <label for="category">Category:</label>
-                    <input type="text" id="category" name="category" required>
+                    <select id="category" name="category" class="form-select" required>
+                        <option value="Instruments">Instruments</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Clothing">Clothing</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -122,7 +131,7 @@
 
     <script>
     // Get the modal
-    var modal = document.getElementById("instrumentsBorrowModal");
+    var modal = document.getElementById("borrowModal");
 
     // Get all buttons that should open the modal
     var btns = document.getElementsByClassName("borrow-btn");
@@ -130,7 +139,7 @@
     // When the user clicks on a button, open the modal
     for (var i = 0; i < btns.length; i++) {
         btns[i].onclick = function() {
-            modal.style.display = "flex";
+            modal.style.display = "flex"; // Use flex to center the modal
         }
     }
 
@@ -143,7 +152,3 @@
     </script>
 </body>
 </html>
-
-<?php
-
-?>

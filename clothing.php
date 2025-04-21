@@ -85,8 +85,13 @@
                 
                 <div class="form-group">
                     <label for="category">Category:</label>
-                    <input type="text" id="category" name="category">
+                    <select id="category" name="category" class="form-select">
+                        <option value="Instruments">Instruments</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Clothing">Clothing</option>
+                    </select>
                 </div>
+                
                 
                 <div class="form-group">
                     <label for="itemName">Item name:</label>
