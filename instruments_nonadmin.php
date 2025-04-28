@@ -28,10 +28,10 @@ session_start();
         <a href="members_nonadmin.php" class="icon-btn">
             <i class="fas fa-user"></i>
         </a>
-        <a href="report.php" class="icon-btn">
+        <a href="report_nonadmin.php" class="icon-btn">
             <i class="fas fa-file-alt"></i>
         </a>
-        <a href="history.php" class="icon-btn">
+        <a href="history_nonadmin.php" class="icon-btn">
             <i class="fas fa-clock"></i>
         </a>
     </div>
@@ -113,10 +113,7 @@ session_start();
                     <input type="text" id="sn" name="sn" required>
                 </div>
                 
-                <div class="form-group">
-                    <label for="status">Status:</label>
-                    <input type="text" id="status" name="status" required>
-                </div>
+                
                 
                 <div class="form-group">
                     <label for="remarks">Remarks:</label>

@@ -58,6 +58,16 @@
             <a href="index.php" class="logout">Log Out</a>
         </div>
 
+         <!-- Action Buttons -->
+         <div class="action-buttons">
+            <button class="add-button" id="addButton">
+                <i class="fas fa-plus"></i> Add
+            </button>
+            <button class="delete-button" id="deleteButton">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </div>
+
         <!-- Card Section -->
         <div class="card-container">
             <?php
@@ -123,16 +133,81 @@
         </div>
     </div>
 
+    <!-- Add Member Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h2>Add Member</h2>
+            <form action="save_member.php" method="POST">
+                <div class="form-group">
+                    <label for="addName">Name:</label>
+                    <input type="text" id="addName" name="members_name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="addProgram">Program:</label>
+                    <input type="text" id="addProgram" name="program" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="addPosition">Position:</label>
+                    <input type="text" id="addPosition" name="position" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="addBirthdate">Birthdate:</label>
+                    <input type="date" id="addBirthdate" name="birthdate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="addAddress">Address:</label>
+                    <input type="text" id="addAddress" name="address">
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Delete Member Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2>Delete Member</h2>
+            <form action="delete_member.php" method="POST">
+                <div class="form-group">
+                    <label for="deleteMember">Select Member:</label>
+                    <select id="deleteMember" name="member_id" class="form-select" required>
+                        <option value="">-- Select a member --</option>
+                        <?php
+                        include 'db_connect.php';
+                        $sql = "SELECT member_id, members_name FROM members ORDER BY members_name";
+                        $result = $conn->query($sql);
+                        
+                        if ($result->num_rows > 0) {
+                            while($row = $result->fetch_assoc()) {
+                                echo "<option value='" . $row["member_id"] . "'>" . $row["members_name"] . "</option>";
+                            }
+                        }
+                        $conn->close();
+                        ?>
+                    </select>
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn" style="background-color: #ff4444; color: white;">Delete Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-    // Get the modal
-    var modal = document.getElementById("profileModal");
-
-    // Get all buttons that should open the modal
-    var btns = document.getElementsByClassName("borrow-btn");
-
-    // When the user clicks on a button, open the modal with member data
-    for (var i = 0; i < btns.length; i++) {
-        btns[i].onclick = function() {
+    // Profile Modal
+    var profileModal = document.getElementById("profileModal");
+    var profileBtns = document.getElementsByClassName("borrow-btn");
+    
+    for (var i = 0; i < profileBtns.length; i++) {
+        profileBtns[i].onclick = function() {
             var memberId = this.getAttribute("data-id");
             var memberName = this.getAttribute("data-name");
             var memberProgram = this.getAttribute("data-program");
@@ -140,26 +215,46 @@
             var memberBirthdate = this.getAttribute("data-birthdate");
             var memberAddress = this.getAttribute("data-address");
             
-            // Set the values in the modal
             document.getElementById("memberName").textContent = memberName;
             document.getElementById("memberProgram").textContent = memberProgram;
             document.getElementById("memberPosition").textContent = memberPosition;
             document.getElementById("memberBirthdate").textContent = memberBirthdate || "Not available";
             document.getElementById("memberAddress").textContent = memberAddress || "Not available";
             
-            modal.style.display = "flex"; // Use flex to center the modal
+            profileModal.style.display = "flex";
         }
     }
-
-    // Close button functionality
+    
     document.getElementById("closeProfileBtn").onclick = function() {
-        modal.style.display = "none";
+        profileModal.style.display = "none";
     }
 
-    // When the user clicks anywhere outside of the modal content, close it
+    // Add Modal
+    var addModal = document.getElementById("addModal");
+    var addButton = document.getElementById("addButton");
+    
+    addButton.onclick = function() {
+        addModal.style.display = "flex";
+    }
+    
+    // Delete Modal
+    var deleteModal = document.getElementById("deleteModal");
+    var deleteButton = document.getElementById("deleteButton");
+    
+    deleteButton.onclick = function() {
+        deleteModal.style.display = "flex";
+    }
+    
+    // Close modals when clicking outside
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == profileModal) {
+            profileModal.style.display = "none";
+        }
+        if (event.target == addModal) {
+            addModal.style.display = "none";
+        }
+        if (event.target == deleteModal) {
+            deleteModal.style.display = "none";
         }
     }
     </script>

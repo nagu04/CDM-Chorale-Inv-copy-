@@ -188,28 +188,47 @@ h3 {
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.5);
-    /* Add these properties for centering */
-    display: none;
     justify-content: center;
     align-items: center;
+    overflow: auto;
 }
 
-/* Add this class for when modal is shown */
+/* When modal is shown */
 .modal.show {
     display: flex !important;
-    justify-content: center;
-    align-items: center;
 }
 
 .modal-content {
     background-color: #e6e6e6;
     padding: 30px;
     width: 500px;
+    max-width: 90%;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
     position: relative;
-    /* Remove the margin that was pushing it down */
-    margin: 5% auto;
+    margin: 40px auto;
+    animation: modalopen 0.4s;
+}
+
+/* Animation for modal opening */
+@keyframes modalopen {
+    from {opacity: 0; transform: scale(0.8);}
+    to {opacity: 1; transform: scale(1);}
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #666;
+}
+
+.close-btn:hover {
+    color: #000;
 }
 
 .modal-content h2 {
@@ -357,7 +376,7 @@ td:last-child {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    z-index: 900;
+    z-index: 900; /* Ensure it's on top of other content */
 }
 
 /* Add Button */
@@ -374,6 +393,7 @@ td:last-child {
     align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
+    z-index: 901; /* Ensure clickability */
 }
 
 .add-button:hover {
@@ -396,6 +416,7 @@ td:last-child {
     align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
+    z-index: 901; /* Ensure clickability */
 }
 
 .delete-button:hover {
@@ -406,4 +427,42 @@ td:last-child {
 
 .add-button i, .delete-button i {
     margin-right: 8px;
+}
+
+/* Alert Messages */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert .close {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    opacity: 0.5;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 10px;
+}
+
+.alert .close:hover {
+    opacity: 0.75;
 }

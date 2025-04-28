@@ -105,11 +105,7 @@
                     <label for="sn">SN:</label>
                     <input type="text" id="sn" name="sn">
                 </div>
-                
-                <div class="form-group">
-                    <label for="status">Status:</label>
-                    <input type="text" id="status" name="status">
-                </div>
+            
                 
                 <div class="form-group">
                     <label for="remarks">Remarks:</label>

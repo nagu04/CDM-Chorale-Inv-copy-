@@ -122,11 +122,7 @@ session_start();
                     <input type="text" id="sn" name="sn" required>
                 </div>
                 
-                <div class="form-group">
-                    <label for="status">Status:</label>
-                    <input type="text" id="status" name="status" required>
-                </div>
-                
+               
                 <div class="form-group">
                     <label for="remarks">Remarks:</label>
                     <textarea id="remarks" name="remarks" rows="4"></textarea>
@@ -139,24 +135,102 @@ session_start();
         </div>
     </div>
 
+ <!-- Add Instrument Modal -->
+ <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h2>Add Instrument</h2>
+            <form action="save_instrument.php" method="POST">
+                <div class="form-group">
+                    <label for="addName">Name:</label>
+                    <input type="text" id="addName" name="instrument_name" required>
+                </div>
+                
+                
+                <div class="form-group">
+                    <label for="addCondition">Condition:</label>
+                    <input type="text" id="addCondition" name="condition" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="addQuantity">Quantity:</label>
+                    <input type="number" id="addQuantity" name="quantity" required min="1">
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Delete Instrument Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2>Delete Clothing</h2>
+            <form action="delete_instrument.php" method="POST">
+                <div class="form-group">
+                    <label for="deleteInstrument">Select Instrument:</label>
+                    <select id="deleteInstrument" name="instru_id" class="form-select" required>
+                        <option value="">-- Select an instrument --</option>
+                        <?php
+                        include 'db_connect.php';
+                        $sql = "SELECT instru_id, instrument_name FROM instruments ORDER BY instrument_name";
+                        $result = $conn->query($sql);
+                        
+                        if ($result->num_rows > 0) {
+                            while($row = $result->fetch_assoc()) {
+                                echo "<option value='" . $row["instru_id"] . "'>" . $row["instrument_name"] . "</option>";
+                            }
+                        }
+                        $conn->close();
+                        ?>
+                    </select>
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn" style="background-color: #ff4444; color: white;">Delete Instrument</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-    // Get the modal
-    var modal = document.getElementById("borrowModal");
-
-    // Get all buttons that should open the modal
-    var btns = document.getElementsByClassName("borrow-btn");
-
-    // When the user clicks on a button, open the modal
-    for (var i = 0; i < btns.length; i++) {
-        btns[i].onclick = function() {
-            modal.style.display = "flex"; // Use flex to center the modal
+    // Borrow Modal
+    var borrowModal = document.getElementById("borrowModal");
+    var borrowBtns = document.getElementsByClassName("borrow-btn");
+    
+    for (var i = 0; i < borrowBtns.length; i++) {
+        borrowBtns[i].onclick = function() {
+            borrowModal.style.display = "flex";
         }
     }
-
-    // When the user clicks anywhere outside of the modal content, close it
+    
+    // Add Modal
+    var addModal = document.getElementById("addModal");
+    var addButton = document.getElementById("addButton");
+    
+    addButton.onclick = function() {
+        addModal.style.display = "flex";
+    }
+    
+    // Delete Modal
+    var deleteModal = document.getElementById("deleteModal");
+    var deleteButton = document.getElementById("deleteButton");
+    
+    deleteButton.onclick = function() {
+        deleteModal.style.display = "flex";
+    }
+    
+    // Close modals when clicking outside
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == borrowModal) {
+            borrowModal.style.display = "none";
+        }
+        if (event.target == addModal) {
+            addModal.style.display = "none";
+        }
+        if (event.target == deleteModal) {
+            deleteModal.style.display = "none";
         }
     }
     </script>

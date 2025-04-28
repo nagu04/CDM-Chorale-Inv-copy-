@@ -81,45 +81,45 @@
     <div id="borrowModal" class="modal">
         <div class="modal-content">
             <h2>Borrow item</h2>
-            <form>
+            <form action="save_history.php" method="POST">
+                <input type="hidden" name="type" value="BORROW">
                 <div class="form-group">
                     <label for="borrowedBy">Borrowed by:</label>
-                    <input type="text" id="borrowedBy" name="borrowedBy">
+                    <input type="text" id="borrowedBy" name="borrowedBy" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="date">Date:</label>
-                    <input type="date" id="date" name="date">
+                    <input type="date" id="date" name="date" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="category">Category:</label>
-                    <select id="category" name="category" class="form-select">
+                    <select id="category" name="category" class="form-select" required>
                         <option value="Instruments">Instruments</option>
                         <option value="Accessories">Accessories</option>
-                        <option value="Clothing">Clothing</option>
+                        <option value="Clothing" selected>Clothing</option>
                     </select>
                 </div>
                 
-                
                 <div class="form-group">
                     <label for="itemName">Item name:</label>
-                    <input type="text" id="itemName" name="itemName">
+                    <input type="text" id="itemName" name="itemName" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity">
+                    <input type="number" id="quantity" name="quantity" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="sn">SN:</label>
-                    <input type="text" id="sn" name="sn">
+                    <input type="text" id="sn" name="sn" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="status">Status:</label>
-                    <input type="text" id="status" name="status">
+                    <input type="text" id="status" name="status" required>
                 </div>
                 
                 <div class="form-group">
@@ -133,25 +133,112 @@
             </form>
         </div>
     </div>
+    
+    <!-- Add Clothing Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h2>Add Clothing</h2>
+            <form action="save_clothing.php" method="POST">
+                <div class="form-group">
+                    <label for="addName">Name:</label>
+                    <input type="text" id="addName" name="clothing_name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="addColor">Color:</label>
+                    <input type="text" id="addColor" name="clothing_color" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="addSize">Size:</label>
+                    <input type="text" id="addSize" name="clothing_size_id" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="addCondition">Condition:</label>
+                    <input type="text" id="addCondition" name="condition" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="addQuantity">Quantity:</label>
+                    <input type="number" id="addQuantity" name="quantity" required min="1">
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Delete Clothing Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2>Delete Clothing</h2>
+            <form action="delete_clothing.php" method="POST">
+                <div class="form-group">
+                    <label for="deleteClothing">Select Clothing:</label>
+                    <select id="deleteClothing" name="clothing_id" class="form-select" required>
+                        <option value="">-- Select a clothing item --</option>
+                        <?php
+                        include 'db_connect.php';
+                        $sql = "SELECT clothing_id, clothing_name FROM clothing ORDER BY clothing_name";
+                        $result = $conn->query($sql);
+                        
+                        if ($result->num_rows > 0) {
+                            while($row = $result->fetch_assoc()) {
+                                echo "<option value='" . $row["clothing_id"] . "'>" . $row["clothing_name"] . "</option>";
+                            }
+                        }
+                        $conn->close();
+                        ?>
+                    </select>
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn" style="background-color: #ff4444; color: white;">Delete Clothing</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
-    // Get the modal
-    var modal = document.getElementById("borrowModal");
-
-    // Get all buttons that should open the modal
-    var btns = document.getElementsByClassName("borrow-btn");
-
-    // When the user clicks on a button, open the modal
-    for (var i = 0; i < btns.length; i++) {
-        btns[i].onclick = function() {
-            modal.style.display = "block";
+    // Borrow Modal
+    var borrowModal = document.getElementById("borrowModal");
+    var borrowBtns = document.getElementsByClassName("borrow-btn");
+    
+    for (var i = 0; i < borrowBtns.length; i++) {
+        borrowBtns[i].onclick = function() {
+            borrowModal.style.display = "flex";
         }
     }
-
-    // When the user clicks anywhere outside of the modal content, close it
+    
+    // Add Modal
+    var addModal = document.getElementById("addModal");
+    var addButton = document.getElementById("addButton");
+    
+    addButton.onclick = function() {
+        addModal.style.display = "flex";
+    }
+    
+    // Delete Modal
+    var deleteModal = document.getElementById("deleteModal");
+    var deleteButton = document.getElementById("deleteButton");
+    
+    deleteButton.onclick = function() {
+        deleteModal.style.display = "flex";
+    }
+    
+    // Close modals when clicking outside
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == borrowModal) {
+            borrowModal.style.display = "none";
+        }
+        if (event.target == addModal) {
+            addModal.style.display = "none";
+        }
+        if (event.target == deleteModal) {
+            deleteModal.style.display = "none";
         }
     }
     </script>
