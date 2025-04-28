@@ -27,6 +27,7 @@ CREATE TABLE `accessories` (
   `deco_name` varchar(50) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `condition` enum('GOOD','BAD') DEFAULT 'GOOD',
+  `image_path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`deco_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -37,7 +38,7 @@ CREATE TABLE `accessories` (
 
 LOCK TABLES `accessories` WRITE;
 /*!40000 ALTER TABLE `accessories` DISABLE KEYS */;
-INSERT INTO `accessories` VALUES (1,'Bamboo Bilao',4,'GOOD'),(2,'Metal Hoop',1,'GOOD'),(3,'Vine Decoration',2,'GOOD'),(4,'Portable Booth',1,'GOOD'),(5,'Tarpaulin',1,'GOOD');
+INSERT INTO `accessories` VALUES (1,'Bamboo Bilao',4,'GOOD',NULL),(2,'Metal Hoop',1,'GOOD',NULL),(3,'Vine Decoration',2,'GOOD',NULL),(4,'Portable Booth',1,'GOOD',NULL),(5,'Tarpaulin',1,'GOOD',NULL);
 /*!40000 ALTER TABLE `accessories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,6 +56,7 @@ CREATE TABLE `clothing` (
   `clothing_color` varchar(45) DEFAULT NULL,
   `clothing_size_id` varchar(11) DEFAULT NULL,
   `condition` enum('GOOD','BAD') DEFAULT 'GOOD',
+  `image_path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`clothing_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -65,7 +67,7 @@ CREATE TABLE `clothing` (
 
 LOCK TABLES `clothing` WRITE;
 /*!40000 ALTER TABLE `clothing` DISABLE KEYS */;
-INSERT INTO `clothing` VALUES (1,'Barong','2','Black','S','GOOD'),(2,'Barong','5','Black','M','GOOD'),(3,'Barong','3','Black','L','GOOD'),(4,'Barong','3','Black','XL','GOOD'),(5,'Barong','3','Cream','S','GOOD'),(6,'Infinity Dress','4','Shiny Royal Blue',NULL,'GOOD'),(7,'Infinity Dress','6','Matte Royal Blue',NULL,'GOOD'),(8,'Infinity Dress','6','Light Blue',NULL,'GOOD'),(9,'Scarf','15','Red',NULL,'GOOD'),(10,'Scarf','9','Green',NULL,'GOOD'),(11,'Skirt','10','Gold',NULL,'GOOD'),(12,'Alampay','8',NULL,NULL,'GOOD'),(13,'Shawl','10',NULL,NULL,'GOOD'),(14,'Filipiniana Detachable','8',NULL,NULL,'GOOD');
+INSERT INTO `clothing` VALUES (1,'Barong','2','Black','S','GOOD',NULL),(2,'Barong','5','Black','M','GOOD',NULL),(3,'Barong','3','Black','L','GOOD',NULL),(4,'Barong','3','Black','XL','GOOD',NULL),(5,'Barong','3','Cream','S','GOOD',NULL),(6,'Infinity Dress','4','Shiny Royal Blue',NULL,'GOOD',NULL),(7,'Infinity Dress','6','Matte Royal Blue',NULL,'GOOD',NULL),(8,'Infinity Dress','6','Light Blue',NULL,'GOOD',NULL),(9,'Scarf','15','Red',NULL,'GOOD',NULL),(10,'Scarf','9','Green',NULL,'GOOD',NULL),(11,'Skirt','10','Gold',NULL,'GOOD',NULL),(12,'Alampay','8',NULL,NULL,'GOOD',NULL),(13,'Shawl','10',NULL,NULL,'GOOD',NULL),(14,'Filipiniana Detachable','8',NULL,NULL,'GOOD',NULL);
 /*!40000 ALTER TABLE `clothing` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -137,7 +139,7 @@ CREATE TABLE `instruments` (
   `instrument_name` varchar(75) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `condition` enum('BAD','GOOD') DEFAULT 'GOOD',
-  `img_dir` longblob DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`instru_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -240,4 +242,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-28 21:48:00
+-- Dump completed on 2025-04-28 22:12:59

@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,6 +44,25 @@
             <a href="index.php" class="logout">Log Out</a>
         </div>
 
+        <!-- Feedback Messages -->
+        <?php
+        if(isset($_SESSION['success_message'])) {
+            echo '<div class="alert alert-success">';
+            echo $_SESSION['success_message'];
+            echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+            echo '</div>';
+            unset($_SESSION['success_message']);
+        }
+        
+        if(isset($_SESSION['error_message'])) {
+            echo '<div class="alert alert-danger">';
+            echo $_SESSION['error_message'];
+            echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+            echo '</div>';
+            unset($_SESSION['error_message']);
+        }
+        ?>
+
         <!-- Card Section -->
         <div class="card-container">
             <?php
@@ -51,12 +73,20 @@
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
+                    // Determine image to display
+                    $imagePath = !empty($row["image_path"]) ? $row["image_path"] : 'keyboard.jpg';
+                    
                     echo "<div class='card'>";
-                    echo "<img src='keyboard.jpg' alt='Instrument'>"; // Placeholder image
+                    echo "<img src='" . $imagePath . "' alt='Accessory'>";
                     echo "<h3>" . $row["deco_name"] . "</h3>";
                     echo "<p>Condition: " . $row["condition"] . "</p>";
                     echo "<p>Quantity: " . $row["quantity"] . "</p>";
                     echo "<button class='borrow-btn' data-name='" . $row["deco_name"] . "'>Borrow</button>";
+                    echo "<button class='edit-btn' data-id='" . $row["deco_id"] . "' 
+                          data-name='" . $row["deco_name"] . "' 
+                          data-condition='" . $row["condition"] . "' 
+                          data-quantity='" . $row["quantity"] . "'
+                          data-image='" . $imagePath . "'>Edit</button>";
                     echo "</div>";
                 }
             } else {
@@ -132,7 +162,7 @@
     <div id="addModal" class="modal">
         <div class="modal-content">
             <h2>Add Accessory</h2>
-            <form action="save_accessory.php" method="POST">
+            <form action="save_accessory.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="addName">Name:</label>
                     <input type="text" id="addName" name="deco_name" required>
@@ -146,6 +176,11 @@
                 <div class="form-group">
                     <label for="addQuantity">Quantity:</label>
                     <input type="number" id="addQuantity" name="quantity" required min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="accessoryImage">Accessory Image:</label>
+                    <input type="file" id="accessoryImage" name="accessory_image" accept="image/*">
                 </div>
                 
                 <div class="submit-container">
@@ -186,6 +221,49 @@
         </div>
     </div>
 
+    <!-- Edit Accessory Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Accessory</h2>
+            <form action="update_accessory.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="editAccessoryId" name="deco_id">
+                <input type="hidden" id="currentImagePath" name="current_image_path">
+                
+                <div class="form-group">
+                    <label for="editName">Name:</label>
+                    <input type="text" id="editName" name="deco_name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editCondition">Condition:</label>
+                    <input type="text" id="editCondition" name="condition" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editQuantity">Quantity:</label>
+                    <input type="number" id="editQuantity" name="quantity" required min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label>Current Image:</label>
+                    <div class="current-image-container">
+                        <img id="currentImage" src="" alt="Current Accessory Image" style="max-width: 150px; max-height: 150px; margin-bottom: 10px;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editAccessoryImage">Change Image:</label>
+                    <input type="file" id="editAccessoryImage" name="accessory_image" accept="image/*">
+                    <small>(Leave empty to keep current image)</small>
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn">Update Accessory</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
     // Borrow Modal
     var borrowModal = document.getElementById("borrowModal");
@@ -218,6 +296,27 @@
         deleteModal.style.display = "flex";
     }
     
+    // Edit Modal
+    var editModal = document.getElementById("editModal");
+    var editBtns = document.getElementsByClassName("edit-btn");
+    
+    for (var i = 0; i < editBtns.length; i++) {
+        editBtns[i].onclick = function() {
+            // Populate the edit form with accessory data
+            document.getElementById("editAccessoryId").value = this.getAttribute("data-id");
+            document.getElementById("editName").value = this.getAttribute("data-name");
+            document.getElementById("editCondition").value = this.getAttribute("data-condition");
+            document.getElementById("editQuantity").value = this.getAttribute("data-quantity");
+            
+            // Handle image
+            var imagePath = this.getAttribute("data-image");
+            document.getElementById("currentImage").src = imagePath;
+            document.getElementById("currentImagePath").value = imagePath;
+            
+            editModal.style.display = "flex";
+        }
+    }
+    
     // Close modals when clicking outside
     window.onclick = function(event) {
         if (event.target == borrowModal) {
@@ -228,6 +327,9 @@
         }
         if (event.target == deleteModal) {
             deleteModal.style.display = "none";
+        }
+        if (event.target == editModal) {
+            editModal.style.display = "none";
         }
     }
     </script>

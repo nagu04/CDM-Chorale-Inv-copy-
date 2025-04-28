@@ -57,7 +57,7 @@
                     echo "<p>Size: " . $row["clothing_size_id"] . "</p>";
                     echo "<p>Condition: " . $row["condition"] . "</p>";
                     echo "<p>Quantity: " . $row["quantity"] . "</p>";
-                    echo "<button class='borrow-btn'>Borrow</button>";
+                    echo "<button class='borrow-btn' data-name='" . $row["clothing_name"] . "'>Borrow</button>";
                     echo "</div>";
                 }
             } else {
@@ -134,6 +134,10 @@
     for (var i = 0; i < btns.length; i++) {
         btns[i].onclick = function() {
             modal.style.display = "block";
+            // Set the item name in the input field
+            document.getElementById("itemName").value = this.getAttribute("data-name");
+            // Set category to Instruments by default
+            document.getElementById("category").value = "Clothing";
         }
     }
 

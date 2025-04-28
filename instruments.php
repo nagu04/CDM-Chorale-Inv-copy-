@@ -46,6 +46,25 @@ session_start();
             <a href="index.php" class="logout">Log Out</a>
         </div>
 
+        <!-- Feedback Messages -->
+        <?php
+        if(isset($_SESSION['success_message'])) {
+            echo '<div class="alert alert-success">';
+            echo $_SESSION['success_message'];
+            echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+            echo '</div>';
+            unset($_SESSION['success_message']);
+        }
+        
+        if(isset($_SESSION['error_message'])) {
+            echo '<div class="alert alert-danger">';
+            echo $_SESSION['error_message'];
+            echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+            echo '</div>';
+            unset($_SESSION['error_message']);
+        }
+        ?>
+
         <!-- Card Section -->
         <div class="card-container">
             <?php
@@ -56,12 +75,20 @@ session_start();
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
+                    // Determine image to display
+                    $imagePath = !empty($row["image_path"]) ? $row["image_path"] : 'keyboard.jpg';
+                    
                     echo "<div class='card'>";
-                    echo "<img src='keyboard.jpg' alt='Instrument'>"; // Placeholder image
+                    echo "<img src='" . $imagePath . "' alt='Instrument'>";
                     echo "<h3>" . $row["instrument_name"] . "</h3>";
                     echo "<p>Condition: " . $row["condition"] . "</p>";
                     echo "<p>Quantity: " . $row["quantity"] . "</p>";
                     echo "<button class='borrow-btn' data-name='" . $row["instrument_name"] . "'>Borrow</button>";
+                    echo "<button class='edit-btn' data-id='" . $row["instru_id"] . "' 
+                          data-name='" . $row["instrument_name"] . "' 
+                          data-condition='" . $row["condition"] . "' 
+                          data-quantity='" . $row["quantity"] . "'
+                          data-image='" . $imagePath . "'>Edit</button>";
                     echo "</div>";
                 }
             } else {
@@ -139,7 +166,7 @@ session_start();
  <div id="addModal" class="modal">
         <div class="modal-content">
             <h2>Add Instrument</h2>
-            <form action="save_instrument.php" method="POST">
+            <form action="save_instrument.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="addName">Name:</label>
                     <input type="text" id="addName" name="instrument_name" required>
@@ -154,6 +181,11 @@ session_start();
                 <div class="form-group">
                     <label for="addQuantity">Quantity:</label>
                     <input type="number" id="addQuantity" name="quantity" required min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="instrumentImage">Instrument Image:</label>
+                    <input type="file" id="instrumentImage" name="instrument_image" accept="image/*">
                 </div>
                 
                 <div class="submit-container">
@@ -194,6 +226,49 @@ session_start();
         </div>
     </div>
 
+    <!-- Edit Instrument Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Instrument</h2>
+            <form action="update_instrument.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="editInstrumentId" name="instru_id">
+                <input type="hidden" id="currentImagePath" name="current_image_path">
+                
+                <div class="form-group">
+                    <label for="editName">Name:</label>
+                    <input type="text" id="editName" name="instrument_name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editCondition">Condition:</label>
+                    <input type="text" id="editCondition" name="condition" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editQuantity">Quantity:</label>
+                    <input type="number" id="editQuantity" name="quantity" required min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label>Current Image:</label>
+                    <div class="current-image-container">
+                        <img id="currentImage" src="" alt="Current Instrument Image" style="max-width: 150px; max-height: 150px; margin-bottom: 10px;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editInstrumentImage">Change Image:</label>
+                    <input type="file" id="editInstrumentImage" name="instrument_image" accept="image/*">
+                    <small>(Leave empty to keep current image)</small>
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn">Update Instrument</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
     // Borrow Modal
     var borrowModal = document.getElementById("borrowModal");
@@ -206,6 +281,27 @@ session_start();
             document.getElementById("itemName").value = this.getAttribute("data-name");
             // Set category to Instruments by default
             document.getElementById("category").value = "Instruments";
+        }
+    }
+    
+    // Edit Modal
+    var editModal = document.getElementById("editModal");
+    var editBtns = document.getElementsByClassName("edit-btn");
+    
+    for (var i = 0; i < editBtns.length; i++) {
+        editBtns[i].onclick = function() {
+            // Populate the edit form with instrument data
+            document.getElementById("editInstrumentId").value = this.getAttribute("data-id");
+            document.getElementById("editName").value = this.getAttribute("data-name");
+            document.getElementById("editCondition").value = this.getAttribute("data-condition");
+            document.getElementById("editQuantity").value = this.getAttribute("data-quantity");
+            
+            // Handle image
+            var imagePath = this.getAttribute("data-image");
+            document.getElementById("currentImage").src = imagePath;
+            document.getElementById("currentImagePath").value = imagePath;
+            
+            editModal.style.display = "flex";
         }
     }
     
@@ -235,6 +331,9 @@ session_start();
         }
         if (event.target == deleteModal) {
             deleteModal.style.display = "none";
+        }
+        if (event.target == editModal) {
+            editModal.style.display = "none";
         }
     }
     </script>

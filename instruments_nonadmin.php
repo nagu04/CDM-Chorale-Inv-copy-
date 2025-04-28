@@ -61,7 +61,7 @@ session_start();
                     echo "<h3>" . $row["instrument_name"] . "</h3>";
                     echo "<p>Condition: " . $row["condition"] . "</p>";
                     echo "<p>Quantity: " . $row["quantity"] . "</p>";
-                    echo "<button class='borrow-btn'>Borrow</button>";
+                    echo "<button class='borrow-btn' data-name='" . $row["instrument_name"] . "'>Borrow</button>";
                     echo "</div>";
                 }
             } else {
@@ -138,6 +138,10 @@ session_start();
     for (var i = 0; i < btns.length; i++) {
         btns[i].onclick = function() {
             modal.style.display = "flex"; // Use flex to center the modal
+            // Set the item name in the input field
+            document.getElementById("itemName").value = this.getAttribute("data-name");
+            // Set category to Instruments by default
+            document.getElementById("category").value = "Instruments";
         }
     }
 

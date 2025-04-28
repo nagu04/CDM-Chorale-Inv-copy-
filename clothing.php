@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,6 +43,25 @@
             <a href="index.php" class="logout">Log Out</a>
         </div>
 
+        <!-- Feedback Messages -->
+        <?php
+        if(isset($_SESSION['success_message'])) {
+            echo '<div class="alert alert-success">';
+            echo $_SESSION['success_message'];
+            echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+            echo '</div>';
+            unset($_SESSION['success_message']);
+        }
+        
+        if(isset($_SESSION['error_message'])) {
+            echo '<div class="alert alert-danger">';
+            echo $_SESSION['error_message'];
+            echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+            echo '</div>';
+            unset($_SESSION['error_message']);
+        }
+        ?>
+
         <!-- Card Section -->
         <div class="card-container">
             <?php
@@ -50,14 +72,24 @@
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
+                    // Determine image to display
+                    $imagePath = !empty($row["image_path"]) ? $row["image_path"] : 'barong.png';
+                    
                     echo "<div class='card'>";
-                    echo "<img src='barong.png' alt='Clothing'>"; // Placeholder image
+                    echo "<img src='" . $imagePath . "' alt='Clothing'>";
                     echo "<h3>" . $row["clothing_name"] . "</h3>";
                     echo "<p>Color: " . $row["clothing_color"] . "</p>";
                     echo "<p>Size: " . $row["clothing_size_id"] . "</p>";
                     echo "<p>Condition: " . $row["condition"] . "</p>";
                     echo "<p>Quantity: " . $row["quantity"] . "</p>";
                     echo "<button class='borrow-btn' data-name='" . $row["clothing_name"] . "'>Borrow</button>";
+                    echo "<button class='edit-btn' data-id='" . $row["clothing_id"] . "' 
+                          data-name='" . $row["clothing_name"] . "' 
+                          data-color='" . $row["clothing_color"] . "' 
+                          data-size='" . $row["clothing_size_id"] . "' 
+                          data-condition='" . $row["condition"] . "' 
+                          data-quantity='" . $row["quantity"] . "'
+                          data-image='" . $imagePath . "'>Edit</button>";
                     echo "</div>";
                 }
             } else {
@@ -135,7 +167,7 @@
     <div id="addModal" class="modal">
         <div class="modal-content">
             <h2>Add Clothing</h2>
-            <form action="save_clothing.php" method="POST">
+            <form action="save_clothing.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="addName">Name:</label>
                     <input type="text" id="addName" name="clothing_name" required>
@@ -159,6 +191,11 @@
                 <div class="form-group">
                     <label for="addQuantity">Quantity:</label>
                     <input type="number" id="addQuantity" name="quantity" required min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="clothingImage">Clothing Image:</label>
+                    <input type="file" id="clothingImage" name="clothing_image" accept="image/*">
                 </div>
                 
                 <div class="submit-container">
@@ -199,6 +236,59 @@
         </div>
     </div>
 
+    <!-- Edit Clothing Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Clothing</h2>
+            <form action="update_clothing.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="editClothingId" name="clothing_id">
+                <input type="hidden" id="currentImagePath" name="current_image_path">
+                
+                <div class="form-group">
+                    <label for="editName">Name:</label>
+                    <input type="text" id="editName" name="clothing_name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editColor">Color:</label>
+                    <input type="text" id="editColor" name="clothing_color" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editSize">Size:</label>
+                    <input type="text" id="editSize" name="clothing_size_id" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editCondition">Condition:</label>
+                    <input type="text" id="editCondition" name="condition" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editQuantity">Quantity:</label>
+                    <input type="number" id="editQuantity" name="quantity" required min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label>Current Image:</label>
+                    <div class="current-image-container">
+                        <img id="currentImage" src="" alt="Current Clothing Image" style="max-width: 150px; max-height: 150px; margin-bottom: 10px;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editClothingImage">Change Image:</label>
+                    <input type="file" id="editClothingImage" name="clothing_image" accept="image/*">
+                    <small>(Leave empty to keep current image)</small>
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn">Update Clothing</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
     // Borrow Modal
     var borrowModal = document.getElementById("borrowModal");
@@ -209,9 +299,29 @@
             borrowModal.style.display = "flex";
             // Set the item name in the input field
             document.getElementById("itemName").value = this.getAttribute("data-name");
-            // Set category to Instruments by default
-            document.getElementById("category").value = "Clothing";
-        
+        }
+    }
+    
+    // Edit Modal
+    var editModal = document.getElementById("editModal");
+    var editBtns = document.getElementsByClassName("edit-btn");
+    
+    for (var i = 0; i < editBtns.length; i++) {
+        editBtns[i].onclick = function() {
+            // Populate the edit form with clothing data
+            document.getElementById("editClothingId").value = this.getAttribute("data-id");
+            document.getElementById("editName").value = this.getAttribute("data-name");
+            document.getElementById("editColor").value = this.getAttribute("data-color");
+            document.getElementById("editSize").value = this.getAttribute("data-size");
+            document.getElementById("editCondition").value = this.getAttribute("data-condition");
+            document.getElementById("editQuantity").value = this.getAttribute("data-quantity");
+            
+            // Handle image
+            var imagePath = this.getAttribute("data-image");
+            document.getElementById("currentImage").src = imagePath;
+            document.getElementById("currentImagePath").value = imagePath;
+            
+            editModal.style.display = "flex";
         }
     }
     
@@ -241,6 +351,9 @@
         }
         if (event.target == deleteModal) {
             deleteModal.style.display = "none";
+        }
+        if (event.target == editModal) {
+            editModal.style.display = "none";
         }
     }
     </script>
