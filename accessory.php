@@ -275,7 +275,7 @@ session_start();
             // Set the item name in the input field
             document.getElementById("itemName").value = this.getAttribute("data-name");
             // Set category to Instruments by default
-            document.getElementById("category").value = "Accessory";
+            document.getElementById("category").value = "Accessories";
         
         }
     }

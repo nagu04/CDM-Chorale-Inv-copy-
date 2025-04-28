@@ -4,7 +4,7 @@ include 'db_connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if all required fields are present
-    $required_fields = ['id', 'type', 'borrowedBy', 'date', 'category', 'itemName', 'quantity', 'status'];
+    $required_fields = ['id', 'type', 'borrowedBy', 'date', 'category', 'itemName', 'quantity'];
     $missing_fields = [];
     
     foreach ($required_fields as $field) {
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item_name = $_POST['itemName'];
     $quantity = $_POST['quantity'];
     $sn = isset($_POST['sn']) ? $_POST['sn'] : null;
-    $status = $_POST['status'];
+    
     $remarks = isset($_POST['remarks']) ? $_POST['remarks'] : null;
 
     // Start transaction
@@ -42,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $old_stmt->close();
 
         // Update the history record
-        $stmt = $conn->prepare("UPDATE history SET type=?, borrowed_by=?, date=?, category=?, item_name=?, quantity=?, sn=?, status=?, remarks=? WHERE history_id=?");
-        $stmt->bind_param("sssssisssi", $type, $borrowed_by, $date, $category, $item_name, $quantity, $sn, $status, $remarks, $id);
+        $stmt = $conn->prepare("UPDATE history SET type=?, borrowed_by=?, date=?, category=?, item_name=?, quantity=?, sn=?, remarks=? WHERE history_id=?");
+        $stmt->bind_param("sssssisssi", $type, $borrowed_by, $date, $category, $item_name, $quantity, $sn, $remarks, $id);
         $stmt->execute();
         $stmt->close();
 

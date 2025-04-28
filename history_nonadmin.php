@@ -100,7 +100,7 @@ $reported_result = $conn->query($reported_sql);
                         <th>Item Name</th>
                         <th>Quantity</th>
                         <th>SN</th>
-                        <th>Status</th>
+                    
                         <th>Remarks</th>
                         <th>Date Created</th>
                         <th>Actions</th>
@@ -117,7 +117,7 @@ $reported_result = $conn->query($reported_sql);
                             echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['sn']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+                            
                             echo "<td>" . htmlspecialchars($row['remarks']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                             echo "<td>

@@ -56,8 +56,11 @@ session_start();
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
+                    // Determine image to display
+                    $imagePath = !empty($row["image_path"]) ? $row["image_path"] : 'keyboard.jpg';
+                    
                     echo "<div class='card'>";
-                    echo "<img src='keyboard.jpg' alt='Instrument'>"; // Placeholder image
+                    echo "<img src='" . $imagePath . "' alt='Instrument'>";
                     echo "<h3>" . $row["instrument_name"] . "</h3>";
                     echo "<p>Condition: " . $row["condition"] . "</p>";
                     echo "<p>Quantity: " . $row["quantity"] . "</p>";
@@ -92,7 +95,7 @@ session_start();
                 <div class="form-group">
                     <label for="category">Category:</label>
                     <select id="category" name="category" class="form-select" required>
-                        <option value="Instruments">Instruments</option>
+                        <option value="Instruments" selected>Instruments</option>
                         <option value="Accessories">Accessories</option>
                         <option value="Clothing">Clothing</option>
                     </select>

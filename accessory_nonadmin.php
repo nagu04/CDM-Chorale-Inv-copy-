@@ -51,8 +51,11 @@
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
+                    // Determine image to display
+                    $imagePath = !empty($row["image_path"]) ? $row["image_path"] : 'keyboard.jpg';
+                    
                     echo "<div class='card'>";
-                    echo "<img src='keyboard.jpg' alt='Instrument'>"; // Placeholder image
+                    echo "<img src='" . $imagePath . "' alt='Accessory'>";
                     echo "<h3>" . $row["deco_name"] . "</h3>";
                     echo "<p>Condition: " . $row["condition"] . "</p>";
                     echo "<p>Quantity: " . $row["quantity"] . "</p>";
@@ -71,39 +74,40 @@
     <div id="accessoriesBorrowModal" class="modal">
         <div class="modal-content">
             <h2>Borrow item</h2>
-            <form>
+            <form action="save_history.php" method="POST">
+                <input type="hidden" name="type" value="BORROW">
                 <div class="form-group">
                     <label for="borrowedBy">Borrowed by:</label>
-                    <input type="text" id="borrowedBy" name="borrowedBy">
+                    <input type="text" id="borrowedBy" name="borrowedBy" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="date">Date:</label>
-                    <input type="date" id="date" name="date">
+                    <input type="date" id="date" name="date" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="category">Category:</label>
-                    <select id="category" name="category" class="form-select">
+                    <select id="category" name="category" class="form-select" required>
                         <option value="Instruments">Instruments</option>
-                        <option value="Accessories">Accessories</option>
+                        <option value="Accessories" selected>Accessories</option>
                         <option value="Clothing">Clothing</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
                     <label for="itemName">Item name:</label>
-                    <input type="text" id="itemName" name="itemName">
+                    <input type="text" id="itemName" name="itemName" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity">
+                    <input type="number" id="quantity" name="quantity" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="sn">SN:</label>
-                    <input type="text" id="sn" name="sn">
+                    <input type="text" id="sn" name="sn" required>
                 </div>
             
                 
@@ -132,8 +136,8 @@
             modal.style.display = "block";
             // Set the item name in the input field
             document.getElementById("itemName").value = this.getAttribute("data-name");
-            // Set category to Instruments by default
-            document.getElementById("category").value = "Accessory";
+            // Set category to Accessories by default
+            document.getElementById("category").value = "Accessories";
         }
     }
 
