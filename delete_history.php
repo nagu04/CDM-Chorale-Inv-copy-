@@ -54,8 +54,16 @@ if (isset($_GET['id'])) {
         // Commit transaction
         $conn->commit();
 
-        // Redirect to history page on success
-        header("Location: history.php");
+        // Determine which page to redirect to based on the HTTP referer
+        $referer = $_SERVER['HTTP_REFERER'] ?? '';
+        
+        if (strpos($referer, '_nonadmin') !== false) {
+            // Redirect to non-admin history page if coming from a non-admin page
+            header("Location: history_nonadmin.php");
+        } else {
+            // Redirect to admin history page
+            header("Location: history.php");
+        }
         exit();
     } catch (Exception $e) {
         // Rollback transaction on error

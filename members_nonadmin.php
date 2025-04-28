@@ -29,22 +29,22 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <a href="instruments.php" class="icon-btn">
+        <a href="instruments_nonadmin.php" class="icon-btn">
             <i class="fas fa-guitar"></i>
         </a>
-        <a href="accessory.php" class="icon-btn">
+        <a href="accessory_nonadmin.php" class="icon-btn">
             <i class="fas fa-gem"></i>
         </a>
-        <a href="clothing.php" class="icon-btn">
+        <a href="clothing_nonadmin.php" class="icon-btn">
             <i class="fas fa-tshirt"></i>
         </a>
-        <a href="members.php" class="icon-btn">
+        <a href="members_nonadmin.php" class="icon-btn">
             <i class="fas fa-user"></i>
         </a>
-        <a href="report.php" class="icon-btn">
+        <a href="report_nonadmin.php" class="icon-btn">
             <i class="fas fa-file-alt"></i>
         </a>
-        <a href="history.php" class="icon-btn">
+        <a href="history_nonadmin.php" class="icon-btn">
             <i class="fas fa-clock"></i>
         </a>
     </div>

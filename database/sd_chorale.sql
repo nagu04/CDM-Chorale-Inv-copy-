@@ -96,6 +96,39 @@ INSERT INTO `clothing_size` VALUES (0,'S'),(1,'M'),(2,'L'),(3,'XL'),(4,'2XL');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `history`
+--
+
+DROP TABLE IF EXISTS `history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `history` (
+  `history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` enum('BORROW','REPORT') NOT NULL,
+  `borrowed_by` varchar(100) NOT NULL,
+  `date` date NOT NULL,
+  `category` varchar(50) NOT NULL,
+  `item_name` varchar(100) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `sn` varchar(50) DEFAULT NULL,
+  `status` varchar(50) NOT NULL,
+  `remarks` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`history_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `history`
+--
+
+LOCK TABLES `history` WRITE;
+/*!40000 ALTER TABLE `history` DISABLE KEYS */;
+INSERT INTO `history` VALUES (10,'REPORT','Hans','2025-04-28','Instruments','adwad',1,'1231313','1313131','','2025-04-28 10:12:02'),(11,'BORROW','Hans ','2025-04-28','Instruments','Keyboard',1,'1','good','','2025-04-28 10:18:54'),(12,'BORROW','Hans ','2025-04-28','Instruments','Keyboard',1,'1','good','','2025-04-28 10:22:30');
+/*!40000 ALTER TABLE `history` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `instruments`
 --
 
@@ -107,6 +140,7 @@ CREATE TABLE `instruments` (
   `instrument_name` varchar(75) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `condition` enum('BAD','GOOD') DEFAULT 'GOOD',
+  `img_dir` longblob DEFAULT NULL,
   PRIMARY KEY (`instru_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -117,7 +151,7 @@ CREATE TABLE `instruments` (
 
 LOCK TABLES `instruments` WRITE;
 /*!40000 ALTER TABLE `instruments` DISABLE KEYS */;
-INSERT INTO `instruments` VALUES (1,'Korg KROSS2-88 Keyboard',1,'GOOD'),(3,'Korg KROSS2-88 Charger',1,'GOOD'),(4,'Keyboard Stand',1,'GOOD'),(5,'Keyboard Case',1,'GOOD'),(6,'Music Sheet Stand',1,'GOOD'),(7,'CREATIVE Speakers',1,'GOOD');
+INSERT INTO `instruments` VALUES (1,'Korg KROSS2-88 Keyboard',1,'GOOD',NULL),(3,'Korg KROSS2-88 Charger',1,'GOOD',NULL),(4,'Keyboard Stand',1,'GOOD',NULL),(5,'Keyboard Case',1,'GOOD',NULL),(6,'Music Sheet Stand',1,'GOOD',NULL),(7,'CREATIVE Speakers',1,'GOOD',NULL);
 /*!40000 ALTER TABLE `instruments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,7 +167,7 @@ CREATE TABLE `login` (
   `username` varchar(50) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`login_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,7 +176,7 @@ CREATE TABLE `login` (
 
 LOCK TABLES `login` WRITE;
 /*!40000 ALTER TABLE `login` DISABLE KEYS */;
-INSERT INTO `login` VALUES (1,'admin','admin');
+INSERT INTO `login` VALUES (1,'admin','admin'),(2,'user','password');
 /*!40000 ALTER TABLE `login` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -156,11 +190,12 @@ DROP TABLE IF EXISTS `members`;
 CREATE TABLE `members` (
   `member_id` int(11) NOT NULL AUTO_INCREMENT,
   `members_name` varchar(60) DEFAULT NULL,
-  `year` int(11) DEFAULT NULL,
   `program` varchar(50) DEFAULT NULL,
   `position` varchar(45) DEFAULT NULL,
+  `birthdate` varchar(50) DEFAULT NULL,
+  `address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`member_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,30 +204,34 @@ CREATE TABLE `members` (
 
 LOCK TABLES `members` WRITE;
 /*!40000 ALTER TABLE `members` DISABLE KEYS */;
-INSERT INTO `members` VALUES (1,'Hans Sese',2,'CPE','Admin'),(2,'Vince Luces',2,'AC','Admin'),(3,'Gian Mustar',3,'ME','Member'),(4,'Gavrel Rodriguez',4,'ECE','Member');
+INSERT INTO `members` VALUES (1,'ALDAYA, ALEXANDRA LIEN S.','AR','Trainee','12/29/2006','BLK 78 LOT 4 A MABINI ST., BRGY. LARAM, SAN PEDRO CITY'),(2,'BACULINAO, REGINA MARIE L.','CE','Member','11/20/2003','145 CALAMANSI ST. TRAMO HEIGHTS PUROK 6, BRGY. SUCAT, MUNTINLUPA CITY'),(3,'BARCELON, JOHN BRYAN B.','CPE','Member','2/23/2004','LIRIO #3 EXTENSION ST., BRGY. CAA, LAS PIÑAS CITY'),(4,'CARPIZ, LEMUEL JAY I.','AR','Member','5/17/2006','BLK 1 LOT 15 GENESIS ST. TEOSEJO SUBDIVISION, BRGY. TUNASAN, MUNTINLUPA CITY'),(5,'CONSTANTINO, MIKAELA COLEEN D.','CPE','Member','4/4/2005','#95 NATIONAL ROAD, BRGY. PUTATAN, MUNTINLUPA CITY'),(6,'DAYPUYART, REUBEN B.','ECE','Trainee','2/1/2006','ST. CATHERINE COMPOUND, BRGY. PUTATAN, MUNTINLUPA CITY'),(7,'DE CASTRO, JUSTIN ALLEN M.','AR','Member','5/9/2005','PHASE 1 BLOCK 10 LOT 29 SOUTHVILLE3'),(8,'ENCARNACION, LADYMAE A.','CE','Member','10/8/2003','SOUTHVILLE 3A EXT, BRGY. SAN ANTONIO, SAN PEDRO  CITY, LAGUNA'),(9,'FAJARDO, ENRICO CHARLES E.','CE','Member','12/2/2002','#25 151 LUBACON APARTMENT PUROK 2, BRGY. CUPANG, MUNTINLUPA CITY'),(10,'GACUTAN, KIMMI VICTORIA P.','ECE','Trainee','7/10/2006','136 WALING-WALING ST. LODORA VILLAGE, BRGY. TUNASAN, MUNTINLUPA CITY'),(11,'GALICA, CLARK KENT C.','CE','Member','7/10/2003','#3-G PUROK 1 ADIA ST., BRGY. BAGUMBAYAN, TAGUIG CITY'),(12,'ILAGAN, ROGELIO I I.','CPE','Member','2/2/2003','B5 L26, VERONA ST., CAMELLA HOMES 2D, SOLDIERS HILLS VILLAGE, PUTATAN, MUNTINLUPA CITY'),(13,'MANUEL, UKRAINE KIEV V.','IE','Trainee','11/4/2005','162 ESTEHONOR COMPOUND WAWA STREET, BRGY. ALABANG, MUNTINLUPA CITY'),(14,'NOBLEZA, JOHN MICHAEL C.','ECE','Member','6/14/2004','15 CAMIA ST L & B COMPOUND 1, BRGY. ALABANG MUNTINLUPA CITY'),(15,'PACINOS, JOHN RINNEL L.','ECE','Member','9/13/2002','295 MONTILLANO ST., BRGY. ALABANG, MUNTINLUPA CITY'),(16,'QUIZON, JILL ERIKA D.','AR','Member','2/16/2005','LOT 31 ACACIA COMPOUND ORCHIDS ST. SGHV, BRGY. PUTATAN MUNTINLUPA'),(17,'RAMIREZ, KIM D.','ECE','Trainee','5/18/2005','218 VIÑALON ST. BRGY. CUPANG, MUNTINLUPA CITY'),(18,'RED, CLIFFORD KEN A.','CE','Trainee','12/1/2003','BLK 4 LOT 11 BRGY. MAGSAYSAY, SAN PEDRO CITY, LAGUNA'),(19,'RIVERA, RONNIE JR. S.','CE','Member','8/31/2004','782 BERGANTIÑOS COMPOUND, BRGY. CUYAB, SAN PEDRO CITY, LAGUNA.'),(20,'ROSAURO, BENEDICT M.','ME','Member','6/25/2005','PH. 3, BLOCK 49, LOT 16, SOUTHVILLE 3, POBLACION, MUNT. CITY'),(21,'TOLEDO, PRECIOUS MAE G.','CE','Trainee','11/1/2005','BRGY. BULI, MUNTINLUPA CITY'),(22,'TORRELIZA, JANRHEY G.','CE','Member','1/2/2005','BLK 31 LOT 17 LINDEN ST. BRGY. LANGGAM, SAN PEDRO, LAGUNA.');
 /*!40000 ALTER TABLE `members` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `history`
+-- Table structure for table `user_login`
 --
 
-DROP TABLE IF EXISTS `history`;
-CREATE TABLE `history` (
-  `history_id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` enum('BORROW','REPORT') NOT NULL,
-  `borrowed_by` varchar(100) NOT NULL,
-  `date` date NOT NULL,
-  `category` varchar(50) NOT NULL,
-  `item_name` varchar(100) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `sn` varchar(50) DEFAULT NULL,
-  `status` varchar(50) NOT NULL,
-  `remarks` text,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`history_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `user_login`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_login` (
+  `id_user_login` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_user_login`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `user_login`
+--
+
+LOCK TABLES `user_login` WRITE;
+/*!40000 ALTER TABLE `user_login` DISABLE KEYS */;
+INSERT INTO `user_login` VALUES (1,'user','user');
+/*!40000 ALTER TABLE `user_login` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -203,4 +242,4 @@ CREATE TABLE `history` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-19 13:35:45
+-- Dump completed on 2025-04-28 18:37:40

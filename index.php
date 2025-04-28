@@ -9,22 +9,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Prepare SQL statement to prevent SQL injection
+    // First check admin login table
     $stmt = $conn->prepare("SELECT * FROM login WHERE username = ? AND password = ?");
     $stmt->bind_param("ss", $username, $password);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Check if credentials match
+    // Check if admin credentials match
     if ($result->num_rows > 0) {
-        // Valid login
+        // Valid admin login
         $_SESSION['username'] = $username;
+       
         // Redirect to admin page
-        header("Location: admin_page.php");
+        header("Location: instruments.php");
         exit();
     } else {
-        // Invalid login
-        $error = "Invalid username or password";
+        // Check user_login table if admin login failed
+        $stmt = $conn->prepare("SELECT * FROM user_login WHERE username = ? AND password = ?");
+        $stmt->bind_param("ss", $username, $password);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        // Check if user credentials match
+        if ($result->num_rows > 0) {
+            // Valid user login
+            $_SESSION['username'] = $username;
+          
+            // Redirect to member page
+            header("Location: instruments_nonadmin.php");
+            exit();
+        } else {
+            // Invalid login for both tables
+            $error = "Invalid username or password";
+        }
     }
     
     $stmt->close();
@@ -37,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="index_style.css">
     
 </head>
 <body>

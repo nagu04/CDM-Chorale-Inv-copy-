@@ -151,3 +151,17 @@ td {
     background-color: #fff;
     color: #000;
 }
+
+.view-profile-btn {
+    background-color: yellow; /* Yellow background */
+    color: black; /* Text color */
+    border: none; /* No border */
+    padding: 10px 20px; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size */
+}
+
+.view-profile-btn:hover {
+    background-color: darkorange; /* Darker shade on hover */
+}
