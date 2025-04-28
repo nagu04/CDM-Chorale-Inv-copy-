@@ -56,7 +56,7 @@
                     echo "<h3>" . $row["deco_name"] . "</h3>";
                     echo "<p>Condition: " . $row["condition"] . "</p>";
                     echo "<p>Quantity: " . $row["quantity"] . "</p>";
-                    echo "<button class='borrow-btn'>Borrow</button>";
+                    echo "<button class='borrow-btn' data-name='" . $row["deco_name"] . "'>Borrow</button>";
                     echo "</div>";
                 }
             } else {
@@ -114,11 +114,7 @@
                     <label for="sn">SN:</label>
                     <input type="text" id="sn" name="sn" required>
                 </div>
-                
-                <div class="form-group">
-                    <label for="status">Status:</label>
-                    <input type="text" id="status" name="status" required>
-                </div>
+              
                 
                 <div class="form-group">
                     <label for="remarks">Remarks:</label>
@@ -198,6 +194,11 @@
     for (var i = 0; i < borrowBtns.length; i++) {
         borrowBtns[i].onclick = function() {
             borrowModal.style.display = "flex";
+            // Set the item name in the input field
+            document.getElementById("itemName").value = this.getAttribute("data-name");
+            // Set category to Instruments by default
+            document.getElementById("category").value = "Accessory";
+        
         }
     }
     

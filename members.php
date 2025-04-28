@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +26,24 @@
             background-color: #f8f8f8;
             border: 1px solid #ddd;
             border-radius: 4px;
+        }
+        /* Edit button styling */
+        .edit-btn {
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 8px;
+            display: block;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .edit-btn:hover {
+            background-color: #2e59d9;
         }
     </style>
 </head>
@@ -58,6 +79,25 @@
             <a href="index.php" class="logout">Log Out</a>
         </div>
 
+        <!-- Feedback Messages -->
+        <?php
+        if(isset($_SESSION['success_message'])) {
+            echo '<div class="alert alert-success">';
+            echo $_SESSION['success_message'];
+            echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+            echo '</div>';
+            unset($_SESSION['success_message']);
+        }
+        
+        if(isset($_SESSION['error_message'])) {
+            echo '<div class="alert alert-danger">';
+            echo $_SESSION['error_message'];
+            echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+            echo '</div>';
+            unset($_SESSION['error_message']);
+        }
+        ?>
+
          <!-- Action Buttons -->
          <div class="action-buttons">
             <button class="add-button" id="addButton">
@@ -78,8 +118,11 @@
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
+                    // Determine the image to display
+                    $imagePath = !empty($row["image_path"]) ? $row["image_path"] : 'default image.jpg';
+                    
                     echo "<div class='card'>";
-                    echo "<img src='2x2 pic formal.jpg' alt='Member'>"; // Placeholder image
+                    echo "<img src='" . $imagePath . "' alt='Member'>"; 
                     echo "<h3>" . $row["members_name"] . "</h3>";
                 
                     echo "<p>Program: " . $row["program"] . "</p>";
@@ -90,6 +133,12 @@
                           data-position='" . $row["position"] . "' 
                           data-birthdate='" . (isset($row["birthdate"]) ? $row["birthdate"] : "") . "' 
                           data-address='" . (isset($row["address"]) ? $row["address"] : "") . "'>View Profile</button>";
+                    echo "<button class='edit-btn' data-id='" . $row["member_id"] . "' 
+                          data-name='" . $row["members_name"] . "' 
+                          data-program='" . $row["program"] . "' 
+                          data-position='" . $row["position"] . "' 
+                          data-birthdate='" . (isset($row["birthdate"]) ? $row["birthdate"] : "") . "' 
+                          data-address='" . (isset($row["address"]) ? $row["address"] : "") . "'>Edit</button>";
                     echo "</div>";
                 }
             } else {
@@ -137,7 +186,7 @@
     <div id="addModal" class="modal">
         <div class="modal-content">
             <h2>Add Member</h2>
-            <form action="save_member.php" method="POST">
+            <form action="save_member.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="addName">Name:</label>
                     <input type="text" id="addName" name="members_name" required>
@@ -161,6 +210,11 @@
                 <div class="form-group">
                     <label for="addAddress">Address:</label>
                     <input type="text" id="addAddress" name="address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="profileImage">Profile Image:</label>
+                    <input type="file" id="profileImage" name="profile_image" accept="image/*">
                 </div>
                 
                 <div class="submit-container">
@@ -201,6 +255,50 @@
         </div>
     </div>
 
+    <!-- Edit Member Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Member</h2>
+            <form action="update_member.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="editMemberId" name="member_id">
+                <div class="form-group">
+                    <label for="editName">Name:</label>
+                    <input type="text" id="editName" name="members_name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editProgram">Program:</label>
+                    <input type="text" id="editProgram" name="program" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editPosition">Position:</label>
+                    <input type="text" id="editPosition" name="position" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editBirthdate">Birthdate:</label>
+                    <input type="date" id="editBirthdate" name="birthdate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="editAddress">Address:</label>
+                    <input type="text" id="editAddress" name="address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="editProfileImage">Change Profile Image:</label>
+                    <input type="file" id="editProfileImage" name="profile_image" accept="image/*">
+                    <small>(Leave empty to keep current image)</small>
+                </div>
+                
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn">Update Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
     // Profile Modal
     var profileModal = document.getElementById("profileModal");
@@ -229,6 +327,31 @@
         profileModal.style.display = "none";
     }
 
+    // Edit Modal
+    var editModal = document.getElementById("editModal");
+    var editBtns = document.getElementsByClassName("edit-btn");
+    
+    for (var i = 0; i < editBtns.length; i++) {
+        editBtns[i].onclick = function() {
+            var memberId = this.getAttribute("data-id");
+            var memberName = this.getAttribute("data-name");
+            var memberProgram = this.getAttribute("data-program");
+            var memberPosition = this.getAttribute("data-position");
+            var memberBirthdate = this.getAttribute("data-birthdate");
+            var memberAddress = this.getAttribute("data-address");
+            
+            // Populate the edit form with member data
+            document.getElementById("editMemberId").value = memberId;
+            document.getElementById("editName").value = memberName;
+            document.getElementById("editProgram").value = memberProgram;
+            document.getElementById("editPosition").value = memberPosition;
+            document.getElementById("editBirthdate").value = memberBirthdate || "";
+            document.getElementById("editAddress").value = memberAddress || "";
+            
+            editModal.style.display = "flex";
+        }
+    }
+    
     // Add Modal
     var addModal = document.getElementById("addModal");
     var addButton = document.getElementById("addButton");
@@ -256,11 +379,10 @@
         if (event.target == deleteModal) {
             deleteModal.style.display = "none";
         }
+        if (event.target == editModal) {
+            editModal.style.display = "none";
+        }
     }
     </script>
 </body>
 </html>
-
-<?php
-
-?>
