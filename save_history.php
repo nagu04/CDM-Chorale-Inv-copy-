@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item_name = $_POST['itemName'];
     $quantity = $_POST['quantity'];
     $sn = isset($_POST['sn']) ? $_POST['sn'] : null;
-   
+    $status = isset($_POST['status']) ? $_POST['status'] : 'PENDING';
     $remarks = isset($_POST['remarks']) ? $_POST['remarks'] : null;
 
     // Start transaction
@@ -33,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Prepare and execute the SQL statement for history
-        $stmt = $conn->prepare("INSERT INTO history (type, borrowed_by, date, category, item_name, quantity, sn, remarks) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssiss", $type, $borrowed_by, $date, $category, $item_name, $quantity, $sn, $remarks);
+        $stmt = $conn->prepare("INSERT INTO history (type, borrowed_by, date, category, item_name, quantity, sn, status, remarks) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssisss", $type, $borrowed_by, $date, $category, $item_name, $quantity, $sn, $status, $remarks);
         $stmt->execute();
         $stmt->close();
 
