@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Update the history record
         $stmt = $conn->prepare("UPDATE history SET type=?, borrowed_by=?, date=?, category=?, item_name=?, quantity=?, sn=?, remarks=? WHERE history_id=?");
-        $stmt->bind_param("sssssisssi", $type, $borrowed_by, $date, $category, $item_name, $quantity, $sn, $remarks, $id);
+        $stmt->bind_param("sssssissi", $type, $borrowed_by, $date, $category, $item_name, $quantity, $sn, $remarks, $id);
         $stmt->execute();
         $stmt->close();
 

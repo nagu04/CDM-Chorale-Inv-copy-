@@ -135,8 +135,7 @@ session_start();
                 <div class="form-group">
                     <label for="category">Category:</label>
                     <select id="category" name="category" class="form-select" onchange="loadItems()" required>
-                        <option value="Instruments">Instruments</option>
-                        <option value="Accessories">Accessories</option>
+                        
                         <option value="Clothing" selected>Clothing</option>
                     </select>
                 </div>
