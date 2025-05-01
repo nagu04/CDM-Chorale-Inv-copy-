@@ -4,11 +4,11 @@ session_start();
 include 'db_connect.php';
 
 // Fetch borrowed items
-$borrowed_sql = "SELECT history_id, type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, created_at FROM history WHERE type = 'BORROW' ORDER BY created_at DESC";
+$borrowed_sql = "SELECT history_id, type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, created_at, is_approved FROM history WHERE type = 'BORROW' ORDER BY created_at DESC";
 $borrowed_result = $conn->query($borrowed_sql);
 
 // Fetch reported items
-$reported_sql = "SELECT history_id, type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, created_at FROM history WHERE type = 'REPORT' ORDER BY created_at DESC";
+$reported_sql = "SELECT history_id, type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, created_at, is_approved FROM history WHERE type = 'REPORT' ORDER BY created_at DESC";
 $reported_result = $conn->query($reported_sql);
 ?>
 <!DOCTYPE html>
@@ -52,6 +52,20 @@ $reported_result = $conn->query($reported_sql);
             margin: 20px 0;
             text-transform: uppercase;
             font-size: 24px;
+        }
+        .approve-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+        .approve-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -100,7 +114,8 @@ $reported_result = $conn->query($reported_sql);
                         <th>Item Name</th>
                         <th>Quantity</th>
                         <th>SN</th>
-                       
+                        <th>Status</th>
+                        <th>Approval</th>
                         <th>Remarks</th>
                         <th>Date Created</th>
                         <th>Actions</th>
@@ -117,21 +132,27 @@ $reported_result = $conn->query($reported_sql);
                             echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['sn']) . "</td>";
-                            
+                            echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+                            echo "<td>" . ($row['is_approved'] ? "Approved" : "Pending") . "</td>";
                             echo "<td>" . htmlspecialchars($row['remarks']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
-                            echo "<td>
-                                    <button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
-                                        <i class='fas fa-edit'></i>
-                                    </button>
-                                    <button class='remove-btn' onclick='confirmDelete(" . $row['history_id'] . ")'>
-                                        <i class='fas fa-trash'></i>
-                                    </button>
-                                  </td>";
+                            echo "<td>";
+                            if (!$row['is_approved']) {
+                                echo "<button class='approve-btn' onclick='approveHistory(" . $row['history_id'] . ")'>
+                                        <i class='fas fa-check'></i>
+                                    </button>";
+                            }
+                            echo "<button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
+                                    <i class='fas fa-edit'></i>
+                                </button>
+                                <button class='remove-btn' onclick='confirmDelete(" . $row['history_id'] . ")'>
+                                    <i class='fas fa-trash'></i>
+                                </button>
+                              </td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='10' style='text-align: center;'>No borrowed items found</td></tr>";
+                        echo "<tr><td colspan='11' style='text-align: center;'>No borrowed items found</td></tr>";
                     }
                     ?>
                 </tbody>
@@ -149,6 +170,7 @@ $reported_result = $conn->query($reported_sql);
                         <th>Quantity</th>
                         <th>SN</th>
                         <th>Status</th>
+                        <th>Approval</th>
                         <th>Remarks</th>
                         <th>Date Created</th>
                         <th>Actions</th>
@@ -166,20 +188,26 @@ $reported_result = $conn->query($reported_sql);
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['sn']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+                            echo "<td>" . ($row['is_approved'] ? "Approved" : "Pending") . "</td>";
                             echo "<td>" . htmlspecialchars($row['remarks']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
-                            echo "<td>
-                                    <button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
-                                        <i class='fas fa-edit'></i>
-                                    </button>
-                                    <button class='remove-btn' onclick='confirmDelete(" . $row['history_id'] . ")'>
-                                        <i class='fas fa-trash'></i>
-                                    </button>
-                                  </td>";
+                            echo "<td>";
+                            if (!$row['is_approved']) {
+                                echo "<button class='approve-btn' onclick='approveHistory(" . $row['history_id'] . ")'>
+                                        <i class='fas fa-check'></i>
+                                    </button>";
+                            }
+                            echo "<button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
+                                    <i class='fas fa-edit'></i>
+                                </button>
+                                <button class='remove-btn' onclick='confirmDelete(" . $row['history_id'] . ")'>
+                                    <i class='fas fa-trash'></i>
+                                </button>
+                              </td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='10' style='text-align: center;'>No reported items found</td></tr>";
+                        echo "<tr><td colspan='11' style='text-align: center;'>No reported items found</td></tr>";
                     }
                     ?>
                 </tbody>
@@ -260,6 +288,12 @@ $reported_result = $conn->query($reported_sql);
     function confirmDelete(id) {
         if (confirm('Are you sure you want to delete this item?')) {
             window.location.href = 'delete_history.php?id=' + id;
+        }
+    }
+
+    function approveHistory(id) {
+        if (confirm('Are you sure you want to approve this item?')) {
+            window.location.href = 'approve_history.php?id=' + id;
         }
     }
 

@@ -329,7 +329,7 @@ h3 {
     padding: 5px;
     margin: 0 5px;
     font-size: 16px;
-    transition: transform 0.2s;
+    transition: all 0.3s ease;
 }
 
 .edit-btn {
@@ -341,22 +341,48 @@ h3 {
     cursor: pointer;
     font-size: 14px;
     margin-top: 8px;
-    display: block;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+    display: inline-block;
+    width: auto;
+    min-width: 80px;
+    transition: all 0.3s ease;
 }
 
 .edit-btn:hover {
     background-color: #2e59d9;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .remove-btn {
     color: #ff4444;
+    transition: all 0.3s ease;
 }
 
-.edit-btn:hover, .remove-btn:hover {
-    transform: scale(1.2);
+.remove-btn:hover {
+    transform: scale(1.1);
+    color: #ff0000;
+}
+
+/* Add smooth transitions for all buttons */
+.borrow-btn, .submit-btn, .add-button, .delete-button {
+    transition: all 0.3s ease;
+}
+
+.borrow-btn:hover, .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.add-button:hover, .delete-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Add active state for buttons */
+.borrow-btn:active, .submit-btn:active, .edit-btn:active, 
+.add-button:active, .delete-button:active, .remove-btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
 }
 
 /* Table Action Column */

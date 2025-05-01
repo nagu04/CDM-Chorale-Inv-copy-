@@ -4,7 +4,7 @@ include 'db_connect.php';
 // SQL to create history table
 $sql = "CREATE TABLE IF NOT EXISTS history (
     history_id int(11) NOT NULL AUTO_INCREMENT,
-    type enum('BORROW','REPORT') NOT NULL,
+    type enum('BORROW','REPORT','ADD','DELETE') NOT NULL,
     borrowed_by varchar(100) NOT NULL,
     date date NOT NULL,
     category varchar(50) NOT NULL,
@@ -13,6 +13,7 @@ $sql = "CREATE TABLE IF NOT EXISTS history (
     sn varchar(50) DEFAULT NULL,
     status varchar(50) NOT NULL,
     remarks text,
+    is_approved boolean DEFAULT FALSE,
     created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (history_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";

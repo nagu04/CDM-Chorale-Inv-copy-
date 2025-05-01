@@ -37,13 +37,19 @@ session_start();
             cursor: pointer;
             font-size: 14px;
             margin-top: 8px;
-            display: block;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
+            display: inline-block;
+            width: auto;
+            min-width: 80px;
+            transition: all 0.3s ease;
         }
         .edit-btn:hover {
             background-color: #2e59d9;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .edit-btn:active {
+            transform: translateY(1px);
+            box-shadow: none;
         }
     </style>
 </head>
