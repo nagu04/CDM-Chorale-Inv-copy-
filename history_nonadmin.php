@@ -4,11 +4,11 @@ session_start();
 include 'db_connect.php';
 
 // Fetch borrowed items
-$borrowed_sql = "SELECT history_id, type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, created_at FROM history WHERE type = 'BORROW' ORDER BY created_at DESC";
+$borrowed_sql = "SELECT history_id, type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, created_at, is_approved FROM history WHERE type = 'BORROW' ORDER BY created_at DESC";
 $borrowed_result = $conn->query($borrowed_sql);
 
 // Fetch reported items
-$reported_sql = "SELECT history_id, type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, created_at FROM history WHERE type = 'REPORT' ORDER BY created_at DESC";
+$reported_sql = "SELECT history_id, type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, created_at, is_approved FROM history WHERE type = 'REPORT' ORDER BY created_at DESC";
 $reported_result = $conn->query($reported_sql);
 ?>
 <!DOCTYPE html>
@@ -100,8 +100,8 @@ $reported_result = $conn->query($reported_sql);
                         <th>Item Name</th>
                         <th>Quantity</th>
                         <th>SN</th>
-                    
                         <th>Remarks</th>
+                        <th>Approval</th>
                         <th>Date Created</th>
                         <th>Actions</th>
                     </tr>
@@ -119,6 +119,7 @@ $reported_result = $conn->query($reported_sql);
                             echo "<td>" . htmlspecialchars($row['sn']) . "</td>";
                             
                             echo "<td>" . htmlspecialchars($row['remarks']) . "</td>";
+                            echo "<td>" . ($row['is_approved'] ? "Approved" : "Pending") . "</td>";
                             echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                             echo "<td>
                                     <button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>

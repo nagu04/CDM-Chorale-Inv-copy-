@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     break;
                 case 'accessories':
                     $table = 'accessories';
-                    $name_field = 'accessory_name';
+                    $name_field = 'deco_name';
                     break;
                 default:
                     throw new Exception("Invalid category");
