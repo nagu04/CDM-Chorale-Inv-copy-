@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item_name = $_POST['itemName'];
     $quantity = $_POST['quantity'];
     $sn = isset($_POST['sn']) ? $_POST['sn'] : null;
-    $status = isset($_POST['status']) ? $_POST['status'] : 'PENDING';
+    $status = isset($_POST['status']) ? $_POST['status']: 'Pending';
     $remarks = isset($_POST['remarks']) ? $_POST['remarks'] : null;
 
     // Start transaction
