@@ -64,7 +64,14 @@ session_start();
                     echo "<h3>" . $row["instrument_name"] . "</h3>";
                     echo "<p>Condition: " . $row["condition"] . "</p>";
                     echo "<p>Quantity: " . $row["quantity"] . "</p>";
-                    echo "<button class='borrow-btn' data-name='" . $row["instrument_name"] . "'>Borrow</button>";
+                    
+                    // Check if quantity is 0, if so disable the borrow button
+                    if ($row["quantity"] > 0) {
+                        echo "<button class='borrow-btn' data-name='" . $row["instrument_name"] . "'>Borrow</button>";
+                    } else {
+                        echo "<button class='borrow-btn disabled' disabled>Out of Stock</button>";
+                    }
+                    
                     echo "</div>";
                 }
             } else {
@@ -94,21 +101,22 @@ session_start();
                 
                 <div class="form-group">
                     <label for="category">Category:</label>
-                    <select id="category" name="category" class="form-select" required>
+                    <select id="category" name="category" class="form-select" onchange="loadItems()" readonly required>
                         <option value="Instruments" selected>Instruments</option>
-                        <option value="Accessories">Accessories</option>
-                        <option value="Clothing">Clothing</option>
+                        
                     </select>
                 </div>
                 
                 <div class="form-group">
                     <label for="itemName">Item name:</label>
-                    <input type="text" id="itemName" name="itemName" required>
+                    <input type="text" id="itemName" name="itemName" readonly required>
                 </div>
                 
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity" required>
+                    <select id="quantity" name="quantity" class="form-select" required>
+                        <option value="">-- Select quantity --</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -137,14 +145,75 @@ session_start();
     // Get all buttons that should open the modal
     var btns = document.getElementsByClassName("borrow-btn");
 
+    // Function to load items based on selected category
+    function loadItems() {
+        const category = document.getElementById('category').value;
+        
+        // Clear quantity options
+        document.getElementById('quantity').innerHTML = '<option value="">-- Select quantity --</option>';
+        
+        // Fetch items for the selected category
+        fetch('get_items.php?category=' + category)
+            .then(response => response.json())
+            .then(data => {
+                // Store the data for later use when selecting quantities
+                window.itemsData = data;
+                
+                // If opened from a specific instrument card, update quantity options
+                const preselectedItem = document.getElementById("itemName").value;
+                if (preselectedItem) {
+                    updateQuantityDropdown(preselectedItem);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading items:', error);
+                alert('Error loading items. Please try again.');
+            });
+    }
+    
+    // Function to update quantity dropdown based on selected item
+    function updateQuantityDropdown(itemName) {
+        const quantitySelect = document.getElementById('quantity');
+        
+        // Clear existing options
+        quantitySelect.innerHTML = '<option value="">-- Select quantity --</option>';
+        
+        if (itemName) {
+            // Find the selected item's data
+            const itemData = window.itemsData ? window.itemsData.find(item => item.name === itemName) : null;
+            
+            if (itemData) {
+                const maxQuantity = parseInt(itemData.quantity);
+                // Create options from 1 to maxQuantity
+                for (let i = 1; i <= maxQuantity; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    quantitySelect.appendChild(option);
+                }
+                
+                // Select the first quantity option by default
+                if (maxQuantity > 0) {
+                    quantitySelect.value = "1";
+                }
+            }
+        }
+    }
+
     // When the user clicks on a button, open the modal
     for (var i = 0; i < btns.length; i++) {
         btns[i].onclick = function() {
             modal.style.display = "flex"; // Use flex to center the modal
-            // Set the item name in the input field
-            document.getElementById("itemName").value = this.getAttribute("data-name");
+            
             // Set category to Instruments by default
             document.getElementById("category").value = "Instruments";
+            
+            // Set the item name directly in the text field
+            const itemName = this.getAttribute("data-name");
+            document.getElementById("itemName").value = itemName;
+            
+            // Load the items and update quantity dropdown
+            loadItems();
         }
     }
 

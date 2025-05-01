@@ -63,7 +63,7 @@ session_start();
                     
                     <div class="form-group">
                     <label for="category">Category:</label>
-                    <select id="category" name="category" class="form-select">
+                    <select id="category" name="category" class="form-select" onchange="loadItems()">
                         <option value="Instruments">Instruments</option>
                         <option value="Accessories">Accessories</option>
                         <option value="Clothing">Clothing</option>
@@ -73,12 +73,16 @@ session_start();
                     
                     <div class="form-group">
                         <label for="itemName">Item name:</label>
-                        <input type="text" id="itemName" name="itemName" required>
+                        <select id="itemName" name="itemName" class="form-select" required>
+                            <option value="">-- Select an item --</option>
+                        </select>
                     </div>
                     
                     <div class="form-group">
                         <label for="quantity">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" required>
+                        <select id="quantity" name="quantity" class="form-select" required>
+                            <option value="">-- Select quantity --</option>
+                        </select>
                     </div>
                     
                     <div class="form-group">
@@ -105,3 +109,65 @@ session_start();
     </div>
 </body>
 </html>
+<script>
+    // Function to load items based on selected category
+    function loadItems() {
+        const category = document.getElementById('category').value;
+        const itemSelect = document.getElementById('itemName');
+        
+        // Clear existing options
+        itemSelect.innerHTML = '<option value="">-- Select an item --</option>';
+        // Clear quantity options too
+        document.getElementById('quantity').innerHTML = '<option value="">-- Select quantity --</option>';
+        
+        // Fetch items for the selected category
+        fetch('get_items.php?category=' + category)
+            .then(response => response.json())
+            .then(data => {
+                // Store the data for later use when selecting quantities
+                window.itemsData = data;
+                
+                // Add new options
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.name;
+                    option.textContent = item.name;
+                    option.dataset.quantity = item.quantity;
+                    itemSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error loading items:', error));
+    }
+    
+    // Function to update quantity dropdown based on selected item
+    function updateQuantityDropdown() {
+        const itemSelect = document.getElementById('itemName');
+        const quantitySelect = document.getElementById('quantity');
+        const selectedItem = itemSelect.options[itemSelect.selectedIndex];
+        
+        // Clear existing options
+        quantitySelect.innerHTML = '<option value="">-- Select quantity --</option>';
+        
+        if (selectedItem && selectedItem.value) {
+            // Find the selected item's data
+            const itemData = window.itemsData.find(item => item.name === selectedItem.value);
+            
+            if (itemData) {
+                const maxQuantity = parseInt(itemData.quantity);
+                // Create options from 1 to maxQuantity
+                for (let i = 1; i <= maxQuantity; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    quantitySelect.appendChild(option);
+                }
+            }
+        }
+    }
+    
+    // Add event listener for item change
+    document.getElementById('itemName').addEventListener('change', updateQuantityDropdown);
+    
+    // Load items on page load
+    document.addEventListener('DOMContentLoaded', loadItems);
+</script>

@@ -178,6 +178,19 @@ h3 {
     background-color: #e6b800;
 }
 
+/* Add styling for disabled buttons */
+.borrow-btn.disabled {
+    background-color: #cccccc;
+    color: #888888;
+    cursor: not-allowed;
+    border: 1px solid #aaaaaa;
+}
+
+.borrow-btn.disabled:hover {
+    background-color: #cccccc;
+    transform: none;
+}
+
 /* Modal */
 .modal {
     display: none;

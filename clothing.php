@@ -82,7 +82,14 @@ session_start();
                     echo "<p>Size: " . $row["clothing_size_id"] . "</p>";
                     echo "<p>Condition: " . $row["condition"] . "</p>";
                     echo "<p>Quantity: " . $row["quantity"] . "</p>";
-                    echo "<button class='borrow-btn' data-name='" . $row["clothing_name"] . "'>Borrow</button>";
+                    
+                    // Check if quantity is 0, if so disable the borrow button
+                    if ($row["quantity"] > 0) {
+                        echo "<button class='borrow-btn' data-name='" . $row["clothing_name"] . "'>Borrow</button>";
+                    } else {
+                        echo "<button class='borrow-btn disabled' disabled>Out of Stock</button>";
+                    }
+                    
                     echo "<button class='edit-btn' data-id='" . $row["clothing_id"] . "' 
                           data-name='" . $row["clothing_name"] . "' 
                           data-color='" . $row["clothing_color"] . "' 
@@ -127,7 +134,7 @@ session_start();
                 
                 <div class="form-group">
                     <label for="category">Category:</label>
-                    <select id="category" name="category" class="form-select" required>
+                    <select id="category" name="category" class="form-select" onchange="loadItems()" required>
                         <option value="Instruments">Instruments</option>
                         <option value="Accessories">Accessories</option>
                         <option value="Clothing" selected>Clothing</option>
@@ -136,12 +143,14 @@ session_start();
                 
                 <div class="form-group">
                     <label for="itemName">Item name:</label>
-                    <input type="text" id="itemName" name="itemName" required>
+                    <input type="text" id="itemName" name="itemName" readonly required>
                 </div>
                 
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity" required>
+                    <select id="quantity" name="quantity" class="form-select" required>
+                        <option value="">-- Select quantity --</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -294,17 +303,110 @@ session_start();
     var borrowModal = document.getElementById("borrowModal");
     var borrowBtns = document.getElementsByClassName("borrow-btn");
     
-    for (var i = 0; i < borrowBtns.length; i++) {
-        borrowBtns[i].onclick = function() {
-            borrowModal.style.display = "flex";
-            // Set the item name in the input field
-            document.getElementById("itemName").value = this.getAttribute("data-name");
-        }
-    }
-    
     // Edit Modal
     var editModal = document.getElementById("editModal");
     var editBtns = document.getElementsByClassName("edit-btn");
+    
+    // Add Modal
+    var addModal = document.getElementById("addModal");
+    var addButton = document.getElementById("addButton");
+    
+    // Delete Modal
+    var deleteModal = document.getElementById("deleteModal");
+    var deleteButton = document.getElementById("deleteButton");
+    
+    // Function to load items based on selected category
+    function loadItems() {
+        const category = document.getElementById('category').value;
+        
+        // Clear quantity options
+        document.getElementById('quantity').innerHTML = '<option value="">-- Select quantity --</option>';
+        
+        // Fetch items for the selected category
+        fetch('get_items.php?category=' + category)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Received data:', data); // Debug output
+                
+                // Store the data for later use when selecting quantities
+                window.itemsData = data;
+                
+                // If opened from a specific clothing item, update quantity options
+                const preselectedItem = document.getElementById("itemName").value;
+                if (preselectedItem) {
+                    console.log('Preselected item:', preselectedItem); // Debug output
+                    updateQuantityDropdown(preselectedItem);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading items:', error);
+                alert('Error loading items. Please try again.');
+            });
+    }
+    
+    // Function to update quantity dropdown based on selected item
+    function updateQuantityDropdown(itemName) {
+        const quantitySelect = document.getElementById('quantity');
+        
+        // Clear existing options
+        quantitySelect.innerHTML = '<option value="">-- Select quantity --</option>';
+        
+        if (itemName && window.itemsData) {
+            console.log('Looking for item name:', itemName); // Debug output
+            console.log('Available items:', window.itemsData); // Debug output
+            
+            // Find the selected item's data - first by exact match
+            let itemData = window.itemsData.find(item => item.name === itemName);
+            
+            // If not found by exact match, try includes
+            if (!itemData) {
+                itemData = window.itemsData.find(item => {
+                    return itemName.includes(item.name) || item.name.includes(itemName);
+                });
+            }
+            
+            console.log('Found item data:', itemData); // Debug output
+            
+            if (itemData) {
+                const maxQuantity = parseInt(itemData.quantity);
+                console.log('Max quantity:', maxQuantity); // Debug output
+                
+                // Create options from 1 to maxQuantity
+                for (let i = 1; i <= maxQuantity; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    quantitySelect.appendChild(option);
+                }
+                
+                // Select the first quantity option by default
+                if (maxQuantity > 0) {
+                    quantitySelect.value = "1";
+                }
+            }
+        }
+    }
+    
+    for (var i = 0; i < borrowBtns.length; i++) {
+        borrowBtns[i].onclick = function() {
+            borrowModal.style.display = "flex";
+            
+            // Set category to Clothing by default
+            document.getElementById("category").value = "Clothing";
+            
+            // Set the item name directly in the text field
+            const itemName = this.getAttribute("data-name");
+            document.getElementById("itemName").value = itemName;
+            
+            // Load the items and update quantity dropdown
+            loadItems();
+        }
+    }
     
     for (var i = 0; i < editBtns.length; i++) {
         editBtns[i].onclick = function() {
@@ -325,17 +427,9 @@ session_start();
         }
     }
     
-    // Add Modal
-    var addModal = document.getElementById("addModal");
-    var addButton = document.getElementById("addButton");
-    
     addButton.onclick = function() {
         addModal.style.display = "flex";
     }
-    
-    // Delete Modal
-    var deleteModal = document.getElementById("deleteModal");
-    var deleteButton = document.getElementById("deleteButton");
     
     deleteButton.onclick = function() {
         deleteModal.style.display = "flex";
@@ -356,6 +450,14 @@ session_start();
             editModal.style.display = "none";
         }
     }
+    
+    // Load items on page load for the borrow modal
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize items if the borrow modal is shown immediately
+        if (borrowModal.style.display === "flex") {
+            loadItems();
+        }
+    });
     </script>
 </body>
 </html>
