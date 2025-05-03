@@ -67,6 +67,66 @@ $reported_result = $conn->query($reported_sql);
             background-color: #218838;
             transform: translateY(-2px);
         }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+        /* Sidebar styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 60px;
+            height: 100vh;
+            background-color: rgba(44, 36, 116, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+        .sidebar:hover {
+            width: 200px;
+        }
+        .icon-btn {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .icon-btn i {
+            font-size: 24px;
+            margin-right: 15px;
+            min-width: 24px;
+        }
+        .icon-btn span {
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            position: absolute;
+            left: 60px;
+        }
+        .sidebar:hover .icon-btn span {
+            opacity: 1;
+        }
+        .icon-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
     </style>
 </head>
 <body>
@@ -74,21 +134,27 @@ $reported_result = $conn->query($reported_sql);
     <div class="sidebar">
         <a href="instruments.php" class="icon-btn">
             <i class="fas fa-guitar"></i>
+            <span>Instruments</span>
         </a>
         <a href="accessory.php" class="icon-btn">
             <i class="fas fa-gem"></i>
+            <span>Accessories</span>
         </a>
         <a href="clothing.php" class="icon-btn">
             <i class="fas fa-tshirt"></i>
+            <span>Clothing</span>
         </a>
         <a href="members.php" class="icon-btn">
             <i class="fas fa-user"></i>
+            <span>Users</span>
         </a>
         <a href="report.php" class="icon-btn">
             <i class="fas fa-file-alt"></i>
+            <span>Report</span>
         </a>
         <a href="history.php" class="icon-btn">
             <i class="fas fa-clock"></i>
+            <span>History</span>
         </a>
     </div>
 
@@ -145,9 +211,6 @@ $reported_result = $conn->query($reported_sql);
                             echo "<button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
                                     <i class='fas fa-edit'></i>
                                 </button>
-                                <button class='remove-btn' onclick='confirmDelete(" . $row['history_id'] . ")'>
-                                    <i class='fas fa-trash'></i>
-                                </button>
                               </td>";
                             echo "</tr>";
                         }
@@ -199,9 +262,6 @@ $reported_result = $conn->query($reported_sql);
                             }
                             echo "<button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
                                     <i class='fas fa-edit'></i>
-                                </button>
-                                <button class='remove-btn' onclick='confirmDelete(" . $row['history_id'] . ")'>
-                                    <i class='fas fa-trash'></i>
                                 </button>
                               </td>";
                             echo "</tr>";
@@ -262,7 +322,10 @@ $reported_result = $conn->query($reported_sql);
                     <textarea id="editRemarks" name="remarks" rows="4"></textarea>
                 </div>
                 
-                <div class="submit-container">
+                <div class="submit-container" style="display: flex; justify-content: space-between;">
+                    <button type="button" class="delete-btn" onclick="confirmDelete(document.getElementById('editId').value)">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
                     <button type="submit" class="submit-btn">Update</button>
                 </div>
             </form>

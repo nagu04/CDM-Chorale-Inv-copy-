@@ -1,11 +1,12 @@
 <?php
+// Database connection parameters
 $servername = "localhost";
 $username = "root";
-$password = "password";  // Default XAMPP MySQL root password is empty
-$database = "sd_chorale";
+$password = "";  // Empty password for XAMPP default MySQL root user
+$dbname = "sd_chorale";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $database);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
