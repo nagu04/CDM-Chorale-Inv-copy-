@@ -13,19 +13,20 @@ session_start();
     <style>
         /* Sidebar styles */
         .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 60px;
-            height: 100vh;
-            background-color: rgba(44, 36, 116, 0.9);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            transition: width 0.3s ease;
-            z-index: 1000;
+         width: 80px;
+         background-color: rgba(44, 36, 116, 0.9); /* Semi-transparent blue background */
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        position: fixed;
+        left: 0;
+        transition: width 0.3s ease;
+        border-right: 4px solid #ffcc00; /* Yellow line at the right edge */
         }
+        
         .sidebar:hover {
             width: 200px;
         }
@@ -43,6 +44,7 @@ session_start();
             font-size: 24px;
             margin-right: 15px;
             min-width: 24px;
+            transition: opacity 0.3s ease;
         }
         .icon-btn span {
             white-space: nowrap;
@@ -54,50 +56,14 @@ session_start();
         .sidebar:hover .icon-btn span {
             opacity: 1;
         }
+        .sidebar:hover .icon-btn i {
+            opacity: 0;
+        }
         .icon-btn:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
         }
-        /* Additional styles for profile modal */
-        .profile-info {
-            margin-bottom: 15px;
-        }
-        .profile-info label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-        .profile-info p {
-            margin: 0;
-            padding: 10px;
-            background-color: #f8f8f8;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        /* Edit button styling */
-        .edit-btn {
-            background-color: #4e73df;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 8px;
-            display: inline-block;
-            width: auto;
-            min-width: 80px;
-            transition: all 0.3s ease;
-        }
-        .edit-btn:hover {
-            background-color: #2e59d9;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        .edit-btn:active {
-            transform: translateY(1px);
-            box-shadow: none;
-        }
+        /* Rest of the existing styles */
     </style>
 </head>
 <body>
@@ -117,7 +83,7 @@ session_start();
         </a>
         <a href="members.php" class="icon-btn">
             <i class="fas fa-user"></i>
-            <span>Users</span>
+            <span>Members</span>
         </a>
         <a href="report.php" class="icon-btn">
             <i class="fas fa-file-alt"></i>

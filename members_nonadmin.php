@@ -11,22 +11,59 @@ session_start();
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* Additional styles for profile modal */
-        .profile-info {
-            margin-bottom: 15px;
+        /* Sidebar styles */
+        .sidebar {
+         width: 80px;
+         background-color: rgba(44, 36, 116, 0.9); /* Semi-transparent blue background */
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        position: fixed;
+        left: 0;
+        transition: width 0.3s ease;
+        border-right: 4px solid #ffcc00; /* Yellow line at the right edge */
         }
-        .profile-info label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
+        
+        .sidebar:hover {
+            width: 200px;
         }
-        .profile-info p {
-            margin: 0;
-            padding: 10px;
-            background-color: #f8f8f8;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        .icon-btn {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
         }
+        .icon-btn i {
+            font-size: 24px;
+            margin-right: 15px;
+            min-width: 24px;
+            transition: opacity 0.3s ease;
+        }
+        .icon-btn span {
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            position: absolute;
+            left: 60px;
+        }
+        .sidebar:hover .icon-btn span {
+            opacity: 1;
+        }
+        .sidebar:hover .icon-btn i {
+            opacity: 0;
+        }
+        .icon-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        /* Rest of the existing styles */
     </style>
 </head>
 <body>
@@ -34,24 +71,29 @@ session_start();
     <div class="sidebar">
         <a href="instruments_nonadmin.php" class="icon-btn">
             <i class="fas fa-guitar"></i>
+            <span>Instruments</span>
         </a>
         <a href="accessory_nonadmin.php" class="icon-btn">
             <i class="fas fa-gem"></i>
+            <span>Accessories</span>
         </a>
         <a href="clothing_nonadmin.php" class="icon-btn">
             <i class="fas fa-tshirt"></i>
+            <span>Clothing</span>
         </a>
         <a href="members_nonadmin.php" class="icon-btn">
             <i class="fas fa-user"></i>
+            <span>Members</span>
         </a>
         <a href="report_nonadmin.php" class="icon-btn">
             <i class="fas fa-file-alt"></i>
+            <span>Report</span>
         </a>
         <a href="history_nonadmin.php" class="icon-btn">
             <i class="fas fa-clock"></i>
+            <span>History</span>
         </a>
     </div>
-
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->

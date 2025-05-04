@@ -80,21 +80,23 @@ $reported_result = $conn->query($reported_sql);
             background-color: #c82333;
             transform: translateY(-2px);
         }
+    
         /* Sidebar styles */
         .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 60px;
-            height: 100vh;
-            background-color: rgba(44, 36, 116, 0.9);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            transition: width 0.3s ease;
-            z-index: 1000;
+         width: 80px;
+         background-color: rgba(44, 36, 116, 0.9); /* Semi-transparent blue background */
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        position: fixed;
+        left: 0;
+        transition: width 0.3s ease;
+        border-right: 4px solid #ffcc00; /* Yellow line at the right edge */
         }
+        
         .sidebar:hover {
             width: 200px;
         }
@@ -112,6 +114,7 @@ $reported_result = $conn->query($reported_sql);
             font-size: 24px;
             margin-right: 15px;
             min-width: 24px;
+            transition: opacity 0.3s ease;
         }
         .icon-btn span {
             white-space: nowrap;
@@ -123,10 +126,14 @@ $reported_result = $conn->query($reported_sql);
         .sidebar:hover .icon-btn span {
             opacity: 1;
         }
+        .sidebar:hover .icon-btn i {
+            opacity: 0;
+        }
         .icon-btn:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
         }
+        /* Rest of the existing styles */
     </style>
 </head>
 <body>
@@ -146,7 +153,7 @@ $reported_result = $conn->query($reported_sql);
         </a>
         <a href="members.php" class="icon-btn">
             <i class="fas fa-user"></i>
-            <span>Users</span>
+            <span>Members</span>
         </a>
         <a href="report.php" class="icon-btn">
             <i class="fas fa-file-alt"></i>
@@ -211,6 +218,12 @@ $reported_result = $conn->query($reported_sql);
                             echo "<button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
                                     <i class='fas fa-edit'></i>
                                 </button>
+
+                                <button class='remove-btn' onclick='confirmDelete(" . $row['history_id'] . ")'>
+                                    <i class='fas fa-trash'></i>
+                                </button>
+
+                                
                               </td>";
                             echo "</tr>";
                         }
@@ -263,6 +276,11 @@ $reported_result = $conn->query($reported_sql);
                             echo "<button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
                                     <i class='fas fa-edit'></i>
                                 </button>
+
+                                <button class='remove-btn' onclick='confirmDelete(" . $row['history_id'] . ")'>
+                                    <i class='fas fa-trash'></i>
+                                </button>
+
                               </td>";
                             echo "</tr>";
                         }
