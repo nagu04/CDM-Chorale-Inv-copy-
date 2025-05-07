@@ -111,8 +111,10 @@ CREATE TABLE `history` (
   `item_name` varchar(100) NOT NULL,
   `quantity` int(11) NOT NULL,
   `sn` varchar(50) DEFAULT NULL,
-  `status` varchar(50) NOT NULL,
+  `condition` varchar(50) NOT NULL,
+  `status` ENUM('needs replacement', 'needs repair', 'not working', 'repaired', 'working') DEFAULT 'working',
   `remarks` text DEFAULT NULL,
+  `is_approved` boolean DEFAULT FALSE,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`history_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

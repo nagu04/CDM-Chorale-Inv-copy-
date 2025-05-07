@@ -207,7 +207,22 @@ $reported_result = $conn->query($reported_sql);
                             echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['sn']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+                            echo "<td>";
+                            if (isset($_SESSION['username']) && $_SESSION['username'] == 'admin') {
+                                echo "<form action='update_history.php' method='POST' style='display: inline;'>
+                                    <input type='hidden' name='history_id' value='" . $row['history_id'] . "'>
+                                    <select name='status' onchange='this.form.submit()'>
+                                        <option value='working'" . ($row['status'] == 'working' ? ' selected' : '') . ">Working</option>
+                                        <option value='needs repair'" . ($row['status'] == 'needs repair' ? ' selected' : '') . ">Needs Repair</option>
+                                        <option value='needs replacement'" . ($row['status'] == 'needs replacement' ? ' selected' : '') . ">Needs Replacement</option>
+                                        <option value='not working'" . ($row['status'] == 'not working' ? ' selected' : '') . ">Not Working</option>
+                                        <option value='repaired'" . ($row['status'] == 'repaired' ? ' selected' : '') . ">Repaired</option>
+                                    </select>
+                                </form>";
+                            } else {
+                                echo htmlspecialchars($row['status']);
+                            }
+                            echo "</td>";
                             echo "<td>" . ($row['is_approved'] ? "Approved" : "Pending") . "</td>";
                             echo "<td>" . htmlspecialchars($row['remarks']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";

@@ -2,7 +2,7 @@
 // Database connection parameters
 $servername = "localhost";
 $username = "root";
-$password = "password";  // Empty password for XAMPP default MySQL root user
+$password = ""; // Ensure this is the correct password for the 'root' user
 $dbname = "sd_chorale";
 
 // Create connection

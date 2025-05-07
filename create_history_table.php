@@ -11,7 +11,8 @@ $sql = "CREATE TABLE IF NOT EXISTS history (
     item_name varchar(100) NOT NULL,
     quantity int(11) NOT NULL,
     sn varchar(50) DEFAULT NULL,
-    status varchar(50) NOT NULL,
+    `condition` varchar(50) NOT NULL,
+    status ENUM('needs replacement', 'needs repair', 'not working', 'repaired', 'working') DEFAULT 'working',
     remarks text,
     is_approved boolean DEFAULT FALSE,
     created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -25,4 +26,4 @@ if ($conn->query($sql) === TRUE) {
 }
 
 $conn->close();
-?> 
+?>
