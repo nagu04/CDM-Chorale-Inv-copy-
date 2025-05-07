@@ -62,6 +62,7 @@ session_start();
         .icon-btn:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
+            width: 170px;
         }
         /* Rest of the existing styles */
     </style>
@@ -128,9 +129,6 @@ session_start();
             <button class="add-button" id="addButton">
                 <i class="fas fa-plus"></i> Add
             </button>
-            <button class="delete-button" id="deleteButton">
-                <i class="fas fa-trash"></i> Delete
-            </button>
         </div>
 
         <!-- Card Section -->
@@ -158,12 +156,15 @@ session_start();
                           data-position='" . $row["position"] . "' 
                           data-birthdate='" . (isset($row["birthdate"]) ? $row["birthdate"] : "") . "' 
                           data-address='" . (isset($row["address"]) ? $row["address"] : "") . "'>View Profile</button>";
+                    echo "<div class='card-buttons'>";
                     echo "<button class='edit-btn' data-id='" . $row["member_id"] . "' 
                           data-name='" . $row["members_name"] . "' 
                           data-program='" . $row["program"] . "' 
                           data-position='" . $row["position"] . "' 
                           data-birthdate='" . (isset($row["birthdate"]) ? $row["birthdate"] : "") . "' 
                           data-address='" . (isset($row["address"]) ? $row["address"] : "") . "'>Edit</button>";
+                    echo "<button class='delete-btn' data-id='" . $row["member_id"] . "' data-name='" . $row["members_name"] . "'>Delete</button>";
+                    echo "</div>";
                     echo "</div>";
                 }
             } else {
@@ -254,23 +255,10 @@ session_start();
         <div class="modal-content">
             <h2>Delete Member</h2>
             <form action="delete_member.php" method="POST">
+                <input type="hidden" id="deleteMemberId" name="member_id">
                 <div class="form-group">
-                    <label for="deleteMember">Select Member:</label>
-                    <select id="deleteMember" name="member_id" class="form-select" required>
-                        <option value="">-- Select a member --</option>
-                        <?php
-                        include 'db_connect.php';
-                        $sql = "SELECT member_id, members_name FROM members ORDER BY members_name";
-                        $result = $conn->query($sql);
-                        
-                        if ($result->num_rows > 0) {
-                            while($row = $result->fetch_assoc()) {
-                                echo "<option value='" . $row["member_id"] . "'>" . $row["members_name"] . "</option>";
-                            }
-                        }
-                        $conn->close();
-                        ?>
-                    </select>
+                    <label>Are you sure you want to delete:</label>
+                    <p id="deleteMemberName" class="selected-item-name"></p>
                 </div>
                 
                 <div class="submit-container">
@@ -387,10 +375,22 @@ session_start();
     
     // Delete Modal
     var deleteModal = document.getElementById("deleteModal");
+    var deleteBtns = document.getElementsByClassName("delete-btn");
     var deleteButton = document.getElementById("deleteButton");
     
-    deleteButton.onclick = function() {
-        deleteModal.style.display = "flex";
+    for (var i = 0; i < deleteBtns.length; i++) {
+        deleteBtns[i].onclick = function() {
+            // Get the member id and name from data attributes
+            var memberId = this.getAttribute("data-id");
+            var memberName = this.getAttribute("data-name");
+            
+            // Set the values in the delete form
+            document.getElementById("deleteMemberId").value = memberId;
+            document.getElementById("deleteMemberName").textContent = memberName;
+            
+            // Show the delete modal
+            deleteModal.style.display = "flex";
+        }
     }
     
     // Close modals when clicking outside

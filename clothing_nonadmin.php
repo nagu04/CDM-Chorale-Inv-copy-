@@ -59,6 +59,7 @@
         .icon-btn:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
+            width: 170px;
         }
         /* Rest of the existing styles */
     </style>

@@ -44,7 +44,7 @@ session_start();
         }
         .icon-btn i {
             font-size: 24px;
-            margin-right: 15px;
+            margin-right: 12px;
             min-width: 24px;
             transition: opacity 0.3s ease;
         }
@@ -62,9 +62,11 @@ session_start();
             opacity: 0;
         }
         .icon-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.16);
             transform: translateX(5px);
+            width: 170px;
         }
+       
         /* Rest of the existing styles */
     </style>
 </head>
@@ -152,11 +154,14 @@ session_start();
                         echo "<button class='borrow-btn disabled' disabled>Out of Stock</button>";
                     }
                     
+                    echo "<div class='card-buttons'>";
                     echo "<button class='edit-btn' data-id='" . $row["instru_id"] . "' 
                           data-name='" . $row["instrument_name"] . "' 
                           data-condition='" . $row["condition"] . "' 
                           data-quantity='" . $row["quantity"] . "'
                           data-image='" . $imagePath . "'>Edit</button>";
+                    echo "<button class='delete-btn' data-id='" . $row["instru_id"] . "' data-name='" . $row["instrument_name"] . "'>Delete</button>";
+                    echo "</div>";
                     echo "</div>";
                 }
             } else {
@@ -170,9 +175,6 @@ session_start();
         <div class="action-buttons">
             <button class="add-button" id="addButton">
                 <i class="fas fa-plus"></i> Add
-            </button>
-            <button class="delete-button" id="deleteButton">
-                <i class="fas fa-trash"></i> Delete
             </button>
         </div>
     </div>
@@ -267,25 +269,12 @@ session_start();
     <!-- Delete Instrument Modal -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
-            <h2>Delete Clothing</h2>
+            <h2>Delete Instrument</h2>
             <form action="delete_instrument.php" method="POST">
+                <input type="hidden" id="deleteInstrumentId" name="instru_id">
                 <div class="form-group">
-                    <label for="deleteInstrument">Select Instrument:</label>
-                    <select id="deleteInstrument" name="instru_id" class="form-select" required>
-                        <option value="">-- Select an instrument --</option>
-                        <?php
-                        include 'db_connect.php';
-                        $sql = "SELECT instru_id, instrument_name FROM instruments ORDER BY instrument_name";
-                        $result = $conn->query($sql);
-                        
-                        if ($result->num_rows > 0) {
-                            while($row = $result->fetch_assoc()) {
-                                echo "<option value='" . $row["instru_id"] . "'>" . $row["instrument_name"] . "</option>";
-                            }
-                        }
-                        $conn->close();
-                        ?>
-                    </select>
+                    <label>Are you sure you want to delete:</label>
+                    <p id="deleteInstrumentName" class="selected-item-name"></p>
                 </div>
                 
                 <div class="submit-container">
@@ -353,6 +342,7 @@ session_start();
     
     // Delete Modal
     var deleteModal = document.getElementById("deleteModal");
+    var deleteBtns = document.getElementsByClassName("delete-btn");
     var deleteButton = document.getElementById("deleteButton");
     
     // Function to load items based on selected category
@@ -443,12 +433,23 @@ session_start();
         }
     }
     
-    addButton.onclick = function() {
-        addModal.style.display = "flex";
+    for (var i = 0; i < deleteBtns.length; i++) {
+        deleteBtns[i].onclick = function() {
+            // Get the instrument id and name from data attributes
+            var instrumentId = this.getAttribute("data-id");
+            var instrumentName = this.getAttribute("data-name");
+            
+            // Set the values in the delete form
+            document.getElementById("deleteInstrumentId").value = instrumentId;
+            document.getElementById("deleteInstrumentName").textContent = instrumentName;
+            
+            // Show the delete modal
+            deleteModal.style.display = "flex";
+        }
     }
     
-    deleteButton.onclick = function() {
-        deleteModal.style.display = "flex";
+    addButton.onclick = function() {
+        addModal.style.display = "flex";
     }
     
     // Close modals when clicking outside

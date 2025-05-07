@@ -62,7 +62,9 @@ session_start();
         .icon-btn:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
+            width: 170px;
         }
+      
         /* Rest of the existing styles */
     </style>
 </head>
@@ -152,6 +154,7 @@ session_start();
                         echo "<button class='borrow-btn disabled' disabled>Out of Stock</button>";
                     }
                     
+                    echo "<div class='card-buttons'>";
                     echo "<button class='edit-btn' data-id='" . $row["clothing_id"] . "' 
                           data-name='" . $row["clothing_name"] . "' 
                           data-color='" . $row["clothing_color"] . "' 
@@ -159,6 +162,8 @@ session_start();
                           data-condition='" . $row["condition"] . "' 
                           data-quantity='" . $row["quantity"] . "'
                           data-image='" . $imagePath . "'>Edit</button>";
+                    echo "<button class='delete-btn' data-id='" . $row["clothing_id"] . "' data-name='" . $row["clothing_name"] . "'>Delete</button>";
+                    echo "</div>";
                     echo "</div>";
                 }
             } else {
@@ -172,9 +177,6 @@ session_start();
     <div class="action-buttons">
             <button class="add-button" id="addButton">
                 <i class="fas fa-plus"></i> Add
-            </button>
-            <button class="delete-button" id="deleteButton">
-                <i class="fas fa-trash"></i> Delete
             </button>
         </div>
 
@@ -280,23 +282,10 @@ session_start();
         <div class="modal-content">
             <h2>Delete Clothing</h2>
             <form action="delete_clothing.php" method="POST">
+                <input type="hidden" id="deleteClothingId" name="clothing_id">
                 <div class="form-group">
-                    <label for="deleteClothing">Select Clothing:</label>
-                    <select id="deleteClothing" name="clothing_id" class="form-select" required>
-                        <option value="">-- Select a clothing item --</option>
-                        <?php
-                        include 'db_connect.php';
-                        $sql = "SELECT clothing_id, clothing_name FROM clothing ORDER BY clothing_name";
-                        $result = $conn->query($sql);
-                        
-                        if ($result->num_rows > 0) {
-                            while($row = $result->fetch_assoc()) {
-                                echo "<option value='" . $row["clothing_id"] . "'>" . $row["clothing_name"] . "</option>";
-                            }
-                        }
-                        $conn->close();
-                        ?>
-                    </select>
+                    <label>Are you sure you want to delete:</label>
+                    <p id="deleteClothingName" class="selected-item-name"></p>
                 </div>
                 
                 <div class="submit-container">
@@ -374,6 +363,7 @@ session_start();
     
     // Delete Modal
     var deleteModal = document.getElementById("deleteModal");
+    var deleteBtns = document.getElementsByClassName("delete-btn");
     var deleteButton = document.getElementById("deleteButton");
     
     // Function to load items based on selected category
@@ -488,12 +478,23 @@ session_start();
         }
     }
     
-    addButton.onclick = function() {
-        addModal.style.display = "flex";
+    for (var i = 0; i < deleteBtns.length; i++) {
+        deleteBtns[i].onclick = function() {
+            // Get the clothing id and name from data attributes
+            var clothingId = this.getAttribute("data-id");
+            var clothingName = this.getAttribute("data-name");
+            
+            // Set the values in the delete form
+            document.getElementById("deleteClothingId").value = clothingId;
+            document.getElementById("deleteClothingName").textContent = clothingName;
+            
+            // Show the delete modal
+            deleteModal.style.display = "flex";
+        }
     }
     
-    deleteButton.onclick = function() {
-        deleteModal.style.display = "flex";
+    addButton.onclick = function() {
+        addModal.style.display = "flex";
     }
     
     // Close modals when clicking outside

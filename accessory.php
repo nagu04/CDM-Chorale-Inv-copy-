@@ -62,7 +62,9 @@ session_start();
         .icon-btn:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
+            width: 170px;
         }
+     
         /* Rest of the existing styles */
     </style>
 </head>
@@ -151,11 +153,14 @@ session_start();
                         echo "<button class='borrow-btn disabled' disabled>Out of Stock</button>";
                     }
                     
+                    echo "<div class='card-buttons'>";
                     echo "<button class='edit-btn' data-id='" . $row["deco_id"] . "' 
                           data-name='" . $row["deco_name"] . "' 
                           data-condition='" . $row["condition"] . "' 
                           data-quantity='" . $row["quantity"] . "'
                           data-image='" . $imagePath . "'>Edit</button>";
+                    echo "<button class='delete-btn' data-id='" . $row["deco_id"] . "' data-name='" . $row["deco_name"] . "'>Delete</button>";
+                    echo "</div>";
                     echo "</div>";
                 }
             } else {
@@ -169,9 +174,6 @@ session_start();
     <div class="action-buttons">
             <button class="add-button" id="addButton">
                 <i class="fas fa-plus"></i> Add
-            </button>
-            <button class="delete-button" id="deleteButton">
-                <i class="fas fa-trash"></i> Delete
             </button>
         </div>
     <!-- Modal -->
@@ -266,23 +268,10 @@ session_start();
         <div class="modal-content">
             <h2>Delete Accessory</h2>
             <form action="delete_accessory.php" method="POST">
+                <input type="hidden" id="deleteAccessoryId" name="deco_id">
                 <div class="form-group">
-                    <label for="deleteAccessory">Select Accessory:</label>
-                    <select id="deleteAccessory" name="deco_id" class="form-select" required>
-                        <option value="">-- Select an accessory --</option>
-                        <?php
-                        include 'db_connect.php';
-                        $sql = "SELECT deco_id, deco_name FROM accessories ORDER BY deco_name";
-                        $result = $conn->query($sql);
-                        
-                        if ($result->num_rows > 0) {
-                            while($row = $result->fetch_assoc()) {
-                                echo "<option value='" . $row["deco_id"] . "'>" . $row["deco_name"] . "</option>";
-                            }
-                        }
-                        $conn->close();
-                        ?>
-                    </select>
+                    <label>Are you sure you want to delete:</label>
+                    <p id="deleteAccessoryName" class="selected-item-name"></p>
                 </div>
                 
                 <div class="submit-container">
@@ -350,6 +339,7 @@ session_start();
     
     // Delete Modal
     var deleteModal = document.getElementById("deleteModal");
+    var deleteBtns = document.getElementsByClassName("delete-btn");
     var deleteButton = document.getElementById("deleteButton");
     
     // Function to load items based on selected category
@@ -440,12 +430,23 @@ session_start();
         }
     }
     
-    addButton.onclick = function() {
-        addModal.style.display = "flex";
+    for (var i = 0; i < deleteBtns.length; i++) {
+        deleteBtns[i].onclick = function() {
+            // Get the accessory id and name from data attributes
+            var accessoryId = this.getAttribute("data-id");
+            var accessoryName = this.getAttribute("data-name");
+            
+            // Set the values in the delete form
+            document.getElementById("deleteAccessoryId").value = accessoryId;
+            document.getElementById("deleteAccessoryName").textContent = accessoryName;
+            
+            // Show the delete modal
+            deleteModal.style.display = "flex";
+        }
     }
     
-    deleteButton.onclick = function() {
-        deleteModal.style.display = "flex";
+    addButton.onclick = function() {
+        addModal.style.display = "flex";
     }
     
     // Close modals when clicking outside
