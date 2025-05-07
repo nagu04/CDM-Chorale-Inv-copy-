@@ -176,8 +176,8 @@ $reported_result = $conn->query($reported_sql);
             <a href="index.php" class="logout">Log Out</a>
         </div>
 
-        <!-- History Tables -->
-        <div class="table-container">
+         <!-- History Tables -->
+         <div class="table-container">
             <!-- Borrowed Items Table -->
             <h2 class="section-title">Borrowed Items</h2>
             <table>
@@ -189,9 +189,8 @@ $reported_result = $conn->query($reported_sql);
                         <th>Item Name</th>
                         <th>Quantity</th>
                         <th>SN</th>
-                        <th>Status</th>
-                        <th>Approval</th>
                         <th>Remarks</th>
+                        <th>Approval</th>
                         <th>Date Created</th>
                         <th>Actions</th>
                     </tr>
@@ -207,24 +206,9 @@ $reported_result = $conn->query($reported_sql);
                             echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['sn']) . "</td>";
-                            echo "<td>";
-                            if (isset($_SESSION['username']) && $_SESSION['username'] == 'admin') {
-                                echo "<form action='update_history.php' method='POST' style='display: inline;'>
-                                    <input type='hidden' name='history_id' value='" . $row['history_id'] . "'>
-                                    <select name='status' onchange='this.form.submit()'>
-                                        <option value='working'" . ($row['status'] == 'working' ? ' selected' : '') . ">Working</option>
-                                        <option value='needs repair'" . ($row['status'] == 'needs repair' ? ' selected' : '') . ">Needs Repair</option>
-                                        <option value='needs replacement'" . ($row['status'] == 'needs replacement' ? ' selected' : '') . ">Needs Replacement</option>
-                                        <option value='not working'" . ($row['status'] == 'not working' ? ' selected' : '') . ">Not Working</option>
-                                        <option value='repaired'" . ($row['status'] == 'repaired' ? ' selected' : '') . ">Repaired</option>
-                                    </select>
-                                </form>";
-                            } else {
-                                echo htmlspecialchars($row['status']);
-                            }
-                            echo "</td>";
-                            echo "<td>" . ($row['is_approved'] ? "Approved" : "Pending") . "</td>";
+                            
                             echo "<td>" . htmlspecialchars($row['remarks']) . "</td>";
+                            echo "<td>" . ($row['is_approved'] ? "Approved" : "Pending") . "</td>";
                             echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                             echo "<td>";
                             if (!$row['is_approved']) {
@@ -232,7 +216,7 @@ $reported_result = $conn->query($reported_sql);
                                         <i class='fas fa-check'></i>
                                     </button>";
                             }
-                            echo "<button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
+                               echo "<button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
                                     <i class='fas fa-edit'></i>
                                 </button>
 
@@ -240,12 +224,11 @@ $reported_result = $conn->query($reported_sql);
                                     <i class='fas fa-trash'></i>
                                 </button>
 
-                                
                               </td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='11' style='text-align: center;'>No borrowed items found</td></tr>";
+                        echo "<tr><td colspan='10' style='text-align: center;'>No borrowed items found</td></tr>";
                     }
                     ?>
                 </tbody>
@@ -281,7 +264,7 @@ $reported_result = $conn->query($reported_sql);
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['sn']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['status']) . "</td>";
-                            echo "<td>" . ($row['is_approved'] ? "Approved" : "Pending") . "</td>";
+                            echo "<td>" . ($row['is_approved'] ? "Resolved" : "Pending") . "</td>";
                             echo "<td>" . htmlspecialchars($row['remarks']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                             echo "<td>";

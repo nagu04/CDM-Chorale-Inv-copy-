@@ -26,7 +26,7 @@ CREATE TABLE `accessories` (
   `deco_id` int(11) NOT NULL AUTO_INCREMENT,
   `deco_name` varchar(50) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
-  `condition` enum('GOOD','BAD') DEFAULT 'GOOD',
+  `condition` varchar(50) DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`deco_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -55,7 +55,7 @@ CREATE TABLE `clothing` (
   `quantity` varchar(45) DEFAULT NULL,
   `clothing_color` varchar(45) DEFAULT NULL,
   `clothing_size_id` varchar(11) DEFAULT NULL,
-  `condition` enum('GOOD','BAD') DEFAULT 'GOOD',
+  `condition` varchar(50) DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`clothing_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -111,7 +111,7 @@ CREATE TABLE `history` (
   `item_name` varchar(100) NOT NULL,
   `quantity` int(11) NOT NULL,
   `sn` varchar(50) DEFAULT NULL,
-  `condition` varchar(50) NOT NULL,
+  `condition` varchar(50) DEFAULT NULL,
   `status` ENUM('needs replacement', 'needs repair', 'not working', 'repaired', 'working') DEFAULT 'working',
   `remarks` text DEFAULT NULL,
   `is_approved` boolean DEFAULT FALSE,
@@ -140,7 +140,7 @@ CREATE TABLE `instruments` (
   `instru_id` int(11) NOT NULL AUTO_INCREMENT,
   `instrument_name` varchar(75) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
-  `condition` enum('BAD','GOOD') DEFAULT 'GOOD',
+  `condition` varchar(50) DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`instru_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

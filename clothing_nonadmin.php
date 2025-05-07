@@ -238,7 +238,7 @@
     }
     
     // Function to update quantity dropdown based on selected item
-    function updateQuantityDropdown(itemName) {
+    function updateQuantityDropdown(itemName, ) {
         const quantitySelect = document.getElementById('quantity');
         
         // Clear existing options

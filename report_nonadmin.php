@@ -151,11 +151,18 @@ session_start();
                         <label for="sn">SN:</label>
                         <input type="text" id="sn" name="sn">
                     </div>
-                    
+
                     <div class="form-group">
-                        <label for="status">Status:</label>
-                        <input type="text" id="status" name="status" required>
+                        <label for="status">Item Status</label>
+                        <select class="form-control" id="status" name="status" required>
+                            <option value="needs repair">Needs Repair</option>
+                            <option value="needs replacement">Needs Replacement</option>
+                            <option value="not working">Not Working</option>
+                            <option value="working">Working</option>
+                        </select>
                     </div>
+                    
+                
                     
                     <div class="form-group">
                         <label for="remarks">Remarks:</label>

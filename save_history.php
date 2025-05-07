@@ -25,16 +25,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item_name = $_POST['itemName'];
     $quantity = $_POST['quantity'];
     $sn = isset($_POST['sn']) ? $_POST['sn'] : null;
-    $status = isset($_POST['status']) ? $_POST['status']: 'Pending';
+    
+    // Ensure status is a valid enum value
+    $valid_statuses = ['needs replacement', 'needs repair', 'not working', 'repaired', 'working'];
+    $status = isset($_POST['status']) ? $_POST['status'] : 'working';
+    if (!in_array($status, $valid_statuses)) {
+        $status = 'working'; // Default to working if invalid status provided
+    }
+    
     $remarks = isset($_POST['remarks']) ? $_POST['remarks'] : null;
+    
+    // Set default condition value
+    $condition = isset($_POST['condition']) ? $_POST['condition'] : 'good';
 
     // Start transaction
     $conn->begin_transaction();
 
     try {
         // Prepare and execute the SQL statement for history
-        $stmt = $conn->prepare("INSERT INTO history (type, borrowed_by, date, category, item_name, quantity, sn, status, remarks) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssisss", $type, $borrowed_by, $date, $category, $item_name, $quantity, $sn, $status, $remarks);
+        $stmt = $conn->prepare("INSERT INTO history (type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, `condition`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssissss", $type, $borrowed_by, $date, $category, $item_name, $quantity, $sn, $status, $remarks, $condition);
         $stmt->execute();
         $stmt->close();
 
