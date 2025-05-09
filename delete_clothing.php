@@ -5,14 +5,34 @@ include 'db_connect.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clothing_id'])) {
     $clothing_id = $_POST['clothing_id'];
     
-    // First, get the image path
-    $stmt = $conn->prepare("SELECT image_path FROM clothing WHERE clothing_id = ?");
+    // First, get all clothing details
+    $stmt = $conn->prepare("SELECT * FROM clothing WHERE clothing_id = ?");
     $stmt->bind_param("i", $clothing_id);
     $stmt->execute();
     $result = $stmt->get_result();
     
     if ($row = $result->fetch_assoc()) {
-        $image_path = $row['image_path'];
+        $image_path = $row['image_path'] ?? '';
+        $clothing_name = $row['clothing_name'];
+        $condition = $row['condition'];
+        $quantity = $row['quantity'];
+        
+        // Convert to JSON for additional details
+        $details = json_encode([
+            'original_table' => 'clothing',
+            'original_id' => $clothing_id,
+            'clothing_name' => $clothing_name,
+            'condition' => $condition,
+            'quantity' => $quantity
+        ]);
+        
+        // Store in deleted_items table
+        $save_stmt = $conn->prepare("INSERT INTO deleted_items (item_id, item_name, item_type, quantity, condition_status, image_path, deleted_by, details) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $deleted_by = $_SESSION['username'] ?? 'Unknown User';
+        $item_type = 'clothing';
+        $save_stmt->bind_param("isiissss", $clothing_id, $clothing_name, $item_type, $quantity, $condition, $image_path, $deleted_by, $details);
+        $save_stmt->execute();
+        $save_stmt->close();
     }
     
     $stmt->close();
@@ -22,10 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clothing_id'])) {
     $stmt->bind_param("i", $clothing_id);
     
     if ($stmt->execute()) {
-        // If clothing deleted successfully, delete the image if it exists and is not the default
-        if (!empty($image_path) && file_exists($image_path) && $image_path != 'barong.png') {
-            unlink($image_path); // Delete the image file
-        }
+        // We don't delete the image anymore so we can use it in the deleted items page
         
         // Success message
         $_SESSION['success_message'] = "Clothing deleted successfully!";

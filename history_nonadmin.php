@@ -4,11 +4,11 @@ session_start();
 include 'db_connect.php';
 
 // Fetch borrowed items
-$borrowed_sql = "SELECT history_id, type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, created_at, is_approved FROM history WHERE type = 'BORROW' ORDER BY created_at DESC";
+$borrowed_sql = "SELECT history_id, type, borrowed_by, date, date_return, category, item_name, quantity, sn, status, remarks, created_at, is_approved FROM history WHERE type = 'BORROW' ORDER BY created_at DESC";
 $borrowed_result = $conn->query($borrowed_sql);
 
 // Fetch reported items
-$reported_sql = "SELECT history_id, type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, created_at, is_approved FROM history WHERE type = 'REPORT' ORDER BY created_at DESC";
+$reported_sql = "SELECT history_id, type, borrowed_by, date, date_return, category, item_name, quantity, sn, status, remarks, created_at, is_approved FROM history WHERE type = 'REPORT' ORDER BY created_at DESC";
 $reported_result = $conn->query($reported_sql);
 ?>
 <!DOCTYPE html>
@@ -137,6 +137,10 @@ $reported_result = $conn->query($reported_sql);
             <i class="fas fa-clock"></i>
             <span>History</span>
         </a>
+        <a href="deleted_items.php" class="icon-btn">
+            <i class="fas fa-trash-alt"></i>
+            <span>Deleted Items</span>
+        </a>
     </div>
 
     <!-- Main Content -->
@@ -144,6 +148,7 @@ $reported_result = $conn->query($reported_sql);
         <!-- Header -->
         <div class="header">
             <img src="picture-1.png" alt="Logo" class="header-logo">
+            <div class="section-indicator">History</div>
             <h2>CDM Chorale Inventory System</h2>
             <a href="index.php" class="logout">Log Out</a>
         </div>
@@ -156,7 +161,8 @@ $reported_result = $conn->query($reported_sql);
                 <thead>
                     <tr>
                         <th>Borrowed By</th>
-                        <th>Date</th>
+                        <th>Date to Borrow</th>
+                        <th>Date to Return</th>
                         <th>Category</th>
                         <th>Item Name</th>
                         <th>Quantity</th>
@@ -174,6 +180,7 @@ $reported_result = $conn->query($reported_sql);
                             echo "<tr>";
                             echo "<td>" . htmlspecialchars($row['borrowed_by']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['date_return']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
@@ -205,7 +212,7 @@ $reported_result = $conn->query($reported_sql);
                 <thead>
                     <tr>
                         <th>Reported By</th>
-                        <th>Date</th>
+                        <th>Date Reported</th>
                         <th>Category</th>
                         <th>Item Name</th>
                         <th>Quantity</th>
@@ -278,7 +285,9 @@ $reported_result = $conn->query($reported_sql);
                 
                 <div class="form-group">
                     <label for="editQuantity">Quantity:</label>
-                    <input type="number" id="editQuantity" name="quantity" required>
+                    <select id="editQuantity" name="quantity" required>
+                        <!-- Options will be populated via JavaScript -->
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -311,12 +320,66 @@ $reported_result = $conn->query($reported_sql);
         document.getElementById('editDate').value = data.date;
         document.getElementById('editCategory').value = data.category;
         document.getElementById('editItemName').value = data.item_name;
-        document.getElementById('editQuantity').value = data.quantity;
+        
+        // Fetch quantities from database based on category and item name
+        fetchQuantities(data.category, data.item_name, data.quantity);
+        
         document.getElementById('editSn').value = data.sn;
         document.getElementById('editStatus').value = data.status;
         document.getElementById('editRemarks').value = data.remarks;
         
         document.getElementById('editModal').style.display = 'flex';
+    }
+    
+    function fetchQuantities(category, itemName, currentQuantity) {
+        // Clear the dropdown first
+        const quantityDropdown = document.getElementById('editQuantity');
+        quantityDropdown.innerHTML = '';
+        
+        // Add a loading option
+        const loadingOption = document.createElement('option');
+        loadingOption.text = 'Loading...';
+        quantityDropdown.add(loadingOption);
+        
+        // Fetch quantities via AJAX
+        fetch(`get_item_quantity.php?category=${encodeURIComponent(category)}&item_name=${encodeURIComponent(itemName)}`)
+            .then(response => response.json())
+            .then(data => {
+                // Clear the dropdown
+                quantityDropdown.innerHTML = '';
+                
+                if (data.error) {
+                    // If there's an error, add a default option with the current quantity
+                    const option = document.createElement('option');
+                    option.value = currentQuantity;
+                    option.text = currentQuantity;
+                    quantityDropdown.add(option);
+                } else {
+                    // Add options for each quantity
+                    data.quantities.forEach(qty => {
+                        const option = document.createElement('option');
+                        option.value = qty;
+                        option.text = qty;
+                        
+                        // Select the current quantity by default
+                        if (qty == currentQuantity) {
+                            option.selected = true;
+                        }
+                        
+                        quantityDropdown.add(option);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching quantities:', error);
+                
+                // On error, add a default option with the current quantity
+                quantityDropdown.innerHTML = '';
+                const option = document.createElement('option');
+                option.value = currentQuantity;
+                option.text = currentQuantity;
+                quantityDropdown.add(option);
+            });
     }
 
     function confirmDelete(id) {

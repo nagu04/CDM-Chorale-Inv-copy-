@@ -2,27 +2,52 @@
 session_start();
 include 'db_connect.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['history_id']) && isset($_POST['status'])) {
-    $history_id = $_POST['history_id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+    $history_id = $_POST['id'];
+    $borrowed_by = $_POST['borrowedBy'];
+    $date = $_POST['date'];
+    $date_return = $_POST['date_return'];
+    $category = $_POST['category'];
+    $item_name = $_POST['itemName'];
+    $quantity = $_POST['quantity'];
+    $sn = $_POST['sn'];
     $status = $_POST['status'];
+    $remarks = $_POST['remarks'];
     
-    // Update the status
-    $stmt = $conn->prepare("UPDATE history SET status = ? WHERE history_id = ?");
-    $stmt->bind_param("si", $status, $history_id);
+    // Update all fields
+    $stmt = $conn->prepare("UPDATE history SET borrowed_by = ?, date = ?, date_return = ?, category = ?, item_name = ?, quantity = ?, sn = ?, status = ?, remarks = ? WHERE history_id = ?");
+    $stmt->bind_param("sssssisssi", $borrowed_by, $date, $date_return, $category, $item_name, $quantity, $sn, $status, $remarks, $history_id);
     
     if ($stmt->execute()) {
-        $_SESSION['success_message'] = "Status updated successfully!";
+        $_SESSION['success_message'] = "History record updated successfully!";
     } else {
-        $_SESSION['error_message'] = "Error updating status: " . $conn->error;
+        $_SESSION['error_message'] = "Error updating record: " . $conn->error;
     }
     
     $stmt->close();
     
-    // Redirect back to history page
-    header("Location: history.php");
+    // Determine which page to redirect to based on the HTTP referer
+    $referer = $_SERVER['HTTP_REFERER'] ?? '';
+    
+    if (strpos($referer, '_nonadmin') !== false) {
+        // Redirect to non-admin history page
+        header("Location: history_nonadmin.php");
+    } else {
+        // Redirect to admin history page
+        header("Location: history.php");
+    }
     exit();
 } else {
-    header("Location: history.php");
+    // Determine which page to redirect to based on the HTTP referer for error case
+    $referer = $_SERVER['HTTP_REFERER'] ?? '';
+    
+    if (strpos($referer, '_nonadmin') !== false) {
+        // Redirect to non-admin history page
+        header("Location: history_nonadmin.php");
+    } else {
+        // Redirect to admin history page
+        header("Location: history.php");
+    }
     exit();
 }
 

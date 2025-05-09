@@ -3,8 +3,17 @@ session_start();
 include 'db_connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check if all required fields are present
+    // Get the type first to determine required fields
+    $type = $_POST['type'] ?? '';
+    
+    // Different required fields based on type
     $required_fields = ['type', 'borrowedBy', 'date', 'category', 'itemName', 'quantity'];
+    
+    // Only require date_return for BORROW operations
+    if ($type === 'BORROW') {
+        $required_fields[] = 'date_return';
+    }
+    
     $missing_fields = [];
     
     foreach ($required_fields as $field) {
@@ -18,9 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Get form data
-    $type = $_POST['type'];
     $borrowed_by = $_POST['borrowedBy'];
     $date = $_POST['date'];
+    // Set date_return to null by default, use the POST value if provided
+    $date_return = isset($_POST['date_return']) && !empty($_POST['date_return']) ? $_POST['date_return'] : null;
     $category = $_POST['category'];
     $item_name = $_POST['itemName'];
     $quantity = $_POST['quantity'];
@@ -43,8 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Prepare and execute the SQL statement for history
-        $stmt = $conn->prepare("INSERT INTO history (type, borrowed_by, date, category, item_name, quantity, sn, status, remarks, `condition`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssissss", $type, $borrowed_by, $date, $category, $item_name, $quantity, $sn, $status, $remarks, $condition);
+        $stmt = $conn->prepare("INSERT INTO history (type, borrowed_by, date, date_return, category, item_name, quantity, sn, status, remarks, `condition`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssissss", $type, $borrowed_by, $date, $date_return, $category, $item_name, $quantity, $sn, $status, $remarks, $condition);
         $stmt->execute();
         $stmt->close();
 

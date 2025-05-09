@@ -95,6 +95,10 @@ session_start();
             <i class="fas fa-clock"></i>
             <span>History</span>
         </a>
+        <a href="deleted_items.php" class="icon-btn">
+            <i class="fas fa-trash-alt"></i>
+            <span>Deleted Items</span>
+        </a>
     </div>
 
 
@@ -103,6 +107,7 @@ session_start();
         <!-- Header -->
         <div class="header">
             <img src="picture-1.png" alt="Logo" class="header-logo">
+            <div class="section-indicator">Accessories</div>
             <h2>CDM Chorale Inventory System</h2>
             
             <a href="index.php" class="logout">Log Out</a>
@@ -138,7 +143,7 @@ session_start();
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     // Determine image to display
-                    $imagePath = !empty($row["image_path"]) ? $row["image_path"] : 'keyboard.jpg';
+                    $imagePath = !empty($row["image_path"]) ? $row["image_path"] : 'picture-1.png';
                     
                     echo "<div class='card'>";
                     echo "<img src='" . $imagePath . "' alt='Accessory'>";
@@ -188,9 +193,14 @@ session_start();
                 </div>
                 
                 <div class="form-group">
-                    <label for="date">Date:</label>
+                    <label for="date">Date to be Borrowed:</label>
                     <input type="date" id="date" name="date" required>
                 </div>
+                <div class="form-group">
+                    <label for="date">Date to be Returned:</label>
+                    <input type="date" id="date_return" name="date_return" required>
+                </div>
+                
                 
                 <div class="form-group">
                     <label for="category">Category:</label>

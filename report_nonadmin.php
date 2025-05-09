@@ -95,6 +95,10 @@ session_start();
             <i class="fas fa-clock"></i>
             <span>History</span>
         </a>
+        <a href="deleted_items.php" class="icon-btn">
+            <i class="fas fa-trash-alt"></i>
+            <span>Deleted Items</span>
+        </a>
     </div>
 
     <!-- Main Content -->
@@ -102,6 +106,7 @@ session_start();
         <!-- Header -->
         <div class="header">
             <img src="picture-1.png" alt="Logo" class="header-logo">
+            <div class="section-indicator">Report Item</div>
             <h2>CDM Chorale Inventory System</h2>
             
             <a href="index.php" class="logout">Log Out</a>

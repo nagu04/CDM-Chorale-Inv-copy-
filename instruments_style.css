@@ -81,6 +81,19 @@ body {
     font-weight: normal;
 }
 
+/* Section Indicator */
+.section-indicator {
+    background-color: #ffcc00;
+    color: #000066;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    margin-right: 20px;
+}
+
 /* Log Out Button */
 .logout {
     background-color: #000066;
@@ -128,7 +141,7 @@ h3 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #b3b3b3; /* Light gray background */
+    background-color: #b3b3b3f5; /* Light gray background */
     border-radius: 15px; /* Increased from 8px for more curved edges */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow: deeper, more spread */
     margin: 15px 5px;
@@ -345,21 +358,7 @@ h3 {
     font-size: 16px;
     transition: all 0.3s ease;
 }
-/*
-.edit-btn {
-    background-color: #4e73df;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 8px;
-    display: inline-block;
-    width: auto;
-    min-width: 80px;
-    transition: all 0.3s ease;
-} */
+
 
 .edit-btn:hover {
     background-color: #2e59d9;
@@ -457,23 +456,7 @@ td:last-child {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Delete Button 
-.delete-btn {
-    background-color: #ff4444;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    z-index: 901; /* Ensure clickability 
-}
-*/
+
 
 .delete-btn:hover {
     background-color: #e60000;
