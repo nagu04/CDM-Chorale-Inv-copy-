@@ -162,7 +162,7 @@ $result = $conn->query($sql);
         </a>
         <a href="deleted_items_nonadmin.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted Items</span>
+            <span>Deleted</span>
         </a>
     </div>
 

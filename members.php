@@ -96,7 +96,7 @@ session_start();
         </a>
         <a href="deleted_items.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted Items</span>
+            <span>Deleted</span>
         </a>
     </div>
 
@@ -310,6 +310,13 @@ session_start();
                     <small>(Leave empty to keep current image)</small>
                 </div>
                 
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="removeImage" name="remove_image" value="5">
+                        Remove current image (use default)
+                    </label>
+                </div>
+                
                 <div class="submit-container">
                     <button type="submit" class="submit-btn">Update Member</button>
                 </div>
@@ -366,9 +373,32 @@ session_start();
             document.getElementById("editBirthdate").value = memberBirthdate || "";
             document.getElementById("editAddress").value = memberAddress || "";
             
+            // Reset remove image checkbox
+            document.getElementById("removeImage").checked = false;
+            document.getElementById("editProfileImage").disabled = false;
+            
             editModal.style.display = "flex";
         }
     }
+    
+    // Handle checkbox for removing image
+    document.getElementById('removeImage').addEventListener('change', function() {
+        document.getElementById('editProfileImage').disabled = this.checked;
+        
+        // Clear the file input if checkbox is checked
+        if (this.checked) {
+            document.getElementById('editProfileImage').value = '';
+        }
+    });
+    
+    // Handle file input for uploading image
+    document.getElementById('editProfileImage').addEventListener('change', function() {
+        if (this.value) {
+            document.getElementById('removeImage').disabled = true;
+        } else {
+            document.getElementById('removeImage').disabled = false;
+        }
+    });
     
     // Add Modal
     var addModal = document.getElementById("addModal");

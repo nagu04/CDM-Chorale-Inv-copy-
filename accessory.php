@@ -97,7 +97,7 @@ session_start();
         </a>
         <a href="deleted_items.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted Items</span>
+            <span>Deleted</span>
         </a>
     </div>
 
@@ -224,8 +224,8 @@ session_start();
                 </div>
                 
                 <div class="form-group">
-                    <label for="sn">SN:</label>
-                    <input type="text" id="sn" name="sn" required>
+                    <label for="sn">Student Number:</label>
+                    <input type="text" id="sn" name="sn" minlength="10" maxlength="11" required>
                 </div>
               
                 
@@ -325,6 +325,13 @@ session_start();
                     <label for="editAccessoryImage">Change Image:</label>
                     <input type="file" id="editAccessoryImage" name="accessory_image" accept="image/*">
                     <small>(Leave empty to keep current image)</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="removeImage" name="remove_image" value="5">
+                        Remove current image (use default) 
+                    </label>
                 </div>
                 
                 <div class="submit-container">
@@ -436,9 +443,37 @@ session_start();
             document.getElementById("currentImage").src = imagePath;
             document.getElementById("currentImagePath").value = imagePath;
             
+            // Reset remove image checkbox
+            document.getElementById("removeImage").checked = false;
+            document.getElementById("editAccessoryImage").disabled = false;
+            
             editModal.style.display = "flex";
         }
     }
+    
+    // Handle checkbox for removing image
+    document.getElementById('removeImage').addEventListener('change', function() {
+        document.getElementById('editAccessoryImage').disabled = this.checked;
+        
+        // Clear the file input if checkbox is checked
+        if (this.checked) {
+            document.getElementById('editAccessoryImage').value = '';
+            // Show the default image in the preview
+            document.getElementById('currentImage').src = 'picture-1.png';
+        } else {
+            // Restore the original image path
+            document.getElementById('currentImage').src = document.getElementById('currentImagePath').value;
+        }
+    });
+    
+    // Handle file input for uploading image
+    document.getElementById('editAccessoryImage').addEventListener('change', function() {
+        if (this.value) {
+            document.getElementById('removeImage').disabled = true;
+        } else {
+            document.getElementById('removeImage').disabled = false;
+        }
+    });
     
     for (var i = 0; i < deleteBtns.length; i++) {
         deleteBtns[i].onclick = function() {
@@ -480,6 +515,22 @@ session_start();
         // Initialize items if the borrow modal is shown immediately
         if (borrowModal.style.display === "flex") {
             loadItems();
+        }
+    });
+
+    // Get the modal
+    var modal = document.getElementById("accessoriesBorrowModal");
+
+    // Get all buttons that should open the modal
+    var btns = document.getElementsByClassName("borrow-btn");
+    
+    // Student Number validation
+    document.getElementById('sn').addEventListener('input', function() {
+        var value = this.value;
+        if (value.length > 0 && (value.length < 10 || value.length > 11)) {
+            this.setCustomValidity('Student Number must be 10-11 characters long');
+        } else {
+            this.setCustomValidity('');
         }
     });
     </script>

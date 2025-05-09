@@ -137,9 +137,9 @@ $reported_result = $conn->query($reported_sql);
             <i class="fas fa-clock"></i>
             <span>History</span>
         </a>
-        <a href="deleted_items.php" class="icon-btn">
+        <a href="deleted_items_nonadmin.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted Items</span>
+            <span>Deleted</span>
         </a>
     </div>
 
@@ -166,7 +166,7 @@ $reported_result = $conn->query($reported_sql);
                         <th>Category</th>
                         <th>Item Name</th>
                         <th>Quantity</th>
-                        <th>SN</th>
+                        <th>Student Number</th>
                         <th>Remarks</th>
                         <th>Approval</th>
                         <th>Date Created</th>
@@ -216,7 +216,7 @@ $reported_result = $conn->query($reported_sql);
                         <th>Category</th>
                         <th>Item Name</th>
                         <th>Quantity</th>
-                        <th>SN</th>
+                        <th>Student Number</th>
                         <th>Status</th>
                         <th>Remarks</th>
                         <th>Date Created</th>

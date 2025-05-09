@@ -97,7 +97,7 @@ session_start();
         </a>
         <a href="deleted_items.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted Items</span>
+            <span>Deleted</span>
         </a>
     </div>
 
@@ -154,20 +154,26 @@ session_start();
                     </div>
                     
                     <div class="form-group">
-                        <label for="sn">SN:</label>
-                        <input type="text" id="sn" name="sn">
+                        <label for="sn">Student Number:</label>
+                        <input type="text" id="sn" name="sn" minlength="10" maxlength="11" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="status">Item Status</label>
-                        <select class="form-control" id="status" name="status" required>
+                        <select class="form-control" id="status" name="status" onchange="toggleCustomStatus()" required>
                             <option value="needs repair">Needs Repair</option>
                             <option value="needs replacement">Needs Replacement</option>
                             <option value="not working">Not Working</option>
                             <option value="working">Working</option>
+                            <option value="other">Other</option>
                         </select>
                     </div>
                     
+                    <div class="form-group" id="customStatusGroup" style="display: none;">
+                        <label for="customStatus">Specify Status:</label>
+                        <input type="text" id="customStatus" name="custom_status" class="form-control" placeholder="Enter custom status...">
+                
+                    </div>
                  
                     <div class="form-group">
                         <label for="remarks">Remarks:</label>
@@ -244,4 +250,40 @@ session_start();
     
     // Load items on page load
     document.addEventListener('DOMContentLoaded', loadItems);
+    
+    // Student Number validation
+    document.getElementById('sn').addEventListener('input', function() {
+        var value = this.value;
+        if (value.length > 0 && (value.length < 10 || value.length > 11)) {
+            this.setCustomValidity('Student Number must be 10-11 characters long');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    function toggleCustomStatus() {
+        const statusSelect = document.getElementById('status');
+        const customStatusGroup = document.getElementById('customStatusGroup');
+        const customStatusInput = document.getElementById('customStatus');
+        
+        if (statusSelect.value === 'other') {
+            customStatusGroup.style.display = 'block';
+            customStatusInput.setAttribute('required', 'required');
+        } else {
+            customStatusGroup.style.display = 'none';
+            customStatusInput.removeAttribute('required');
+        }
+    }
+
+    // Form submission validation
+    document.querySelector('form').addEventListener('submit', function(event) {
+        const statusSelect = document.getElementById('status');
+        const customStatusInput = document.getElementById('customStatus');
+        
+        if (statusSelect.value === 'other' && customStatusInput.value.trim() === '') {
+            event.preventDefault();
+            alert('Please specify a custom status');
+            customStatusInput.focus();
+        }
+    });
 </script>

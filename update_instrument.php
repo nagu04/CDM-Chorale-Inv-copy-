@@ -12,8 +12,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['instru_id'])) {
     // Default to current image path
     $image_path = $current_image_path;
     
-    // Handle image upload if a new image is provided
-    if(isset($_FILES['instrument_image']) && $_FILES['instrument_image']['error'] == 0) {
+    // Check if remove_image checkbox is checked
+    if(isset($_POST['remove_image']) && $_POST['remove_image'] == '5') {
+        // Set image path to default image
+        $image_path = 'picture-1.png';
+        
+        // Delete the old image if it exists and is not already the default
+        if (!empty($current_image_path) && file_exists($current_image_path) && 
+            $current_image_path != 'picture-1.png' && $current_image_path != 'keyboard.jpg') {
+            unlink($current_image_path);
+        }
+    }
+    // Handle image upload if a new image is provided and remove_image is not checked
+    elseif(isset($_FILES['instrument_image']) && $_FILES['instrument_image']['error'] == 0) {
         // Create the instrument_images directory if it doesn't exist
         if(!file_exists('instrument_images')) {
             mkdir('instrument_images', 0777, true);
@@ -27,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['instru_id'])) {
         // Move the uploaded file to the target location
         if(move_uploaded_file($_FILES['instrument_image']['tmp_name'], $target_file)) {
             // If upload successful, delete the old image if it exists and is not the default
-            if (!empty($current_image_path) && file_exists($current_image_path) && $current_image_path != 'keyboard.jpg') {
+            if (!empty($current_image_path) && file_exists($current_image_path) && 
+                $current_image_path != 'picture-1.png' && $current_image_path != 'keyboard.jpg') {
                 unlink($current_image_path); // Delete the old image file
             }
             

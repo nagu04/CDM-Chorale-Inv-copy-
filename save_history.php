@@ -36,11 +36,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quantity = $_POST['quantity'];
     $sn = isset($_POST['sn']) ? $_POST['sn'] : null;
     
+    // Validate student number length (10-11 characters)
+    if (!empty($sn) && (strlen($sn) < 10 || strlen($sn) > 11)) {
+        die("Error: Student Number must be 10-11 characters long.");
+    }
+    
     // Ensure status is a valid enum value
-    $valid_statuses = ['needs replacement', 'needs repair', 'not working', 'repaired', 'working'];
+    $valid_statuses = ['needs replacement', 'needs repair', 'not working', 'repaired', 'working', 'other'];
     $status = isset($_POST['status']) ? $_POST['status'] : 'working';
-    if (!in_array($status, $valid_statuses)) {
-        $status = 'working'; // Default to working if invalid status provided
+    
+    // Handle custom status when "other" is selected
+    if ($status === 'other' && isset($_POST['custom_status']) && !empty($_POST['custom_status'])) {
+        $status = $_POST['custom_status'];
+    } elseif ($status === 'other') {
+        $status = 'custom status'; // Default if "other" selected but no custom text
+    }
+    
+    if (!in_array($status, $valid_statuses) && $status !== 'custom status') {
+        // If status is not one of the predefined values but is a custom entry, that's OK
+        // We only default to "working" if the status is completely invalid and not a custom entry
+        if (empty($status)) {
+            $status = 'working';
+        }
     }
     
     $remarks = isset($_POST['remarks']) ? $_POST['remarks'] : null;

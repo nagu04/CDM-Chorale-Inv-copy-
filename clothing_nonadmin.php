@@ -91,9 +91,9 @@
             <i class="fas fa-clock"></i>
             <span>History</span>
         </a>
-        <a href="deleted_items.php" class="icon-btn">
+        <a href="deleted_items_nonadmin.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted Items</span>
+            <span>Deleted</span>
         </a>
     </div>
 
@@ -188,8 +188,8 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="sn">SN:</label>
-                    <input type="text" id="sn" name="sn" required>
+                    <label for="sn">Student Number:</label>
+                    <input type="text" id="sn" name="sn" minlength="10" maxlength="11" required>
                 </div>
                 
               
@@ -212,6 +212,16 @@
 
     // Get all buttons that should open the modal
     var btns = document.getElementsByClassName("borrow-btn");
+    
+    // Student Number validation
+    document.getElementById('sn').addEventListener('input', function() {
+        var value = this.value;
+        if (value.length > 0 && (value.length < 10 || value.length > 11)) {
+            this.setCustomValidity('Student Number must be 10-11 characters long');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
 
     // Function to load items based on selected category
     function loadItems() {

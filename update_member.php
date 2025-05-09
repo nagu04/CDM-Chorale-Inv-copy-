@@ -24,10 +24,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['member_id'])) {
     
     $stmt->close();
     
-    // Check if a new image was uploaded
-    $image_path = $current_image_path; // Default to current image path
+    // Default to current image path
+    $image_path = $current_image_path;
     
-    if(isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
+    // Check if remove_image checkbox is checked
+    if(isset($_POST['remove_image']) && $_POST['remove_image'] == '5') {
+        // Set image path to default image
+        $image_path = 'default image.jpg';
+        
+        // Delete the old image if it exists and is not already the default
+        if (!empty($current_image_path) && file_exists($current_image_path) && 
+            $current_image_path != 'default image.jpg' && $current_image_path != 'picture-1.png') {
+            unlink($current_image_path);
+        }
+    }
+    // Check if a new image was uploaded and remove_image is not checked
+    elseif(isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
         // Create the member_profiles directory if it doesn't exist
         if(!file_exists('member_profiles')) {
             mkdir('member_profiles', 0777, true);
@@ -40,8 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['member_id'])) {
         
         // Move the uploaded file to the target location
         if(move_uploaded_file($_FILES['profile_image']['tmp_name'], $target_file)) {
-            // If upload successful, delete the old image if it exists
-            if (!empty($current_image_path) && file_exists($current_image_path) && $current_image_path != $target_file) {
+            // If upload successful, delete the old image if it exists and is not the default
+            if (!empty($current_image_path) && file_exists($current_image_path) && 
+                $current_image_path != 'default image.jpg' && $current_image_path != 'picture-1.png') {
                 unlink($current_image_path); // Delete the old image file
             }
             

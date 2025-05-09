@@ -167,7 +167,7 @@ $reported_result = $conn->query($reported_sql);
         </a>
         <a href="deleted_items.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted Items</span>
+            <span>Deleted</span>
         </a>
     </div>
 
@@ -195,7 +195,7 @@ $reported_result = $conn->query($reported_sql);
                         <th>Category</th>
                         <th>Item Name</th>
                         <th>Quantity</th>
-                        <th>SN</th>
+                        <th>Student Number</th>
                         <th>Remarks</th>
                         <th>Approval</th>
                         <th>Date Created</th>
@@ -253,7 +253,7 @@ $reported_result = $conn->query($reported_sql);
                         <th>Category</th>
                         <th>Item Name</th>
                         <th>Quantity</th>
-                        <th>SN</th>
+                        <th>Student Number</th>
                         <th>Status</th>
                         <th>Approval</th>
                         <th>Remarks</th>
@@ -262,7 +262,7 @@ $reported_result = $conn->query($reported_sql);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
+                    <?php       
                     if ($reported_result->num_rows > 0) {
                         while($row = $reported_result->fetch_assoc()) {
                             echo "<tr>";
