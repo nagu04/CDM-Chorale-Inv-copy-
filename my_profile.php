@@ -34,6 +34,12 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param('s', $username);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
+
+// Provide fallback values if keys are missing or $user is false
+$user_full_name = isset($user['full_name']) ? $user['full_name'] : '';
+$user_email = isset($user['email']) ? $user['email'] : '';
+$user_username = isset($user['username']) ? $user['username'] : '';
+$user_password = isset($user['password']) ? $user['password'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -145,15 +151,17 @@ $user = $stmt->get_result()->fetch_assoc();
         }
         .profile-container {
             background-color: rgba(44, 36, 116, 0.9);
-            padding: 20px;
-            border-radius: 8px;
+            width: 600px;
+            margin: 40px auto 20px auto;
+            padding: 16px 24px 24px 24px;
+            border-radius: 10px;
             color: white;
-            margin-bottom: 20px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
         }
         .profile-header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         .profile-avatar {
             width: 100px;
@@ -165,16 +173,18 @@ $user = $stmt->get_result()->fetch_assoc();
         .profile-info h2 {
             margin: 0;
             color: #ffcc00;
+            font-size: 1.3em;
         }
         .profile-info p {
-            margin: 5px 0;
+            margin: 3px 0;
             color: white;
+            font-size: 0.98em;
         }
         .edit-form {
-            margin-top: 20px;
+            margin-top: 10px;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .form-group label {
             display: block;
@@ -182,12 +192,15 @@ $user = $stmt->get_result()->fetch_assoc();
             color: #ffcc00;
         }
         .form-group input {
-            width: 100%;
-            padding: 8px;
+            display: block;
+            width: 96%;
+            margin: 0 auto;
+            padding: 8px 12px;
             border: 1px solid #444;
             border-radius: 4px;
             background: rgba(5, 5, 5, 0.7);
             color: white;
+            box-sizing: border-box;
         }
         .form-group input:focus {
             outline: none;
@@ -205,6 +218,15 @@ $user = $stmt->get_result()->fetch_assoc();
         .save-btn:hover {
             background-color: #218838;
             transform: translateY(-2px);
+        }
+        .password-group input[type="password"], .password-group input[type="text"] {
+            padding-right: 44px !important;
+        }
+        .password-group button#togglePassword {
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -245,10 +267,6 @@ $user = $stmt->get_result()->fetch_assoc();
             <span>Manage Users</span>
         </a>
         <?php endif; ?>
-        <a href="my_profile.php" class="icon-btn">
-            <i class="fas fa-user-circle"></i>
-            <span>My Profile</span>
-        </a>
     </div>
 
     <!-- Main Content -->
@@ -258,40 +276,58 @@ $user = $stmt->get_result()->fetch_assoc();
             <img src="picture-1.png" alt="Logo" class="header-logo">
             <div class="section-indicator">My Profile</div>
             <h2>CDM Chorale Inventory System</h2>
-            <a href="index.php" class="logout">Log Out</a>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="my_profile.php" class="profile-link" style="color: #ffcc00; font-weight: bold; font-size: 16px; text-decoration: none; margin-right: 8px;">Profile</a>
+                <a href="index.php" class="logout">Log Out</a>
+            </div>
         </div>
 
         <div class="profile-container">
             <div class="profile-header">
-                <img src="default-avatar.png" alt="Profile Picture" class="profile-avatar">
                 <div class="profile-info">
-                    <h2><?php echo htmlspecialchars($user['full_name']); ?></h2>
-                    <p><i class="fas fa-user"></i> <?php echo htmlspecialchars($user['username']); ?></p>
-                    <p><i class="fas fa-envelope"></i> <?php echo htmlspecialchars($user['email']); ?></p>
+                    <h2><?php echo htmlspecialchars($user_full_name); ?></h2>
+                    <p><i class="fas fa-user"></i> <?php echo htmlspecialchars($user_username); ?></p>
+                    <p><i class="fas fa-envelope"></i> <?php echo htmlspecialchars($user_email); ?></p>
                 </div>
             </div>
 
             <form method="POST" class="edit-form">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user_username); ?>" readonly style="background-color: #222; color: #aaa; cursor: not-allowed;">
                 </div>
-                <div class="form-group">
+                <div class="form-group password-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($user['password']); ?>" required>
+                    <div style="position: relative; width: 100%;">
+                        <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($user_password); ?>" required style="padding-right: 44px;">
+                        <button type="button" id="togglePassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #ffcc00; font-size: 18px; height: 32px; display: flex; align-items: center;">
+                            <i class="fas fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="full_name">Full Name</label>
-                    <input type="text" id="full_name" name="full_name" value="<?php echo htmlspecialchars($user['full_name']); ?>" required>
+                    <input type="text" id="full_name" name="full_name" value="<?php echo htmlspecialchars($user_full_name); ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user_email); ?>" required>
                 </div>
                 <button type="submit" name="update_profile" class="save-btn">Save Changes</button>
             </form>
         </div>
     </div>
+<script>
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    const eyeIcon = document.getElementById('eyeIcon');
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        eyeIcon.classList.toggle('fa-eye');
+        eyeIcon.classList.toggle('fa-eye-slash');
+    });
+</script>
 </body>
 </html>
 <?php

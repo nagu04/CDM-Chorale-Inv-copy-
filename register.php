@@ -34,12 +34,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($check_stmt->get_result()->num_rows > 0) {
             $error = "Username already exists";
         } else {
-            // Insert into login table (plain text password for consistency with your current setup)
-            $insert_sql = "INSERT INTO login (username, password) VALUES (?, ?)";
+            // Insert into pending_users table
+            $insert_sql = "INSERT INTO pending_users (username, password, full_name, email, status, requested_at) VALUES (?, ?, ?, ?, 'pending', NOW())";
             $insert_stmt = $conn->prepare($insert_sql);
-            $insert_stmt->bind_param("ss", $username, $password);
+            $insert_stmt->bind_param("ssss", $username, $password, $full_name, $email);
             if ($insert_stmt->execute()) {
-                $success = "Registration successful! You can now log in.";
+                $success = "Registration submitted! Your account is pending approval by an admin.";
             } else {
                 $error = "Error submitting registration";
             }

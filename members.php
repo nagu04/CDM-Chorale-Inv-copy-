@@ -98,17 +98,18 @@ session_start();
             <i class="fas fa-trash-alt"></i>
             <span>Deleted</span>
         </a>
+        <?php if (isset($_SESSION['username']) && $_SESSION['username'] === 'admin' && basename($_SERVER['PHP_SELF']) !== 'manage_users.php'): ?>
+        <a href="manage_users.php" class="icon-btn">
+            <i class="fas fa-users-cog"></i>
+            <span>Manage Users</span>
+        </a>
+        <?php endif; ?>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <div class="header">
-            <img src="picture-1.png" alt="Logo" class="header-logo">
-            <div class="section-indicator">Members</div>
-            <h2>CDM Chorale Inventory System</h2>
-            <a href="index.php" class="logout">Log Out</a>
-        </div>
+        <?php $section_title = 'Members'; include 'header.php'; ?>
 
         <!-- Feedback Messages -->
         <?php

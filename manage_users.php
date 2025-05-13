@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $request_sql = "SELECT * FROM pending_users WHERE id = ?";
         $stmt = $conn->prepare($request_sql);
         $stmt->bind_param("i", $request_id);
-        $stmt->execute();
+    $stmt->execute();
         $request = $stmt->get_result()->fetch_assoc();
         
         if ($request) {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $update_sql = "UPDATE pending_users SET status = 'approved', approved_by = ?, approved_at = NOW() WHERE id = ?";
                 $stmt = $conn->prepare($update_sql);
                 $stmt->bind_param("si", $_SESSION['username'], $request_id);
-                $stmt->execute();
+    $stmt->execute();
                 
                 $success = "User request approved successfully!";
             } else {
@@ -60,10 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif (isset($_POST['edit_user'])) {
         $user_id = $_POST['user_id'];
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $full_name = $_POST['full_name'];
-        $email = $_POST['email'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $full_name = $_POST['full_name'];
+    $email = $_POST['email'];
         
         $update_sql = "UPDATE users SET username = ?, password = ?, full_name = ?, email = ? WHERE id = ? AND username != 'admin'";
         $stmt = $conn->prepare($update_sql);
@@ -294,25 +294,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <i class="fas fa-trash-alt"></i>
             <span>Deleted</span>
         </a>
+        <?php if (basename($_SERVER['PHP_SELF']) !== 'manage_users.php'): ?>
         <a href="manage_users.php" class="icon-btn">
             <i class="fas fa-users-cog"></i>
             <span>Manage Users</span>
         </a>
+        <?php endif; ?>
+        <?php if (basename($_SERVER['PHP_SELF']) !== 'manage_users.php'): ?>
         <a href="my_profile.php" class="icon-btn">
             <i class="fas fa-user-circle"></i>
             <span>My Profile</span>
         </a>
+        <?php endif; ?>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Header -->
-        <div class="header">
-            <img src="picture-1.png" alt="Logo" class="header-logo">
-            <div class="section-indicator">Manage Users</div>
-            <h2>CDM Chorale Inventory System</h2>
-            <a href="index.php" class="logout">Log Out</a>
-        </div>
+        <?php $section_title = 'Manage Users'; include 'header.php'; ?>
 
         <div class="table-container">
             <?php if (!empty($success)): ?>

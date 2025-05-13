@@ -13,20 +13,19 @@ session_start();
     <style>
         /* Sidebar styles */
         .sidebar {
-         width: 80px;
-         background-color: rgba(44, 36, 116, 0.9); /* Semi-transparent blue background */
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 30px;
-        position: fixed;
-        left: 0;
-        transition: width 0.3s ease;
-        border-right: 4px solid #ffcc00; /* Yellow line at the right edge */
+            width: 80px;
+            background-color: rgba(44, 36, 116, 0.9);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            position: fixed;
+            left: 0;
+            transition: width 0.3s ease;
+            border-right: 4px solid #ffcc00;
         }
-        
         .sidebar:hover {
             width: 200px;
         }
@@ -42,7 +41,7 @@ session_start();
         }
         .icon-btn i {
             font-size: 24px;
-            margin-right: 15px;
+            margin-right: 12px;
             min-width: 24px;
             transition: opacity 0.3s ease;
         }
@@ -60,12 +59,10 @@ session_start();
             opacity: 0;
         }
         .icon-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.16);
             transform: translateX(5px);
             width: 170px;
         }
-      
-        /* Rest of the existing styles */
     </style>
 </head>
 <body>
@@ -89,7 +86,7 @@ session_start();
         </a>
         <a href="report.php" class="icon-btn">
             <i class="fas fa-file-alt"></i>
-            <span>Report</span> 
+            <span>Report</span>
         </a>
         <a href="history.php" class="icon-btn">
             <i class="fas fa-clock"></i>
@@ -99,18 +96,19 @@ session_start();
             <i class="fas fa-trash-alt"></i>
             <span>Deleted</span>
         </a>
+        <?php if (isset($_SESSION['username']) && $_SESSION['username'] === 'admin' && basename($_SERVER['PHP_SELF']) !== 'manage_users.php'): ?>
+        <a href="manage_users.php" class="icon-btn">
+            <i class="fas fa-users-cog"></i>
+            <span>Manage Users</span>
+        </a>
+        <?php endif; ?>
     </div>
 
 
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <div class="header">
-        <img src="picture-1.png" alt="Logo" class="header-logo">
-        <div class="section-indicator">Clothing</div>
-            <h2>CDM Chorale Inventory System</h2>
-            <a href="index.php" class="logout">Log Out</a>
-        </div>
+        <?php $section_title = 'Clothing'; include 'header.php'; ?>
 
         <!-- Feedback Messages -->
         <?php
