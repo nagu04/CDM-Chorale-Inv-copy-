@@ -2,7 +2,7 @@
 // Database connection parameters
 $servername = "localhost";
 $username = "root";
-$password = "password"; // Ensure this is the correct password for the 'root' user
+$password = "";  // Empty password for XAMPP default MySQL root user
 $dbname = "sd_chorale";
 
 // Create connection
@@ -10,6 +10,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    // Log the error but don't expose details to the user
+    error_log("Database connection failed: " . $conn->connect_error);
+    die("Database connection error. Please try again later.");
 }
 ?>

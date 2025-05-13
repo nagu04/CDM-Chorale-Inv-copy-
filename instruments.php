@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['username'])) {
+    header("Location: index.php");
+    exit();
+}
 ?>
 
 
@@ -101,6 +107,16 @@ session_start();
             <i class="fas fa-trash-alt"></i>
             <span>Deleted</span>
         </a>
+        <?php if (isset($_SESSION['username']) && $_SESSION['username'] === 'admin'): ?>
+        <a href="manage_users.php" class="icon-btn">
+            <i class="fas fa-users-cog"></i>
+            <span>Manage Users</span>
+        </a>
+        <?php endif; ?>
+        <a href="my_profile.php" class="icon-btn">
+            <i class="fas fa-user-circle"></i>
+            <span>My Profile</span>
+        </a>
     </div>
 
     <!-- Main Content -->
@@ -111,7 +127,7 @@ session_start();
             <div class="section-indicator">Instruments</div>
             <h2>CDM Chorale Inventory System</h2>
           
-            <a href="index.php" class="logout">Log Out</a>
+            <a href="logout.php" class="logout">Log Out</a>
         </div>
 
         <!-- Feedback Messages -->

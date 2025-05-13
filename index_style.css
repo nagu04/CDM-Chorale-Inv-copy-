@@ -157,3 +157,60 @@ label {
     text-align: center;
     font-weight: bold;
 }
+
+/* Add these styles to your existing index_style.css file */
+
+.toggle-form {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.toggle-link {
+    color: #ffcc00;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.toggle-link:hover {
+    text-decoration: underline;
+}
+
+.success-message {
+    background-color: rgba(76, 175, 80, 0.9);
+    color: white;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Make sure the registration form matches the login form style */
+#registerForm {
+    display: none;
+}
+
+#registerForm .input-field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#registerForm .login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #ffcc00;
+    color: #2c2474;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#registerForm .login-button:hover {
+    background-color: #e6b800;
+}

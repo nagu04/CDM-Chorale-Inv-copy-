@@ -213,12 +213,14 @@ $reported_result = $conn->query($reported_sql);
                     <tr>
                         <th>Reported By</th>
                         <th>Date Reported</th>
+                        <th>Date Returned</th>
                         <th>Category</th>
                         <th>Item Name</th>
                         <th>Quantity</th>
                         <th>Student Number</th>
                         <th>Status</th>
                         <th>Remarks</th>
+                        <th>Approval</th>
                         <th>Date Created</th>
                         <th>Actions</th>
                     </tr>
@@ -230,12 +232,14 @@ $reported_result = $conn->query($reported_sql);
                             echo "<tr>";
                             echo "<td>" . htmlspecialchars($row['borrowed_by']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['date_return'] ?? 'N/A') . "</td>";
                             echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['sn']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['status']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['remarks']) . "</td>";
+                            echo "<td>" . ($row['is_approved'] ? "Resolved" : "Pending") . "</td>";
                             echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                             echo "<td>
                                     <button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
@@ -248,7 +252,7 @@ $reported_result = $conn->query($reported_sql);
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='10' style='text-align: center;'>No reported items found</td></tr>";
+                        echo "<tr><td colspan='11' style='text-align: center;'>No reported items found</td></tr>";
                     }
                     ?>
                 </tbody>

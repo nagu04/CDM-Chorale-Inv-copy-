@@ -4,7 +4,7 @@ session_start();
 include 'db_connect.php';
 
 // Fetch deleted items
-$sql = "SELECT * FROM deleted_items ORDER BY deleted_at DESC";
+$sql = "SELECT id, item_id, item_name, item_type, quantity, condition_status, image_path, deleted_at, deleted_by, details FROM deleted_items ORDER BY deleted_at DESC";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -202,14 +202,14 @@ $result = $conn->query($sql);
             <table>
                 <thead>
                     <tr>
-                        <th>Image</th>
-                        <th>Type</th>
                         <th>Item Name</th>
+                        <th>Type</th>
                         <th>Quantity</th>
                         <th>Condition</th>
+                        <th>Image</th>
                         <th>Deleted By</th>
                         <th>Deleted At</th>
-                        <th>Actions</th>
+                        <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -217,31 +217,20 @@ $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) {
                             echo "<tr>";
-                            
-                            // Image column
-                            $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
-                            echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
-                            
-                            // Item type with styled badge
-                            echo "<td>";
-                            $type = $row['item_type'];
-                            echo "<span class='type-badge type-" . $type . "'>" . ucfirst($type) . "</span>";
-                            echo "</td>";
-                            
                             echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                            echo "<td><span class='type-badge type-" . strtolower($row['item_type']) . "'>" . htmlspecialchars($row['item_type']) . "</span></td>";
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
+                            echo "<td>";
+                            if (!empty($row['image_path'])) {
+                                echo "<img src='" . htmlspecialchars($row['image_path']) . "' alt='Item Image' class='item-image'>";
+                            } else {
+                                echo "No image";
+                            }
+                            echo "</td>";
                             echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
-                            
-                            echo "<td>
-                                    <button class='edit-btn' onclick='restoreItem(" . $row['id'] . ")'>
-                                        <i class='fas fa-undo'></i> Restore
-                                    </button>
-                                    <button class='delete-btn' onclick='confirmDelete(" . $row['id'] . ")' style='background-color: #f44336; margin-left: 5px;'>
-                                        <i class='fas fa-trash'></i> Delete
-                                    </button>
-                                  </td>";
+                            echo "<td>" . htmlspecialchars($row['details']) . "</td>";
                             echo "</tr>";
                         }
                     } else {
