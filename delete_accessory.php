@@ -4,8 +4,9 @@ include 'db_connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deco_id'])) {
     $deco_id = $_POST['deco_id'];
+    $delete_reason = isset($_POST['delete_reason']) ? trim($_POST['delete_reason']) : 'No reason provided';
     
-    // First, get all accessory details
+    // First, get the accessory details
     $stmt = $conn->prepare("SELECT * FROM accessories WHERE deco_id = ?");
     $stmt->bind_param("i", $deco_id);
     $stmt->execute();
@@ -27,10 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deco_id'])) {
         ]);
         
         // Store in deleted_items table
-        $save_stmt = $conn->prepare("INSERT INTO deleted_items (item_id, item_name, item_type, quantity, condition_status, image_path, deleted_by, details) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $save_stmt = $conn->prepare("INSERT INTO deleted_items (item_id, item_name, item_type, quantity, condition_status, image_path, deleted_by, reason, details) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $deleted_by = $_SESSION['username'] ?? 'Unknown User';
         $item_type = 'accessory';
-        $save_stmt->bind_param("isiissss", $deco_id, $deco_name, $item_type, $quantity, $condition, $image_path, $deleted_by, $details);
+        $save_stmt->bind_param("isiiissss", $deco_id, $deco_name, $item_type, $quantity, $condition, $image_path, $deleted_by, $delete_reason, $details);
         $save_stmt->execute();
         $save_stmt->close();
     }
@@ -42,16 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deco_id'])) {
     $stmt->bind_param("i", $deco_id);
     
     if ($stmt->execute()) {
-        // We don't delete the image anymore so we can use it in the deleted items page
-        
-        // Success message
+        // If accessory deleted successfully, we keep the image for the deleted items page
         $_SESSION['success_message'] = "Accessory deleted successfully!";
-        
-        // Redirect back to accessories page
         header("Location: accessory.php");
         exit();
     } else {
-        // Error
         $_SESSION['error_message'] = "Error deleting accessory: " . $conn->error;
         header("Location: accessory.php");
         exit();
@@ -59,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deco_id'])) {
     
     $stmt->close();
 } else {
-    // Not a valid POST request
     header("Location: accessory.php");
     exit();
 }

@@ -4,6 +4,7 @@ include 'db_connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clothing_id'])) {
     $clothing_id = $_POST['clothing_id'];
+    $delete_reason = isset($_POST['delete_reason']) ? trim($_POST['delete_reason']) : 'No reason provided';
     
     // First, get all clothing details
     $stmt = $conn->prepare("SELECT * FROM clothing WHERE clothing_id = ?");
@@ -26,11 +27,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clothing_id'])) {
             'quantity' => $quantity
         ]);
         
-        // Store in deleted_items table
-        $save_stmt = $conn->prepare("INSERT INTO deleted_items (item_id, item_name, item_type, quantity, condition_status, image_path, deleted_by, details) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        // Get user's full name for deleted_by field
         $deleted_by = $_SESSION['username'] ?? 'Unknown User';
+        
+        // If we know which table the user belongs to
+        if (isset($_SESSION['user_table'])) {
+            $user_table = $_SESSION['user_table'];
+            $user_query = $conn->prepare("SELECT full_name FROM $user_table WHERE username = ?");
+            $user_query->bind_param("s", $_SESSION['username']);
+            $user_query->execute();
+            $user_result = $user_query->get_result();
+            
+            if ($user_result && $user_result->num_rows > 0) {
+                $user_data = $user_result->fetch_assoc();
+                if (!empty($user_data['full_name'])) {
+                    $deleted_by = $user_data['full_name'];
+                }
+            }
+            $user_query->close();
+        }
+        
+        // Store in deleted_items table
+        $save_stmt = $conn->prepare("INSERT INTO deleted_items (item_id, item_name, item_type, quantity, condition_status, image_path, deleted_by, reason, details) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $item_type = 'clothing';
-        $save_stmt->bind_param("isiissss", $clothing_id, $clothing_name, $item_type, $quantity, $condition, $image_path, $deleted_by, $details);
+        $save_stmt->bind_param("isiiissss", $clothing_id, $clothing_name, $item_type, $quantity, $condition, $image_path, $deleted_by, $delete_reason, $details);
         $save_stmt->execute();
         $save_stmt->close();
     }

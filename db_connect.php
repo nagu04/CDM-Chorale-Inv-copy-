@@ -2,8 +2,8 @@
 // Database connection parameters
 $servername = "localhost";
 $username = "root";
-$password = "";  // Empty password for XAMPP default MySQL root user
-$dbname = "sd_chorale";
+$password = "password";  // Empty password for XAMPP default MySQL root user
+$dbname = "inv"; //palitan mo to depende sa name ng db mo sa phpmyadmin
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

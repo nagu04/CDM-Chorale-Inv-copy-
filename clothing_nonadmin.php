@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -104,7 +107,13 @@
         <img src="picture-1.png" alt="Logo" class="header-logo">
         <div class="section-indicator">Clothing</div>
             <h2>CDM Chorale Inventory System</h2>
-            <a href="index.php" class="logout">Log Out</a>
+            
+            <div style="display: flex; gap: 10px;">
+                <a href="my_profile_nonadmin.php" class="logout" style="background-color: #ffcc00; color: #000066;">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </a>
+                <a href="index.php" class="logout">Log Out</a>
+            </div>
         </div>
 
         <!-- Card Section -->
@@ -257,6 +266,20 @@
             });
     }
     
+    // Function to fill in the user's full name from profile
+    function loadUserFullName() {
+        fetch('get_user_profile.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('borrowedBy').value = data.full_name;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading user profile:', error);
+            });
+    }
+    
     // Function to update quantity dropdown based on selected item
     function updateQuantityDropdown(itemName, ) {
         const quantitySelect = document.getElementById('quantity');
@@ -311,6 +334,9 @@
             // Set the item name directly in the text field
             const itemName = this.getAttribute("data-name");
             document.getElementById("itemName").value = itemName;
+            
+            // Load the user's full name
+            loadUserFullName();
             
             // Load the items and update quantity dropdown
             loadItems();

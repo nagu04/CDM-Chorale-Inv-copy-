@@ -244,45 +244,40 @@ session_start();
         }
     }
     
+    // Function to fill in the user's full name from profile
+    function loadUserFullName() {
+        fetch('get_user_profile.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('borrowedBy').value = data.full_name;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading user profile:', error);
+            });
+    }
+    
     // Add event listener for item change
     document.getElementById('itemName').addEventListener('change', updateQuantityDropdown);
     
     // Load items on page load
-    document.addEventListener('DOMContentLoaded', loadItems);
-    
-    // Student Number validation
-    document.getElementById('sn').addEventListener('input', function() {
-        var value = this.value;
-        if (value.length > 0 && (value.length < 10 || value.length > 11)) {
-            this.setCustomValidity('Student Number must be 10-11 characters long');
-        } else {
-            this.setCustomValidity('');
-        }
-    });
+    loadItems();
 
+    // Load the user's full name on page load
+    loadUserFullName();
+    
+    // Toggle custom status field
     function toggleCustomStatus() {
         const statusSelect = document.getElementById('status');
         const customStatusGroup = document.getElementById('customStatusGroup');
-        const customStatusInput = document.getElementById('customStatus');
         
         if (statusSelect.value === 'other') {
             customStatusGroup.style.display = 'block';
-            customStatusInput.setAttribute('required', 'required');
+            document.getElementById('customStatus').setAttribute('required', 'required');
         } else {
             customStatusGroup.style.display = 'none';
-            customStatusInput.removeAttribute('required');
+            document.getElementById('customStatus').removeAttribute('required');
         }
     }
-
-    // Form submission validation
-    document.querySelector('form').addEventListener('submit', function(event) {
-        const statusSelect = document.getElementById('status');
-        const customStatusInput = document.getElementById('customStatus');
-        
-        if (statusSelect.value === 'other' && customStatusInput.value.trim() === '') {
-            event.preventDefault();
-            alert('Please specify a custom status');
-            customStatusInput.focus();
-        }
-    });
 </script>

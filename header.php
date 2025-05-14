@@ -5,8 +5,10 @@ if (!isset($section_title)) $section_title = '';
     <img src="picture-1.png" alt="Logo" class="header-logo">
     <div class="section-indicator"><?php echo htmlspecialchars($section_title); ?></div>
     <h2>CDM Chorale Inventory System</h2>
-    <div style="display: flex; align-items: center; gap: 16px;">
-        <a href="my_profile.php" class="logout">Profile</a>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="my_profile.php" class="logout profile-link">
+            <i class="fas fa-user-circle"></i> My Profile
+        </a>
         <a href="logout.php" class="logout">Log Out</a>
     </div>
 </div>
@@ -29,5 +31,12 @@ if (!isset($section_title)) $section_title = '';
 }
 .header .logout:hover {
     background-color: #000044 !important;
+}
+.header .profile-link {
+    background-color: #ffcc00 !important;
+    color: #000066 !important;
+}
+.header .profile-link:hover {
+    background-color: #e6b800 !important;
 }
 </style> 

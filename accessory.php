@@ -284,6 +284,11 @@ session_start();
                     <p id="deleteAccessoryName" class="selected-item-name"></p>
                 </div>
                 
+                <div class="form-group">
+                    <label for="delete_reason">Reason for deletion:</label>
+                    <textarea id="delete_reason" name="delete_reason" rows="3" style="width: 100%; padding: 8px; border-radius: 4px; background: rgba(5, 5, 5, 0.7); color: white; border: 1px solid #444;" placeholder="Please provide a reason for deleting this item..." required></textarea>
+                </div>
+                
                 <div class="submit-container">
                     <button type="submit" class="submit-btn" style="background-color: #ff4444; color: white;">Delete Accessory</button>
                 </div>
@@ -385,6 +390,20 @@ session_start();
             });
     }
     
+    // Function to fill in the user's full name from profile
+    function loadUserFullName() {
+        fetch('get_user_profile.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('borrowedBy').value = data.full_name;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading user profile:', error);
+            });
+    }
+    
     // Function to update quantity dropdown based on selected item
     function updateQuantityDropdown(itemName) {
         const quantitySelect = document.getElementById('quantity');
@@ -424,6 +443,9 @@ session_start();
             // Set the item name directly in the text field
             const itemName = this.getAttribute("data-name");
             document.getElementById("itemName").value = itemName;
+            
+            // Load the user's full name
+            loadUserFullName();
             
             // Load the items and update quantity dropdown
             loadItems();
@@ -532,6 +554,37 @@ session_start();
         } else {
             this.setCustomValidity('');
         }
+    });
+
+    // Delete confirmation
+    var deleteConfirmModal = document.getElementById("deleteConfirmModal");
+    var deleteLinks = document.querySelectorAll(".delete-link");
+    var closeButtons = document.querySelectorAll(".close, .close-modal, .cancel-btn");
+    
+    // Set up delete links
+    deleteLinks.forEach(function(link) {
+        link.addEventListener("click", function(e) {
+            e.preventDefault();
+            var decoId = this.getAttribute("data-id");
+            document.getElementById("delete_deco_id").value = decoId;
+            deleteConfirmModal.style.display = "flex";
+        });
+    });
+    
+    // Close modals when clicking close buttons
+    closeButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
+            deleteConfirmModal.style.display = "none";
+            // Add other modals here if needed
+        });
+    });
+    
+    // Close modals when clicking outside of them
+    window.addEventListener("click", function(event) {
+        if (event.target == deleteConfirmModal) {
+            deleteConfirmModal.style.display = "none";
+        }
+        // Add other modals here if needed
     });
     </script>
 </body>

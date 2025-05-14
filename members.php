@@ -267,6 +267,11 @@ session_start();
                     <p id="deleteMemberName" class="selected-item-name"></p>
                 </div>
                 
+                <div class="form-group">
+                    <label for="delete_reason">Reason for removal:</label>
+                    <textarea id="delete_reason" name="delete_reason" rows="3" style="width: 100%; padding: 8px; border-radius: 4px; background: rgba(5, 5, 5, 0.7); color: white; border: 1px solid #444;" placeholder="Please provide a reason for removing this member..." required></textarea>
+                </div>
+                
                 <div class="submit-container">
                     <button type="submit" class="submit-btn" style="background-color: #ff4444; color: white;">Delete Member</button>
                 </div>
@@ -412,20 +417,18 @@ session_start();
     // Delete Modal
     var deleteModal = document.getElementById("deleteModal");
     var deleteBtns = document.getElementsByClassName("delete-btn");
-    var deleteButton = document.getElementById("deleteButton");
     
     for (var i = 0; i < deleteBtns.length; i++) {
         deleteBtns[i].onclick = function() {
-            // Get the member id and name from data attributes
+            // Get the member id from data attributes
             var memberId = this.getAttribute("data-id");
-            var memberName = this.getAttribute("data-name");
             
-            // Set the values in the delete form
+            // Set the value in the delete confirmation form
             document.getElementById("deleteMemberId").value = memberId;
-            document.getElementById("deleteMemberName").textContent = memberName;
             
-            // Show the delete modal
+            // Show the delete confirmation modal
             deleteModal.style.display = "flex";
+            return false; // Prevent default behavior
         }
     }
     

@@ -252,13 +252,6 @@ $user_password = isset($user['password']) ? $user['password'] : '';
         .logout:hover {
             background-color: #000044;
         }
-        .profile-link {
-            background-color: #ffcc00 !important;
-            color: #000066 !important;
-        }
-        .profile-link:hover {
-            background-color: #e6b800 !important;
-        }
         .profile-container {
             background-color: rgba(44, 36, 116, 0.9);
             width: 600px;
@@ -295,35 +288,6 @@ $user_password = isset($user['password']) ? $user['password'] : '';
             border-radius: 5px;
             font-size: 16px;
         }
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .alert-success {
-            background-color: rgba(40, 167, 69, 0.7);
-            color: white;
-        }
-        .alert-danger {
-            background-color: rgba(220, 53, 69, 0.7);
-            color: white;
-        }
-        .save-btn {
-            background-color: #ffcc00;
-            color: #000066;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-        .save-btn:hover {
-            background-color: #e6b800;
-            transform: translateY(-2px);
-        }
         .password-input-container {
             position: relative;
             width: 100%;
@@ -347,45 +311,68 @@ $user_password = isset($user['password']) ? $user['password'] : '';
             justify-content: center;
             height: 100%;
         }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.7);
+            color: white;
+        }
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.7);
+            color: white;
+        }
+        .btn-update {
+            background-color: #ffcc00;
+            color: #000066;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .btn-update:hover {
+            background-color: #e6b800;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <a href="instruments.php" class="icon-btn">
+        <a href="instruments_nonadmin.php" class="icon-btn">
             <i class="fas fa-guitar"></i>
             <span>Instruments</span>
         </a>
-        <a href="accessory.php" class="icon-btn">
+        <a href="accessory_nonadmin.php" class="icon-btn">
             <i class="fas fa-gem"></i>
             <span>Accessories</span>
         </a>
-        <a href="clothing.php" class="icon-btn">
+        <a href="clothing_nonadmin.php" class="icon-btn">
             <i class="fas fa-tshirt"></i>
             <span>Clothing</span>
         </a>
-        <a href="members.php" class="icon-btn">
+        <a href="members_nonadmin.php" class="icon-btn">
             <i class="fas fa-user"></i>
             <span>Members</span>
         </a>
-        <a href="report.php" class="icon-btn">
+        <a href="report_nonadmin.php" class="icon-btn">
             <i class="fas fa-file-alt"></i>
             <span>Report</span>
         </a>
-        <a href="history.php" class="icon-btn">
+        <a href="history_nonadmin.php" class="icon-btn">
             <i class="fas fa-clock"></i>
             <span>History</span>
         </a>
-        <a href="deleted_items.php" class="icon-btn">
+        <a href="deleted_items_nonadmin.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
             <span>Deleted</span>
         </a>
-        <?php if (isset($_SESSION['username']) && $_SESSION['username'] === 'admin'): ?>
-        <a href="manage_users.php" class="icon-btn">
-            <i class="fas fa-users-cog"></i>
-            <span>Manage Users</span>
-        </a>
-        <?php endif; ?>
     </div>
 
     <!-- Main Content -->
@@ -395,37 +382,35 @@ $user_password = isset($user['password']) ? $user['password'] : '';
             <img src="picture-1.png" alt="Logo" class="header-logo">
             <div class="section-indicator">My Profile</div>
             <h2>CDM Chorale Inventory System</h2>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <a href="my_profile.php" class="logout profile-link">
-                    <i class="fas fa-user-circle"></i> My Profile
-                </a>
-                <a href="index.php" class="logout">Log Out</a>
-            </div>
+            
+            <a href="index.php" class="logout">Log Out</a>
         </div>
 
+        <!-- Profile Container -->
         <div class="profile-container">
-            <?php if (isset($success)): ?>
-            <div class="alert alert-success" style="background-color: rgba(40, 167, 69, 0.2); color: #28a745; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
-                <p><i class="fas fa-check-circle"></i> <?php echo $success; ?></p>
-            </div>
-            <?php endif; ?>
-            
-            <?php if (isset($error)): ?>
-            <div class="alert alert-danger" style="background-color: rgba(220, 53, 69, 0.2); color: #dc3545; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
-                <p><i class="fas fa-exclamation-circle"></i> <?php echo $error; ?></p>
-            </div>
-            <?php endif; ?>
-            
             <div class="profile-header">
                 <i class="fas fa-user-circle"></i>
                 <h2>My Profile</h2>
             </div>
-
-            <form method="POST" class="profile-form">
+            
+            <?php if (isset($success)): ?>
+                <div class="alert alert-success">
+                    <?php echo $success; ?>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (isset($error)): ?>
+                <div class="alert alert-danger">
+                    <?php echo $error; ?>
+                </div>
+            <?php endif; ?>
+            
+            <form class="profile-form" method="POST">
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user_username); ?>" readonly style="background-color: #222; color: #aaa; cursor: not-allowed;">
                 </div>
+                
                 <div class="form-group password-group">
                     <label for="password">Password</label>
                     <div class="password-input-container">
@@ -435,19 +420,22 @@ $user_password = isset($user['password']) ? $user['password'] : '';
                         </button>
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <label for="full_name">Full Name</label>
-                    <input type="text" id="full_name" name="full_name" value="<?php echo htmlspecialchars($user_full_name); ?>" required>
+                    <input type="text" id="full_name" name="full_name" value="<?php echo htmlspecialchars($user_full_name); ?>">
                 </div>
+                
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user_email); ?>" required>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user_email); ?>">
                 </div>
-                <button type="submit" name="update_profile" class="save-btn">Save Changes</button>
+                
+                <button type="submit" class="btn-update">Save Changes</button>
             </form>
         </div>
     </div>
-<script>
+    <script>
     const passwordInput = document.getElementById('password');
     const togglePassword = document.getElementById('togglePassword');
     const eyeIcon = document.getElementById('eyeIcon');
@@ -459,7 +447,4 @@ $user_password = isset($user['password']) ? $user['password'] : '';
     });
 </script>
 </body>
-</html>
-<?php
-$conn->close();
-?> 
+</html> 

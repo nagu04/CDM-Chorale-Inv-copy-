@@ -134,6 +134,15 @@ $result = $conn->query($sql);
         .reject-btn:hover {
             background-color: #d32f2f;
         }
+        
+        .profile-link {
+            background-color: #ffcc00 !important;
+            color: #000066 !important;
+        }
+        
+        .profile-link:hover {
+            background-color: #e6b800 !important;
+        }
     </style>
 </head>
 <body>
@@ -188,7 +197,12 @@ $result = $conn->query($sql);
             <img src="picture-1.png" alt="Logo" class="header-logo">
             <div class="section-indicator">Pending Registrations</div>
             <h2>CDM Chorale Inventory System</h2>
-            <a href="index.php" class="logout">Log Out</a>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <a href="my_profile.php" class="logout profile-link">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </a>
+                <a href="index.php" class="logout">Log Out</a>
+            </div>
         </div>
 
         <!-- Pending Registrations List -->

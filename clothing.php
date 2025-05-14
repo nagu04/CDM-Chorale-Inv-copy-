@@ -297,6 +297,11 @@ session_start();
                     <p id="deleteClothingName" class="selected-item-name"></p>
                 </div>
                 
+                <div class="form-group">
+                    <label for="delete_reason">Reason for deletion:</label>
+                    <textarea id="delete_reason" name="delete_reason" rows="3" style="width: 100%; padding: 8px; border-radius: 4px; background: rgba(5, 5, 5, 0.7); color: white; border: 1px solid #444;" placeholder="Please provide a reason for deleting this item..." required></textarea>
+                </div>
+                
                 <div class="submit-container">
                     <button type="submit" class="submit-btn" style="background-color: #ff4444; color: white;">Delete Clothing</button>
                 </div>
@@ -377,10 +382,10 @@ session_start();
     var addModal = document.getElementById("addModal");
     var addButton = document.getElementById("addButton");
     
-    // Delete Modal
+    // Delete Confirmation Modal
     var deleteModal = document.getElementById("deleteModal");
     var deleteBtns = document.getElementsByClassName("delete-btn");
-    var deleteButton = document.getElementById("deleteButton");
+    var closeButtons = document.querySelectorAll(".close, .close-modal, .cancel-btn");
     
     // Function to load items based on selected category
     function loadItems() {
@@ -413,6 +418,20 @@ session_start();
             .catch(error => {
                 console.error('Error loading items:', error);
                 alert('Error loading items. Please try again.');
+            });
+    }
+    
+    // Function to fill in the user's full name from profile
+    function loadUserFullName() {
+        fetch('get_user_profile.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('borrowedBy').value = data.full_name;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading user profile:', error);
             });
     }
     
@@ -470,6 +489,9 @@ session_start();
             const itemName = this.getAttribute("data-name");
             document.getElementById("itemName").value = itemName;
             
+            // Load the user's full name
+            loadUserFullName();
+            
             // Load the items and update quantity dropdown
             loadItems();
         }
@@ -522,6 +544,7 @@ session_start();
         }
     });
     
+    // Delete confirmation
     for (var i = 0; i < deleteBtns.length; i++) {
         deleteBtns[i].onclick = function() {
             // Get the clothing id and name from data attributes
@@ -534,8 +557,17 @@ session_start();
             
             // Show the delete modal
             deleteModal.style.display = "flex";
-        }
+            return false; // Prevent default action
+        };
     }
+    
+    // Close modals when clicking close buttons
+    closeButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
+            deleteModal.style.display = "none";
+            // Add other modals here if needed
+        });
+    });
     
     addButton.onclick = function() {
         addModal.style.display = "flex";

@@ -3,8 +3,8 @@
 session_start();
 include 'db_connect.php';
 
-// Fetch deleted items
-$sql = "SELECT id, item_id, item_name, item_type, quantity, condition_status, image_path, deleted_at, deleted_by, details FROM deleted_items ORDER BY deleted_at DESC";
+// Fetch deleted items with reason column
+$sql = "SELECT id, item_id, item_name, item_type, quantity, condition_status, image_path, deleted_at, deleted_by, reason, details FROM deleted_items ORDER BY deleted_at DESC";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -75,8 +75,14 @@ $result = $conn->query($sql);
             color: white;
         }
         .type-member {
-            background-color: #FF9800;
-            color: white;
+            background-color: #8e44ad;
+        }
+        .profile-link {
+            background-color: #ffcc00 !important;
+            color: #000066 !important;
+        }
+        .profile-link:hover {
+            background-color: #e6b800 !important;
         }
 
         /* Sidebar styles */
@@ -176,7 +182,17 @@ $result = $conn->query($sql);
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <?php $section_title = 'Deleted Items'; include 'header.php'; ?>
+        <div class="header">
+            <img src="picture-1.png" alt="Logo" class="header-logo">
+            <div class="section-indicator">Deleted Items</div>
+            <h2>CDM Chorale Inventory System</h2>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <a href="my_profile.php" class="logout profile-link">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </a>
+                <a href="index.php" class="logout">Log Out</a>
+            </div>
+        </div>
 
         <!-- Deleted Items Table -->
         <div class="table-container">
@@ -203,14 +219,15 @@ $result = $conn->query($sql);
             <table>
                 <thead>
                     <tr>
-                        <th>Item Name</th>
+                        <th>Image</th>
                         <th>Type</th>
+                        <th>Item Name</th>
                         <th>Quantity</th>
                         <th>Condition</th>
-                        <th>Image</th>
+                        <th>Reason for Deletion</th>
                         <th>Deleted By</th>
                         <th>Deleted At</th>
-                        <th>Details</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -218,24 +235,39 @@ $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) {
                             echo "<tr>";
+                            
+                            // Image column
+                            $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                            echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                            
+                            // Item type with styled badge
+                            echo "<td>";
+                            $type = $row['item_type'];
+                            echo "<span class='type-badge type-" . $type . "'>" . ucfirst($type) . "</span>";
+                            echo "</td>";
+                            
                             echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
-                            echo "<td><span class='type-badge type-" . strtolower($row['item_type']) . "'>" . htmlspecialchars($row['item_type']) . "</span></td>";
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
-                            echo "<td>";
-                            if (!empty($row['image_path'])) {
-                                echo "<img src='" . htmlspecialchars($row['image_path']) . "' alt='Item Image' class='item-image'>";
-                            } else {
-                                echo "No image";
-                            }
-                            echo "</td>";
+                            
+                            // Reason column
+                            echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                            
                             echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['details']) . "</td>";
+                            
+                            echo "<td>
+                                    <button class='edit-btn' onclick='restoreItem(" . $row['id'] . ")'>
+                                        <i class='fas fa-undo'></i> Restore
+                                    </button>
+                                    <button class='delete-btn' onclick='confirmDelete(" . $row['id'] . ")' style='background-color: #f44336; margin-left: 5px;'>
+                                        <i class='fas fa-trash'></i> Delete
+                                    </button>
+                                  </td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='8' style='text-align: center;'>No deleted items found</td></tr>";
+                        echo "<tr><td colspan='9' style='text-align: center;'>No deleted items found</td></tr>";
                     }
                     ?>
                 </tbody>

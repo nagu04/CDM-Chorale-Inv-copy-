@@ -1,8 +1,13 @@
 <?php
 session_start();
-$_SESSION['logout_message'] = 'You have been logged out. Please log in again.';
-session_unset();
+
+// Clear all session variables
+$_SESSION = array();
+
+// Destroy the session
 session_destroy();
+
+// Redirect to login page
 header("Location: index.php");
 exit();
 ?> 

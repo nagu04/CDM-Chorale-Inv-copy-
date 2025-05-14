@@ -4,12 +4,25 @@ include 'db_connect.php';
 
 // Redirect if already logged in
 if (isset($_SESSION['username'])) {
-    header("Location: instruments.php");
+    // Check which type of user is logged in
+    if (isset($_SESSION['user_table']) && $_SESSION['user_table'] === 'login') {
+        header("Location: instruments.php"); // Admin
+    } else {
+        header("Location: instruments_nonadmin.php"); // Regular user
+    }
     exit();
 }
 
 $error = '';
 $success = '';
+
+// Handle logout if requested
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: register.php");
+    exit();
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
@@ -54,9 +67,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Colegio de Muntinlupa Chorale</title>
     <link rel="stylesheet" href="index_style.css">
+    <script>
+    window.addEventListener('beforeunload', function() {
+        // Make an AJAX call to a logout script
+        navigator.sendBeacon('logout.php');
+    });
+    </script>
 </head>
 <body>
     <div class="login-container">
+        <?php if (isset($_SESSION['username'])): ?>
+        <div style="text-align: right; margin-bottom: 10px;">
+            <a href="register.php?logout=1" style="color: #ffcc00; text-decoration: none;">Logout first to register</a>
+        </div>
+        <?php endif; ?>
         <div class="login-header">
             <img src="cdmlogo.svg" alt="Logo">
             <h2>Colegio de Muntinlupa Chorale</h2>
