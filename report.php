@@ -167,13 +167,13 @@ session_start();
                             <option value="other">Other</option>
                         </select>
                     </div>
-                    
+                    <!--
                     <div class="form-group" id="customStatusGroup" style="display: none;">
                         <label for="customStatus">Specify Status:</label>
                         <input type="text" id="customStatus" name="custom_status" class="form-control" placeholder="Enter custom status...">
                 
                     </div>
-                 
+                     -->
                     <div class="form-group">
                         <label for="remarks">Remarks:</label>
                         <textarea id="remarks" name="remarks" rows="4"></textarea>

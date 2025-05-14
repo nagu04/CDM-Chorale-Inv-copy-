@@ -290,12 +290,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <i class="fas fa-trash-alt"></i>
             <span>Deleted</span>
         </a>
-        <?php if (basename($_SERVER['PHP_SELF']) !== 'manage_users.php'): ?>
         <a href="manage_users.php" class="icon-btn">
             <i class="fas fa-users-cog"></i>
             <span>Manage Users</span>
         </a>
-        <?php endif; ?>
+        
         <?php if (basename($_SERVER['PHP_SELF']) !== 'manage_users.php'): ?>
         <a href="my_profile.php" class="icon-btn">
             <i class="fas fa-user-circle"></i>
