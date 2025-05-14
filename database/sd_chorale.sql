@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 09, 2025 at 09:57 AM
+-- Generation Time: May 14, 2025 at 06:41 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sd_chorale`
+-- Database: `inv`
 --
 
 -- --------------------------------------------------------
@@ -44,7 +44,7 @@ INSERT INTO `accessories` (`deco_id`, `deco_name`, `quantity`, `condition`, `ima
 (2, 'Metal Hoop', 1, 'GOOD', NULL),
 (3, 'Vine Decoration', 2, 'GOOD', NULL),
 (4, 'Portable Booth', 1, 'GOOD', NULL),
-(5, 'Tarpaulin', 1, 'GOOD', NULL);
+(5, 'Tarpaulin', 1, '', '');
 
 -- --------------------------------------------------------
 
@@ -67,15 +67,15 @@ CREATE TABLE `clothing` (
 --
 
 INSERT INTO `clothing` (`clothing_id`, `clothing_name`, `quantity`, `clothing_color`, `clothing_size_id`, `condition`, `image_path`) VALUES
-(1, 'Barong (Brown Small)', '2', 'Black', 'S', 'GOOD', 'barong.png'),
-(2, 'Barong (Black Medium)', '5', 'Black', 'M', 'GOOD', 'barong.png'),
+(1, 'Barong (Brown Small)', '1', 'Black', 'S', 'GOOD', 'picture-1.png'),
+(2, 'Barong (Black Medium)', '5', 'Black', 'M', 'GOOD', 'picture-1.png'),
 (3, 'Barong (Black Large)', '3', 'Black', 'L', 'GOOD', 'barong.png'),
 (4, 'Barong (Black XL)', '3', 'Black', 'XL', 'GOOD', 'barong.png'),
 (5, 'Barong (Cream Small)', '3', 'Cream', 'S', 'GOOD', 'barong.png'),
 (6, 'Infinity Dress (Shiny Royal Blue)', '4', 'Shiny Royal Blue', '0', 'GOOD', 'barong.png'),
-(7, 'Infinity Dress (Matte Royal Blue)', '6', 'Matte Royal Blue', 'n/a', 'GOOD', 'barong.png'),
+(7, 'Infinity Dress (Matte Royal Blue)', '6', 'Matte Royal Blue', 'n/a', 'GOOD', 'picture-1.png'),
 (8, 'Infinity Dress (Light Blue)', '6', 'Light Blue', 'N/A', 'GOOD', 'barong.png'),
-(9, 'Scarf', '15', 'Red', NULL, 'GOOD', NULL),
+(9, 'Scarf', '15', 'Red', 'N/A', 'GOOD', 'picture-1.png'),
 (10, 'Scarf', '9', 'Green', NULL, 'GOOD', NULL),
 (11, 'Skirt', '10', 'Gold', NULL, 'GOOD', NULL),
 (12, 'Alampay', '8', NULL, NULL, 'GOOD', NULL),
@@ -120,6 +120,7 @@ CREATE TABLE `deleted_items` (
   `image_path` varchar(255) DEFAULT NULL,
   `deleted_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `deleted_by` varchar(100) DEFAULT NULL,
+  `reason` varchar(255) DEFAULT NULL,
   `details` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -146,6 +147,13 @@ CREATE TABLE `history` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `history`
+--
+
+INSERT INTO `history` (`history_id`, `type`, `borrowed_by`, `date`, `date_return`, `category`, `item_name`, `quantity`, `sn`, `condition`, `status`, `remarks`, `is_approved`, `created_at`) VALUES
+(14, 'BORROW', 'Hans Sese', '2025-05-14', '2025-05-15', 'Clothing', 'Barong (Brown Small)', 1, '20231020406', 'good', 'working', '', 0, '2025-05-14 03:35:04');
+
 -- --------------------------------------------------------
 
 --
@@ -165,11 +173,11 @@ CREATE TABLE `instruments` (
 --
 
 INSERT INTO `instruments` (`instru_id`, `instrument_name`, `quantity`, `condition`, `image_path`) VALUES
-(1, 'Korg KROSS2-88 Keyboard', 1, 'GOOD', 'instrument_images/instrument_1_1745850451.jpg'),
+(1, 'Korg KROSS2-88 Keyboard', 1, 'GOOD', 'picture-1.png'),
 (3, 'Korg KROSS2-88 Charger', 1, 'GOOD', NULL),
 (4, 'Keyboard Stand', 1, 'GOOD', NULL),
 (5, 'Keyboard Case', 1, 'GOOD', NULL),
-(6, 'Music Sheet Stand', 1, 'GOOD', 'instrument_images/instrument_6_1746775833.png'),
+(6, 'Music Sheet Stand', 1, 'GOOD', 'picture-1.png'),
 (7, 'CREATIVE Speakers', 1, 'GOOD', NULL);
 
 -- --------------------------------------------------------
@@ -181,16 +189,18 @@ INSERT INTO `instruments` (`instru_id`, `instrument_name`, `quantity`, `conditio
 CREATE TABLE `login` (
   `login_id` int(11) NOT NULL,
   `username` varchar(50) DEFAULT NULL,
-  `password` varchar(50) DEFAULT NULL
+  `password` varchar(50) DEFAULT NULL,
+  `full_name` varchar(100) DEFAULT '',
+  `email` varchar(100) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`login_id`, `username`, `password`) VALUES
-(1, 'admin', 'admin'),
-(2, 'user', 'password');
+INSERT INTO `login` (`login_id`, `username`, `password`, `full_name`, `email`) VALUES
+(1, 'admin', 'admin', 'Tamara Verdan', 'maamtammy@edu.ph'),
+(2, 'user', 'password', 'Rinnel Pacinos', 'kuyarinnel@cdm.edu.ph');
 
 -- --------------------------------------------------------
 
@@ -239,21 +249,49 @@ INSERT INTO `members` (`member_id`, `members_name`, `program`, `position`, `birt
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pending_users`
+--
+
+CREATE TABLE `pending_users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
+  `requested_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  `approved_by` varchar(50) DEFAULT NULL,
+  `approved_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pending_users`
+--
+
+INSERT INTO `pending_users` (`id`, `username`, `password`, `email`, `full_name`, `requested_at`, `status`, `approved_by`, `approved_at`) VALUES
+(1, 'user1', 'password', 'hanssese@yahoo.com', 'Hans Sese', '2025-05-14 02:12:25', 'pending', NULL, NULL),
+(3, 'user2', 'password', 'sese.hans.pythagoras@gmail.com', 'Hans Sese', '2025-05-14 04:32:41', 'pending', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user_login`
 --
 
 CREATE TABLE `user_login` (
   `id_user_login` int(11) NOT NULL,
   `username` varchar(50) DEFAULT NULL,
-  `password` varchar(50) DEFAULT NULL
+  `password` varchar(50) DEFAULT NULL,
+  `full_name` varchar(100) DEFAULT '',
+  `email` varchar(100) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_login`
 --
 
-INSERT INTO `user_login` (`id_user_login`, `username`, `password`) VALUES
-(1, 'user', 'user');
+INSERT INTO `user_login` (`id_user_login`, `username`, `password`, `full_name`, `email`) VALUES
+(1, 'user', 'user', 'Hans Sese', 'sese.hans.pythagoras@gmail.com');
 
 --
 -- Indexes for dumped tables
@@ -308,6 +346,14 @@ ALTER TABLE `members`
   ADD PRIMARY KEY (`member_id`);
 
 --
+-- Indexes for table `pending_users`
+--
+ALTER TABLE `pending_users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
 -- Indexes for table `user_login`
 --
 ALTER TABLE `user_login`
@@ -321,31 +367,31 @@ ALTER TABLE `user_login`
 -- AUTO_INCREMENT for table `accessories`
 --
 ALTER TABLE `accessories`
-  MODIFY `deco_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `deco_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `clothing`
 --
 ALTER TABLE `clothing`
-  MODIFY `clothing_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `clothing_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `deleted_items`
 --
 ALTER TABLE `deleted_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `instruments`
 --
 ALTER TABLE `instruments`
-  MODIFY `instru_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `instru_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `login`
@@ -357,7 +403,13 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `pending_users`
+--
+ALTER TABLE `pending_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_login`
