@@ -169,12 +169,26 @@ $result = $conn->query($sql);
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <div class="header">
-            <img src="picture-1.png" alt="Logo" class="header-logo">
-            <div class="section-indicator">Deleted Items</div>
-            <h2>CDM Chorale Inventory System</h2>
-            <a href="index.php" class="logout">Log Out</a>
-        </div>
+        <?php $section_title = 'Instruments'; include 'header.php'; ?>
+
+        <!-- Feedback Messages -->
+        <?php
+        if(isset($_SESSION['success_message'])) {
+            echo '<div class="alert alert-success">';
+            echo $_SESSION['success_message'];
+            echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+            echo '</div>';
+            unset($_SESSION['success_message']);
+        }
+        
+        if(isset($_SESSION['error_message'])) {
+            echo '<div class="alert alert-danger">';
+            echo $_SESSION['error_message'];
+            echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+            echo '</div>';
+            unset($_SESSION['error_message']);
+        }
+        ?>
 
         <!-- Deleted Items Table -->
         <div class="table-container">

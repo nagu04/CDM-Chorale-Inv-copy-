@@ -102,12 +102,7 @@ session_start();
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <div class="header">
-            <img src="picture-1.png" alt="Logo" class="header-logo">
-            <div class="section-indicator">Members</div>
-            <h2>CDM Chorale Inventory System</h2>
-            <a href="index.php" class="logout">Log Out</a>
-        </div>
+        <?php $section_title = 'Instruments'; include 'header.php'; ?>
 
         <!-- Feedback Messages -->
         <?php
@@ -128,6 +123,7 @@ session_start();
         }
         ?>
 
+        
         <!-- Card Section -->
         <div class="card-container">
             <?php

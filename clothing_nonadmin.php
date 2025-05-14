@@ -102,19 +102,27 @@ session_start();
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Header -->
-        <div class="header">
-        <img src="picture-1.png" alt="Logo" class="header-logo">
-        <div class="section-indicator">Clothing</div>
-            <h2>CDM Chorale Inventory System</h2>
-            
-            <div style="display: flex; gap: 10px;">
-                <a href="my_profile_nonadmin.php" class="logout" style="background-color: #ffcc00; color: #000066;">
-                    <i class="fas fa-user-circle"></i> My Profile
-                </a>
-                <a href="index.php" class="logout">Log Out</a>
-            </div>
-        </div>
+       <!-- Header -->
+       <?php $section_title = 'Instruments'; include 'header.php'; ?>
+
+<!-- Feedback Messages -->
+<?php
+if(isset($_SESSION['success_message'])) {
+    echo '<div class="alert alert-success">';
+    echo $_SESSION['success_message'];
+    echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+    echo '</div>';
+    unset($_SESSION['success_message']);
+}
+
+if(isset($_SESSION['error_message'])) {
+    echo '<div class="alert alert-danger">';
+    echo $_SESSION['error_message'];
+    echo '<button type="button" class="close" onclick="this.parentElement.style.display=\'none\';">&times;</button>';
+    echo '</div>';
+    unset($_SESSION['error_message']);
+}
+?>
 
         <!-- Card Section -->
         <div class="card-container">
