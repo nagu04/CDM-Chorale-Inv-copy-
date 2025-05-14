@@ -107,12 +107,12 @@ if (!isset($_SESSION['username'])) {
             <i class="fas fa-trash-alt"></i>
             <span>Deleted</span>
         </a>
-        <?php if (isset($_SESSION['username']) && $_SESSION['username'] === 'admin' && basename($_SERVER['PHP_SELF']) !== 'manage_users.php'): ?>
+        
         <a href="manage_users.php" class="icon-btn">
             <i class="fas fa-users-cog"></i>
             <span>Manage Users</span>
         </a>
-        <?php endif; ?>
+        
     </div>
 
     <!-- Main Content -->

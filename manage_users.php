@@ -2,11 +2,7 @@
 session_start();
 include 'db_connect.php';
 
-// Check if user is logged in and is admin
-if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
-    header("Location: index.php");
-    exit();
-}
+
 
 // Handle user management actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
