@@ -449,6 +449,23 @@ $user_password = isset($user['password']) ? $user['password'] : '';
         eyeIcon.classList.toggle('fa-eye');
         eyeIcon.classList.toggle('fa-eye-slash');
     });
+    document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    const header = document.querySelector('.header');
+    
+    sidebar.addEventListener('mouseenter', function() {
+        sidebar.style.width = '200px';
+       
+        header.style.marginLeft = '110px'; // Push header to match sidebar expansion
+    });
+    
+    sidebar.addEventListener('mouseleave', function() {
+        sidebar.style.width = '80px';
+       
+        header.style.marginLeft = '-10px';
+    });
+});
 </script>
 </body>
 </html>

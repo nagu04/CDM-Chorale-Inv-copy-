@@ -182,17 +182,7 @@ $result = $conn->query($sql);
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <div class="header">
-            <img src="picture-1.png" alt="Logo" class="header-logo">
-            <div class="section-indicator">Deleted Items</div>
-            <h2>CDM Chorale Inventory System</h2>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <a href="my_profile.php" class="logout profile-link">
-                    <i class="fas fa-user-circle"></i> My Profile
-                </a>
-                <a href="index.php" class="logout">Log Out</a>
-            </div>
-        </div>
+        <?php $section_title = 'Deleted Items'; include 'header.php'; ?>
 
         <!-- Deleted Items Table -->
         <div class="table-container">
@@ -381,6 +371,23 @@ $result = $conn->query($sql);
             deleteAllModal.style.display = "none";
         }
     }
+    document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    const header = document.querySelector('.header');
+    
+    sidebar.addEventListener('mouseenter', function() {
+        sidebar.style.width = '200px';
+       
+        header.style.marginLeft = '110px'; // Push header to match sidebar expansion
+    });
+    
+    sidebar.addEventListener('mouseleave', function() {
+        sidebar.style.width = '80px';
+       
+        header.style.marginLeft = '-10px';
+    });
+});
     </script>
 </body>
 </html>

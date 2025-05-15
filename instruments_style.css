@@ -6,6 +6,7 @@ body {
     display: flex;
     background: url('bgpic2.png') no-repeat center center fixed; /* Default background image */
     background-size: cover;
+    overflow-x: hidden;
 }
 
 /* Sidebar */
@@ -21,6 +22,8 @@ body {
     position: fixed;
     left: 0;
     border-right: 4px solid #ffcc00; /* Yellow line at the right edge */
+    
+    transition: width 0.3s ease-in-out;
 }
 
 /* Sidebar Icons */
@@ -50,6 +53,7 @@ body {
     padding: 30px;
     background-color: rgba(5, 5, 5, 0.637); /* Semi-transparent white background */
     min-height: 100vh;
+    transition: margin-left 0.3s ease-in-out;
 }
 
 /* Header */
@@ -64,6 +68,8 @@ body {
     margin: -30px -30px 20px -10px;
     position: relative;
     border-bottom: 4px solid #ffcc00; /* Yellow line at the bottom */
+    
+    transition: margin-left 0.3s ease-in-out;
 }
 
 .header-logo {

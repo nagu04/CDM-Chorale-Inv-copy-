@@ -23,7 +23,7 @@ if (!isset($section_title)) $section_title = '';
     text-decoration: none;
     min-width: 90px;
     text-align: center;
-    margin-right: 8px;
+    margin-right: 9px;
     padding: 8px 15px;
     display: inline-block;
     font-weight: normal !important;
