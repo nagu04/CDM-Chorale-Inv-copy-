@@ -206,6 +206,8 @@ $user_password = isset($user['password']) ? $user['password'] : '';
             transform: translateX(5px);
             width: 170px;
         }
+
+        /* end of sidebar */
         .main-content {
             margin-left: 80px;
             padding: 20px;
@@ -391,17 +393,7 @@ $user_password = isset($user['password']) ? $user['password'] : '';
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <div class="header">
-            <img src="picture-1.png" alt="Logo" class="header-logo">
-            <div class="section-indicator">My Profile</div>
-            <h2>CDM Chorale Inventory System</h2>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <a href="my_profile.php" class="logout profile-link">
-                    <i class="fas fa-user-circle"></i> My Profile
-                </a>
-                <a href="index.php" class="logout">Log Out</a>
-            </div>
-        </div>
+        <?php $section_title = 'My Profile'; include 'header.php'; ?>
 
         <div class="profile-container">
             <?php if (isset($success)): ?>

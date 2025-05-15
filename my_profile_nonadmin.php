@@ -378,13 +378,7 @@ $user_password = isset($user['password']) ? $user['password'] : '';
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <div class="header">
-            <img src="picture-1.png" alt="Logo" class="header-logo">
-            <div class="section-indicator">My Profile</div>
-            <h2>CDM Chorale Inventory System</h2>
-            
-            <a href="index.php" class="logout">Log Out</a>
-        </div>
+        <?php $section_title = 'My Profile'; include 'header_nonadmin.php'; ?>
 
         <!-- Profile Container -->
         <div class="profile-container">

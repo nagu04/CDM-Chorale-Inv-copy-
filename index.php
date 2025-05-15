@@ -57,7 +57,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="index_style.css">
-   
+   <style>
+    .login-container {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  padding: 0;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  height: 550px;
+}
+    </style>
 </head>
 <body>
     <div class="login-container">

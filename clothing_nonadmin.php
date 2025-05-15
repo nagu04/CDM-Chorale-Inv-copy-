@@ -103,7 +103,7 @@ session_start();
     <!-- Main Content -->
     <div class="main-content">
        <!-- Header -->
-       <?php $section_title = 'Instruments'; include 'header.php'; ?>
+       <?php $section_title = 'Clothing'; include 'header_nonadmin.php'; ?>
 
 <!-- Feedback Messages -->
 <?php

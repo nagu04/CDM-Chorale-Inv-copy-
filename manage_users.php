@@ -2,8 +2,6 @@
 session_start();
 include 'db_connect.php';
 
-
-
 // Handle user management actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['approve_request'])) {
@@ -11,12 +9,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $request_sql = "SELECT * FROM pending_users WHERE id = ?";
         $stmt = $conn->prepare($request_sql);
         $stmt->bind_param("i", $request_id);
-    $stmt->execute();
+        $stmt->execute();
         $request = $stmt->get_result()->fetch_assoc();
         
         if ($request) {
             // Insert into users table
-            $insert_sql = "INSERT INTO users (username, password, full_name, email) VALUES (?, ?, ?, ?)";
+            $insert_sql = "INSERT INTO user_login (username, password, full_name, email) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($insert_sql);
             $stmt->bind_param("ssss", $request['username'], $request['password'], $request['full_name'], $request['email']);
             
@@ -25,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $update_sql = "UPDATE pending_users SET status = 'approved', approved_by = ?, approved_at = NOW() WHERE id = ?";
                 $stmt = $conn->prepare($update_sql);
                 $stmt->bind_param("si", $_SESSION['username'], $request_id);
-    $stmt->execute();
+                $stmt->execute();
                 
                 $success = "User request approved successfully!";
             } else {
@@ -34,12 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif (isset($_POST['reject_request'])) {
         $request_id = $_POST['request_id'];
-        $update_sql = "UPDATE pending_users SET status = 'rejected', approved_by = ?, approved_at = NOW() WHERE id = ?";
-        $stmt = $conn->prepare($update_sql);
-        $stmt->bind_param("si", $_SESSION['username'], $request_id);
+        // Changed from UPDATE to DELETE
+        $delete_sql = "DELETE FROM pending_users WHERE id = ?";
+        $stmt = $conn->prepare($delete_sql);
+        $stmt->bind_param("i", $request_id);
         
         if ($stmt->execute()) {
-            $success = "User request rejected successfully!";
+            $success = "User request rejected and removed successfully!";
         } else {
             $error = "Error rejecting user request.";
         }
@@ -56,10 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif (isset($_POST['edit_user'])) {
         $user_id = $_POST['user_id'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $full_name = $_POST['full_name'];
-    $email = $_POST['email'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $full_name = $_POST['full_name'];
+        $email = $_POST['email'];
         
         $update_sql = "UPDATE users SET username = ?, password = ?, full_name = ?, email = ? WHERE id = ? AND username != 'admin'";
         $stmt = $conn->prepare($update_sql);
@@ -191,6 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
             margin-right: 5px;
             transition: all 0.3s ease;
+            
         }
         .edit-btn:hover {
             background-color: #218838;
@@ -368,7 +368,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </thead>
                 <tbody>
                     <?php
-                    $users_sql = "SELECT * FROM users WHERE username != 'admin'";
+                    $users_sql = "SELECT * FROM user_login WHERE username != 'admin'";
                     $users_result = $conn->query($users_sql);
                     
                     if ($users_result->num_rows > 0) {
@@ -378,25 +378,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             echo "<td>" . htmlspecialchars($user['full_name']) . "</td>";
                             echo "<td>" . htmlspecialchars($user['email']) . "</td>";
                             echo "<td>";
-                            echo '<button onclick="showEditForm(' . $user['id'] . ')" class="edit-btn"><i class="fas fa-edit"></i></button>';
+                            echo '<button onclick="showEditForm(' . $user['id_user_login'] . ')" class="edit-btn"><i class="fas fa-edit"></i></button>';
                             echo '<form method="POST" style="display: inline;">';
-                            echo '<input type="hidden" name="user_id" value="' . $user['id'] . '">';
+                            echo '<input type="hidden" name="user_id" value="' . $user['id_user_login'] . '">';
                             echo '<button type="submit" name="delete_user" class="delete-btn" onclick="return confirm(\'Are you sure you want to delete this user?\')"><i class="fas fa-trash"></i></button>';
                             echo '</form>';
                             echo "</td>";
                             echo "</tr>";
                             
                             // Edit form (hidden by default)
-                            echo '<tr id="edit-form-' . $user['id'] . '" class="edit-form" style="display: none;">';
+                            echo '<tr id="edit-form-' . $user['id_user_login'] . '" class="edit-form" style="display: none;">';
                             echo '<td colspan="4">';
                             echo '<form method="POST">';
-                            echo '<input type="hidden" name="user_id" value="' . $user['id'] . '">';
+                            echo '<input type="hidden" name="user_id" value="' . $user['id_user_login'] . '">';
                             echo '<input type="text" name="username" placeholder="Username" value="' . htmlspecialchars($user['username']) . '" required><br>';
                             echo '<input type="text" name="password" placeholder="Password" value="' . htmlspecialchars($user['password']) . '" required><br>';
                             echo '<input type="text" name="full_name" placeholder="Full Name" value="' . htmlspecialchars($user['full_name']) . '" required><br>';
                             echo '<input type="email" name="email" placeholder="Email" value="' . htmlspecialchars($user['email']) . '" required><br>';
-                            echo '<button type="submit" name="edit_user" class="edit-btn"><i class="fas fa-save"></i> Save Changes</button>';
-                            echo '<button type="button" onclick="hideEditForm(' . $user['id'] . ')" class="delete-btn"><i class="fas fa-times"></i> Cancel</button>';
+                            echo '<button type="submit" name="edit_user" class="edit-btn"><i class="fas fa-save"></i> Save</button>';
+                            echo '<button type="button" onclick="hideEditForm(' . $user['id_user_login'] . ')" class="delete-btn"><i class="fas fa-times"></i> Cancel</button>';
                             echo '</form>';
                             echo '</td>';
                             echo '</tr>';

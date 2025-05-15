@@ -112,7 +112,7 @@ if (!isset($_SESSION['username'])) {
     <!-- Main Content -->
     <div class="main-content">
          <!-- Header -->
-         <?php $section_title = 'Instruments'; include 'header.php'; ?>
+         <?php $section_title = 'Instruments'; include 'header_nonadmin.php'; ?>
 
 <!-- Feedback Messages -->
 <?php

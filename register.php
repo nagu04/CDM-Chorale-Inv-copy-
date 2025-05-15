@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
-  height: 850px;
+  
 }
 
     </style>
@@ -99,7 +99,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <img src="cdmlogo.svg" alt="Logo">
             <h2>Colegio de Muntinlupa Chorale</h2>
         </div>
-        <img src="cdmlogo.svg" alt="Logo" class="logo">
         <div class="login-title">SIGN UP</div>
         <?php if ($error): ?>
             <div class="error-message">
@@ -124,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="email" id="email" name="email" class="input-field" placeholder="Enter your email" required>
             <button type="submit" class="login-button">Sign Up</button>
         </form>
-        <div class="register-link" style="text-align:center; margin-top:15px;">
+        <div class="register-link" style="text-align: center; padding-bottom: 20px; margin-top: 15px;">
             Already have an account? <a href="index.php">Log in here</a>.
         </div>
     </div>

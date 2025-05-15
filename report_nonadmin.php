@@ -104,7 +104,7 @@ session_start();
     <!-- Main Content -->
     <div class="main-content">
        <!-- Header -->
-       <?php $section_title = 'Instruments'; include 'header.php'; ?>
+       <?php $section_title = 'Report'; include 'header_nonadmin.php'; ?>
 
 <!-- Feedback Messages -->
 <?php
