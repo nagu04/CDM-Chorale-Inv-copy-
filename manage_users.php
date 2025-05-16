@@ -43,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Error rejecting user request.";
         }
     } elseif (isset($_POST['delete_user'])) {
-        $user_id = $_POST['user_id'];
-        $delete_sql = "DELETE FROM users WHERE id = ? AND username != 'admin'";
+        $user_id = $_POST['id_user_login'];
+        $delete_sql = "DELETE FROM user_login WHERE id_user_login = ?";
         $stmt = $conn->prepare($delete_sql);
         $stmt->bind_param("i", $user_id);
         
@@ -54,13 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Error deleting user.";
         }
     } elseif (isset($_POST['edit_user'])) {
-        $user_id = $_POST['user_id'];
+        $user_id = $_POST['id_user_login'];
         $username = $_POST['username'];
         $password = $_POST['password'];
         $full_name = $_POST['full_name'];
         $email = $_POST['email'];
         
-        $update_sql = "UPDATE users SET username = ?, password = ?, full_name = ?, email = ? WHERE id = ? AND username != 'admin'";
+        $update_sql = "UPDATE user_login SET username = ?, password = ?, full_name = ?, email = ? WHERE id_user_login = ? AND username != 'admin'";
         $stmt = $conn->prepare($update_sql);
         $stmt->bind_param("ssssi", $username, $password, $full_name, $email, $user_id);
         
@@ -380,7 +380,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             echo "<td>";
                             echo '<button onclick="showEditForm(' . $user['id_user_login'] . ')" class="edit-btn"><i class="fas fa-edit"></i></button>';
                             echo '<form method="POST" style="display: inline;">';
-                            echo '<input type="hidden" name="user_id" value="' . $user['id_user_login'] . '">';
+                            echo '<input type="hidden" name="id_user_login" value="' . $user['id_user_login'] . '">';
                             echo '<button type="submit" name="delete_user" class="delete-btn" onclick="return confirm(\'Are you sure you want to delete this user?\')"><i class="fas fa-trash"></i></button>';
                             echo '</form>';
                             echo "</td>";
@@ -390,7 +390,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             echo '<tr id="edit-form-' . $user['id_user_login'] . '" class="edit-form" style="display: none;">';
                             echo '<td colspan="4">';
                             echo '<form method="POST">';
-                            echo '<input type="hidden" name="user_id" value="' . $user['id_user_login'] . '">';
+                            echo '<input type="hidden" name="id_user_login" value="' . $user['id_user_login'] . '">';
                             echo '<input type="text" name="username" placeholder="Username" value="' . htmlspecialchars($user['username']) . '" required><br>';
                             echo '<input type="text" name="password" placeholder="Password" value="' . htmlspecialchars($user['password']) . '" required><br>';
                             echo '<input type="text" name="full_name" placeholder="Full Name" value="' . htmlspecialchars($user['full_name']) . '" required><br>';

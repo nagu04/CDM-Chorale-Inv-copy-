@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 14, 2025 at 06:41 AM
+-- Generation Time: May 16, 2025 at 03:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,7 +40,7 @@ CREATE TABLE `accessories` (
 --
 
 INSERT INTO `accessories` (`deco_id`, `deco_name`, `quantity`, `condition`, `image_path`) VALUES
-(1, 'Bamboo Bilao', 4, 'GOOD', NULL),
+(1, 'Bamboo Bilao', 4, '', 'picture-1.png'),
 (2, 'Metal Hoop', 1, 'GOOD', NULL),
 (3, 'Vine Decoration', 2, 'GOOD', NULL),
 (4, 'Portable Booth', 1, 'GOOD', NULL),
@@ -67,16 +67,16 @@ CREATE TABLE `clothing` (
 --
 
 INSERT INTO `clothing` (`clothing_id`, `clothing_name`, `quantity`, `clothing_color`, `clothing_size_id`, `condition`, `image_path`) VALUES
-(1, 'Barong (Brown Small)', '1', 'Black', 'S', 'GOOD', 'picture-1.png'),
+(1, 'Barong (Brown Small)', '2', 'Black', 'S', 'GOOD', 'picture-1.png'),
 (2, 'Barong (Black Medium)', '5', 'Black', 'M', 'GOOD', 'picture-1.png'),
-(3, 'Barong (Black Large)', '3', 'Black', 'L', 'GOOD', 'barong.png'),
-(4, 'Barong (Black XL)', '3', 'Black', 'XL', 'GOOD', 'barong.png'),
-(5, 'Barong (Cream Small)', '3', 'Cream', 'S', 'GOOD', 'barong.png'),
-(6, 'Infinity Dress (Shiny Royal Blue)', '4', 'Shiny Royal Blue', '0', 'GOOD', 'barong.png'),
+(3, 'Barong (Black Large)', '3', 'Black', 'L', 'GOOD', 'picture-1.png'),
+(4, 'Barong (Black XL)', '3', 'Black', 'XL', 'GOOD', 'picture-1.png'),
+(5, 'Barong (Cream Small)', '3', 'Cream', 'S', 'GOOD', 'picture-1.png'),
+(6, 'Infinity Dress (Shiny Royal Blue)', '4', 'Shiny Royal Blue', '0', 'GOOD', 'picture-1.png'),
 (7, 'Infinity Dress (Matte Royal Blue)', '6', 'Matte Royal Blue', 'n/a', 'GOOD', 'picture-1.png'),
-(8, 'Infinity Dress (Light Blue)', '6', 'Light Blue', 'N/A', 'GOOD', 'barong.png'),
-(9, 'Scarf', '15', 'Red', 'N/A', 'GOOD', 'picture-1.png'),
-(10, 'Scarf', '9', 'Green', NULL, 'GOOD', NULL),
+(8, 'Infinity Dress (Light Blue)', '6', 'Light Blue', 'N/A', 'GOOD', 'picture-1.png'),
+(9, 'Scarf (Red)', '15', 'Red', 'N/A', 'GOOD', 'picture-1.png'),
+(10, 'Scarf (Green)', '9', 'Green', 'n/a', 'GOOD', 'picture-1.png'),
 (11, 'Skirt', '10', 'Gold', NULL, 'GOOD', NULL),
 (12, 'Alampay', '8', NULL, NULL, 'GOOD', NULL),
 (13, 'Shawl', '10', NULL, NULL, 'GOOD', NULL),
@@ -147,13 +147,6 @@ CREATE TABLE `history` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `history`
---
-
-INSERT INTO `history` (`history_id`, `type`, `borrowed_by`, `date`, `date_return`, `category`, `item_name`, `quantity`, `sn`, `condition`, `status`, `remarks`, `is_approved`, `created_at`) VALUES
-(14, 'BORROW', 'Hans Sese', '2025-05-14', '2025-05-15', 'Clothing', 'Barong (Brown Small)', 1, '20231020406', 'good', 'working', '', 0, '2025-05-14 03:35:04');
-
 -- --------------------------------------------------------
 
 --
@@ -178,7 +171,7 @@ INSERT INTO `instruments` (`instru_id`, `instrument_name`, `quantity`, `conditio
 (4, 'Keyboard Stand', 1, 'GOOD', NULL),
 (5, 'Keyboard Case', 1, 'GOOD', NULL),
 (6, 'Music Sheet Stand', 1, 'GOOD', 'picture-1.png'),
-(7, 'CREATIVE Speakers', 1, 'GOOD', NULL);
+(7, 'CREATIVE Speakers', 1, '', 'picture-1.png');
 
 -- --------------------------------------------------------
 
@@ -201,6 +194,7 @@ CREATE TABLE `login` (
 INSERT INTO `login` (`login_id`, `username`, `password`, `full_name`, `email`) VALUES
 (1, 'admin', 'admin', 'Tamara Verdan', 'maamtammy@edu.ph'),
 (2, 'user', 'password', 'Rinnel Pacinos', 'kuyarinnel@cdm.edu.ph');
+(3, 'admin2', 'password', 'Rinnel Pacinos', 'kuyarinnel@cdm.edu.ph');
 
 -- --------------------------------------------------------
 
@@ -226,7 +220,7 @@ INSERT INTO `members` (`member_id`, `members_name`, `program`, `position`, `birt
 (2, 'BACULINAO, REGINA MARIE L.', 'CE', 'Member', '11/20/2003', '145 CALAMANSI ST. TRAMO HEIGHTS PUROK 6, BRGY. SUCAT, MUNTINLUPA CITY', NULL),
 (3, 'BARCELON, JOHN BRYAN B.', 'CPE', 'Member', '2/23/2004', 'LIRIO #3 EXTENSION ST., BRGY. CAA, LAS PIÑAS CITY', NULL),
 (4, 'CARPIZ, LEMUEL JAY I.', 'AR', 'Member', '2006-05-17', 'BLK 1 LOT 15 GENESIS ST. TEOSEJO SUBDIVISION, BRGY. TUNASAN, MUNTINLUPA CITY', 'member_profiles/member_4_1745846904.jpg'),
-(5, 'CONSTANTINO, MIKAELA COLEEN D.', 'CPE', 'Member', '4/4/2005', '#95 NATIONAL ROAD, BRGY. PUTATAN, MUNTINLUPA CITY', NULL),
+(5, 'CONSTANTINO, MIKAELA COLEEN D.', 'CPE', 'Member', '4/4/2005', '#95 NATIONAL ROAD, BRGY. PUTATAN, MUNTINLUPA CITY', ''),
 (6, 'DAYPUYART, REUBEN B.', 'ECE', 'Trainee', '2006-01-02', 'ST. CATHERINE COMPOUND, BRGY. PUTATAN, MUNTINLUPA CITY', 'member_profiles/member_6_1745847220.jpg'),
 (7, 'DE CASTRO, JUSTIN ALLEN M.', 'AR', 'Member', '2005-09-05', 'PHASE 1 BLOCK 10 LOT 29 SOUTHVILLE3', 'member_profiles/member_7_1745847256.png'),
 (8, 'ENCARNACION, LADYMAE A.', 'CE', 'Member', '10/8/2003', 'SOUTHVILLE 3A EXT, BRGY. SAN ANTONIO, SAN PEDRO  CITY, LAGUNA', NULL),
@@ -269,8 +263,7 @@ CREATE TABLE `pending_users` (
 --
 
 INSERT INTO `pending_users` (`id`, `username`, `password`, `email`, `full_name`, `requested_at`, `status`, `approved_by`, `approved_at`) VALUES
-(1, 'user1', 'password', 'hanssese@yahoo.com', 'Hans Sese', '2025-05-14 02:12:25', 'pending', NULL, NULL),
-(3, 'user2', 'password', 'sese.hans.pythagoras@gmail.com', 'Hans Sese', '2025-05-14 04:32:41', 'pending', NULL, NULL);
+(11, 'newuser', 'password', 'vinceluces@cdm.edu', 'Vince Luces', '2025-05-15 07:49:15', 'approved', 'user', '2025-05-15 07:50:00');
 
 -- --------------------------------------------------------
 
@@ -291,7 +284,8 @@ CREATE TABLE `user_login` (
 --
 
 INSERT INTO `user_login` (`id_user_login`, `username`, `password`, `full_name`, `email`) VALUES
-(1, 'user', 'user', 'Hans Sese', 'sese.hans.pythagoras@gmail.com');
+(1, 'user', 'user', 'Hans', 'sese.hans.pythagoras@gmail.com'),
+(2, 'newuser', 'password', 'Vince Luces', 'vinceluces@cdm.edu');
 
 --
 -- Indexes for dumped tables
@@ -350,8 +344,8 @@ ALTER TABLE `members`
 --
 ALTER TABLE `pending_users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD KEY `username` (`username`) USING BTREE,
+  ADD KEY `email` (`email`) USING BTREE;
 
 --
 -- Indexes for table `user_login`
@@ -367,31 +361,31 @@ ALTER TABLE `user_login`
 -- AUTO_INCREMENT for table `accessories`
 --
 ALTER TABLE `accessories`
-  MODIFY `deco_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `deco_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `clothing`
 --
 ALTER TABLE `clothing`
-  MODIFY `clothing_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `clothing_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `deleted_items`
 --
 ALTER TABLE `deleted_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `instruments`
 --
 ALTER TABLE `instruments`
-  MODIFY `instru_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `instru_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `login`
@@ -403,19 +397,19 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `pending_users`
 --
 ALTER TABLE `pending_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `user_login`
 --
 ALTER TABLE `user_login`
-  MODIFY `id_user_login` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_user_login` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <button type="submit" class="login-button">Log In</button>
         </form>
-        <div class="register-link" style="text-align: center; padding-bottom: 20px; margin-top: 15px;"
+        <div class="register-link" style="text-align: center; padding-bottom: 20px; margin-top: 15px;">
             Don't have an account? <a href="register.php">Sign up here</a>.
         </div>
     </div>

@@ -402,7 +402,7 @@ $user_password = isset($user['password']) ? $user['password'] : '';
             <form class="profile-form" method="POST">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user_username); ?>" readonly style="background-color: #222; color: #aaa; cursor: not-allowed;">
+                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user_username); ?>" required>
                 </div>
                 
                 <div class="form-group password-group">
