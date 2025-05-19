@@ -28,7 +28,7 @@ $members_result = $conn->query($members_sql);
     <link rel="stylesheet" href="instruments_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        .table-container {
+         .table-container {
             padding: 20px;
         }
         table {
@@ -87,11 +87,18 @@ $members_result = $conn->query($members_sql);
             color: white;
         }
         .type-member {
-            background-color: #FF9800;
-            color: white;
+            background-color: #8e44ad;
         }
-          /* Sidebar styles */
-          .sidebar {
+        .profile-link {
+            background-color: #ffcc00 !important;
+            color: #000066 !important;
+        }
+        .profile-link:hover {
+            background-color: #e6b800 !important;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
          width: 80px;
          background-color: rgba(44, 36, 116, 0.9); /* Semi-transparent blue background */
         height: 100vh;
@@ -142,6 +149,35 @@ $members_result = $conn->query($members_sql);
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
             width: 170px;
+        }
+        /* Tabs styles */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .tab-btn {
+            background: #2c2474;
+            color: #fff;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            font-size: 16px;
+            outline: none;
+            transition: background 0.2s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: #ffcc00;
+            color: #2c2474;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
         }
     </style>
 </head>
@@ -202,7 +238,16 @@ $members_result = $conn->query($members_sql);
         }
         ?>
 
+          <!-- Tabs -->
+          <div class="tabs">
+                <button class="tab-btn active" onclick="showTab(event, 'instruments')">Instruments</button>
+                <button class="tab-btn" onclick="showTab(event, 'accessories')">Accessories</button>
+                <button class="tab-btn" onclick="showTab(event, 'clothing')">Clothing</button>
+                <button class="tab-btn" onclick="showTab(event, 'members')">Members</button>
+            </div>
+
        <!-- Deleted Instruments Table -->
+       <div id="tab-instruments" class="tab-content active">
        <h2 class="section-title">Deleted Instruments</h2>
                         <table>
                             <thead>
@@ -240,8 +285,10 @@ $members_result = $conn->query($members_sql);
                                 ?>
                             </tbody>
                         </table>
+         </div>
 
                          <!-- Deleted Accessories Table -->
+                        <div id="tab-accessories" class="tab-content">
                          <h2 class="section-title">Deleted Accessories</h2>
                         <table>
                             <thead>
@@ -279,10 +326,12 @@ $members_result = $conn->query($members_sql);
                                 ?>
                             </tbody>
                         </table>
+                        </div>
 
                          <!-- Deleted Clothing Table -->
+                         <div id="tab-clothing" class="tab-content">
                          <h2 class="section-title">Deleted Clothing</h2>
-                        <table>
+                            <table>
                             <thead>
                                 <tr>
                                     <th>Image</th>
@@ -318,8 +367,10 @@ $members_result = $conn->query($members_sql);
                                 ?>
                             </tbody>
                         </table>
+                        </div>
 
                         <!-- Deleted Member Table -->
+                        <div id="tab-members" class="tab-content">
                         <h2 class="section-title">Deleted Members</h2>
                         <table>
                             <thead>
@@ -356,6 +407,7 @@ $members_result = $conn->query($members_sql);
                                 ?>
                             </tbody>
                         </table>
+                         </div>
         </div>
     </div>
 
@@ -364,6 +416,8 @@ $members_result = $conn->query($members_sql);
     const sidebar = document.querySelector('.sidebar');
     const mainContent = document.querySelector('.main-content');
     const header = document.querySelector('.header');
+
+    
     
     sidebar.addEventListener('mouseenter', function() {
         sidebar.style.width = '200px';
@@ -377,6 +431,19 @@ $members_result = $conn->query($members_sql);
         header.style.marginLeft = '-10px';
     });
 });
+    function showTab(event, tab) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(function(el) {
+            el.classList.remove('active');
+        });
+        // Remove active from all buttons
+        document.querySelectorAll('.tab-btn').forEach(function(el) {
+            el.classList.remove('active');
+        });
+        // Show selected tab and activate button
+        document.getElementById('tab-' + tab).classList.add('active');
+        event.target.classList.add('active');
+    }
 </script>
 </body>
 </html>
