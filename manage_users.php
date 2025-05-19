@@ -288,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </a>
         <a href="deleted_items.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted</span>
+            <span>Archives</span>
         </a>
         <a href="manage_users.php" class="icon-btn">
             <i class="fas fa-users-cog"></i>

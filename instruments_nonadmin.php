@@ -104,7 +104,7 @@ if (!isset($_SESSION['username'])) {
         </a>
         <a href="deleted_items_nonadmin.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted</span>
+            <span>Archives</span>
         </a>
     </div>
 

@@ -139,7 +139,7 @@ $reported_result = $conn->query($reported_sql);
         </a>
         <a href="deleted_items_nonadmin.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted</span>
+            <span>Archives</span>
         </a>
     </div>
 
@@ -169,7 +169,7 @@ if(isset($_SESSION['error_message'])) {
         <!-- History Tables -->
         <div class="table-container">
             <!-- Borrowed Items Table -->
-            <h2 class="section-title">Borrowed Items</h2>
+            <h2 class="section-title">Borrow Requests</h2>
             <table>
                 <thead>
                     <tr>

@@ -167,7 +167,7 @@ $reported_result = $conn->query($reported_sql);
         </a>
         <a href="deleted_items.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted</span>
+            <span>Archives</span>
         </a>
         
         <a href="manage_users.php" class="icon-btn">
@@ -185,7 +185,7 @@ $reported_result = $conn->query($reported_sql);
          <!-- History Tables -->
          <div class="table-container">
             <!-- Borrowed Items Table -->
-            <h2 class="section-title">Borrowed Items</h2>
+            <h2 class="section-title">Borrow Requests</h2>
             <table>
                 <thead>
                     <tr>

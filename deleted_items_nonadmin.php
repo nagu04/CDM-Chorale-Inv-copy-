@@ -12,7 +12,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deleted Items</title>
+    <title>Archives</title>
     <link rel="stylesheet" href="instruments_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -162,14 +162,14 @@ $result = $conn->query($sql);
         </a>
         <a href="deleted_items_nonadmin.php" class="icon-btn">
             <i class="fas fa-trash-alt"></i>
-            <span>Deleted</span>
+            <span>Archives</span>
         </a>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
-        <?php $section_title = 'Deleted Items'; include 'header_nonadmin.php'; ?>
+        <?php $section_title = 'Archives'; include 'header_nonadmin.php'; ?>
 
         <!-- Feedback Messages -->
         <?php
