@@ -3,9 +3,21 @@
 session_start();
 include 'db_connect.php';
 
-// Fetch deleted items with reason column
-$sql = "SELECT id, item_id, item_name, item_type, quantity, condition_status, image_path, deleted_at, deleted_by, reason, details FROM deleted_items ORDER BY deleted_at DESC";
-$result = $conn->query($sql);
+// Fetch deleted instruments
+$instruments_sql = "SELECT * FROM deleted_instruments ORDER BY deleted_at DESC";
+$instruments_result = $conn->query($instruments_sql);
+
+// Fetch deleted accessories
+$accessories_sql = "SELECT * FROM deleted_accessories ORDER BY deleted_at DESC";
+$accessories_result = $conn->query($accessories_sql);
+
+// Fetch deleted clothing
+$clothing_sql = "SELECT * FROM deleted_clothing ORDER BY deleted_at DESC";
+$clothing_result = $conn->query($clothing_sql);
+
+// Fetch deleted members
+$members_sql = "SELECT * FROM deleted_members ORDER BY deleted_at DESC";
+$members_result = $conn->query($members_sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -184,9 +196,7 @@ $result = $conn->query($sql);
         <!-- Header -->
         <?php $section_title = 'Archives'; include 'header.php'; ?>
 
-        <!-- Deleted Items Table -->
-        <div class="table-container">
-            <h2 class="section-title">Deleted Items</h2>
+       
             
             <?php
             // Display success message if set
@@ -206,62 +216,189 @@ $result = $conn->query($sql);
             }
             ?>
             
-            <table>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Type</th>
-                        <th>Item Name</th>
-                        <th>Quantity</th>
-                        <th>Condition</th>
-                        <th>Reason for Deletion</th>
-                        <th>Deleted By</th>
-                        <th>Deleted At</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                            echo "<tr>";
-                            
-                            // Image column
-                            $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
-                            echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
-                            
-                            // Item type with styled badge
-                            echo "<td>";
-                            $type = $row['item_type'];
-                            echo "<span class='type-badge type-" . $type . "'>" . ucfirst($type) . "</span>";
-                            echo "</td>";
-                            
-                            echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
-                            
-                            // Reason column
-                            echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
-                            
-                            echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
-                            
-                            echo "<td>
-                                    <button class='edit-btn' onclick='restoreItem(" . $row['id'] . ")'>
+            <!-- Deleted Instruments Table -->
+                        <h2 class="section-title">Deleted Instruments</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Condition</th>
+                                    <th>Reason</th>
+                                    <th>Deleted By</th>
+                                    <th>Deleted At</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($instruments_result->num_rows > 0) {
+                                    while($row = $instruments_result->fetch_assoc()) {
+                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                        echo "<tr>";
+                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                        echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                                       
+                                        echo "<td>
+                                    <button class='edit-btn' onclick='restoreInstrument(" . $row['id'] . ")'>
                                         <i class='fas fa-undo'></i> Restore
                                     </button>
-                                    <button class='delete-btn' onclick='confirmDelete(" . $row['id'] . ")' style='background-color: #f44336; margin-left: 5px;'>
+                                    <button class='delete-btn' onclick='confirmDeleteInstrument(" . $row['id'] . ")' style='background-color: #f44336; margin-left: 5px;'>
                                         <i class='fas fa-trash'></i> Delete
                                     </button>
                                   </td>";
                             echo "</tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='9' style='text-align: center;'>No deleted items found</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7' style='text-align: center;'>No deleted instruments found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+
+                         <!-- Deleted Accessories Table -->
+                         <h2 class="section-title">Deleted Accessories</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Condition</th>
+                                    <th>Reason</th>
+                                    <th>Deleted By</th>
+                                    <th>Deleted At</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($accessories_result->num_rows > 0) {
+                                    while($row = $accessories_result->fetch_assoc()) {
+                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                        echo "<tr>";
+                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                        echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                                       
+                                        echo "<td>
+                                    <button class='edit-btn' onclick='restoreAccessory(" . $row['id'] . ")'>
+                                        <i class='fas fa-undo'></i> Restore
+                                    </button>
+                                    <button class='delete-btn' onclick='confirmDeleteAccessory(" . $row['id'] . ")' style='background-color: #f44336; margin-left: 5px;'>
+                                        <i class='fas fa-trash'></i> Delete
+                                    </button>
+                                  </td>";
+                            echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7' style='text-align: center;'>No deleted accessories found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+
+                         <!-- Deleted Clothing Table -->
+                         <h2 class="section-title">Deleted Clothing</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Condition</th>
+                                    <th>Reason</th>
+                                    <th>Deleted By</th>
+                                    <th>Deleted At</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($clothing_result->num_rows > 0) {
+                                    while($row = $clothing_result->fetch_assoc()) {
+                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                        echo "<tr>";
+                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                        echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                                        
+                                        echo "<td>
+                                    <button class='edit-btn' onclick='restoreClothing(" . $row['id'] . ")'>
+                                        <i class='fas fa-undo'></i> Restore
+                                    </button>
+                                    <button class='delete-btn' onclick='confirmDeleteClothing(" . $row['id'] . ")' style='background-color: #f44336; margin-left: 5px;'>
+                                        <i class='fas fa-trash'></i> Delete
+                                    </button>
+                                  </td>";
+                            echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7' style='text-align: center;'>No deleted clothing found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+
+                        <!-- Deleted Member Table -->
+                        <h2 class="section-title">Deleted Members</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Member Name</th>
+                                    <th>Reason</th>
+                                    <th>Deleted By</th>
+                                    <th>Deleted At</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($members_result->num_rows > 0) {
+                                    while($row = $members_result->fetch_assoc()) {
+                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                        echo "<tr>";
+                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                        echo "<td>" . htmlspecialchars($row['full_name']) . "</td>";
+                                     
+                                        
+                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                                       
+
+                                        echo "<td>
+                                    <button class='edit-btn' onclick='restoreMember(" . $row['id'] . ")'>
+                                        <i class='fas fa-undo'></i> Restore
+                                    </button>
+                                    <button class='delete-btn' onclick='confirmDeleteMember(" . $row['id'] . ")' style='background-color: #f44336; margin-left: 5px;'>
+                                        <i class='fas fa-trash'></i> Delete
+                                    </button>
+                                  </td>";
+                            echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7' style='text-align: center;'>No deleted members found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                            
 
             <div style="text-align: right; margin-top: 20px;">
                 <button class="delete-btn" onclick="confirmDeleteAll()" style="background-color: #f44336; padding: 10px 15px;">
@@ -318,23 +455,81 @@ $result = $conn->query($sql);
     var itemToRestore = null;
     var itemToDelete = null;
 
-    function restoreItem(id) {
+    function restoreInstrument(id) {
         itemToRestore = id;
         modal.style.display = "flex";
         
         // Set up the confirmation button
         confirmButton.onclick = function() {
-            window.location.href = 'restore_item.php?id=' + itemToRestore;
+            window.location.href = 'restore_deleted_item.php?type=instrument&id=' + itemToRestore;
+        }
+
+        //RESTORE ITEMS
+    }
+    function restoreAccessory(id) {
+        itemToRestore = id;
+        modal.style.display = "flex";
+        
+        // Set up the confirmation button
+        confirmButton.onclick = function() {
+            window.location.href = 'restore_deleted_item.php?type=accessory&id=' + itemToRestore;
+        }
+    }
+    function restoreClothing(id) {
+        itemToRestore = id;
+        modal.style.display = "flex";
+        
+        // Set up the confirmation button
+        confirmButton.onclick = function() {
+            window.location.href = 'restore_deleted_item.php?type=clothing&id=' + itemToRestore;
+        }
+    }
+    function restoreMember(id) {
+        itemToRestore = id;
+        modal.style.display = "flex";
+        
+        // Set up the confirmation button
+        confirmButton.onclick = function() {
+            window.location.href = 'restore_deleted_item.php?type=member&id=' + itemToRestore;
         }
     }
 
-    function confirmDelete(id) {
+    //DELETE ITEMS
+
+    function confirmDeleteInstrument(id) {
         itemToDelete = id;
         deleteModal.style.display = "flex";
         
         // Set up the confirmation button
         confirmDeleteButton.onclick = function() {
-            window.location.href = 'permanent_delete.php?id=' + itemToDelete;
+            window.location.href = 'permanent_delete.php?type=instrument&id=' + itemToDelete;
+        }
+    }
+    function confirmDeleteAccessory(id) {
+        itemToDelete = id;
+        deleteModal.style.display = "flex";
+        
+        // Set up the confirmation button
+        confirmDeleteButton.onclick = function() {
+            window.location.href = 'permanent_delete.php?type=accessory&id=' + itemToDelete;
+        }
+    }
+    function confirmDeleteClothing(id) {
+        itemToDelete = id;
+        deleteModal.style.display = "flex";
+        
+        // Set up the confirmation button
+        confirmDeleteButton.onclick = function() {
+            window.location.href = 'permanent_delete.php?type=clothing&id=' + itemToDelete;
+        }
+    }
+    function confirmDeleteMember(id) {
+        itemToDelete = id;
+        deleteModal.style.display = "flex";
+        
+        // Set up the confirmation button
+        confirmDeleteButton.onclick = function() {
+            window.location.href = 'permanent_delete.php?type=member&id=' + itemToDelete;
         }
     }
 

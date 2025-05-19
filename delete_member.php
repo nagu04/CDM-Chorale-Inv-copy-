@@ -48,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['member_id'])) {
         }
         
         // Store in deleted_items table
-        $save_stmt = $conn->prepare("INSERT INTO deleted_items (item_id, item_name, item_type, image_path, deleted_by, reason, details) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $save_stmt = $conn->prepare("INSERT INTO deleted_members (member_id, full_name, image_path, deleted_by, reason, deleted_at) VALUES (?, ?, ?, ?, ?, NOW())");
         $item_type = 'member';
-        $save_stmt->bind_param("issssss", $member_id, $member_name, $item_type, $image_path, $deleted_by, $delete_reason, $details);
+        $save_stmt->bind_param("issss", $member_id, $member_name, $image_path, $deleted_by, $delete_reason);
         $save_stmt->execute();
         $save_stmt->close();
     }

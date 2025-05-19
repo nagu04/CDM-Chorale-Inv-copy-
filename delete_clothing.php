@@ -48,9 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clothing_id'])) {
         }
         
         // Store in deleted_items table
-        $save_stmt = $conn->prepare("INSERT INTO deleted_items (item_id, item_name, item_type, quantity, condition_status, image_path, deleted_by, reason, details) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $save_stmt = $conn->prepare("INSERT INTO deleted_clothing (item_id, item_name, quantity, condition_status, image_path, deleted_by, reason, deleted_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
+        
         $item_type = 'clothing';
-        $save_stmt->bind_param("isiiissss", $clothing_id, $clothing_name, $item_type, $quantity, $condition, $image_path, $deleted_by, $delete_reason, $details);
+        $save_stmt->bind_param("isissss", $clothing_id, $clothing_name, $quantity, $condition, $image_path, $deleted_by, $delete_reason);
         $save_stmt->execute();
         $save_stmt->close();
     }

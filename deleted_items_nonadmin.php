@@ -3,9 +3,21 @@
 session_start();
 include 'db_connect.php';
 
-// Fetch deleted items
-$sql = "SELECT id, item_id, item_name, item_type, quantity, condition_status, image_path, deleted_at, deleted_by, reason, details FROM deleted_items ORDER BY deleted_at DESC";
-$result = $conn->query($sql);
+// Fetch deleted instruments
+$instruments_sql = "SELECT * FROM deleted_instruments ORDER BY deleted_at DESC";
+$instruments_result = $conn->query($instruments_sql);
+
+// Fetch deleted accessories
+$accessories_sql = "SELECT * FROM deleted_accessories ORDER BY deleted_at DESC";
+$accessories_result = $conn->query($accessories_sql);
+
+// Fetch deleted clothing
+$clothing_sql = "SELECT * FROM deleted_clothing ORDER BY deleted_at DESC";
+$clothing_result = $conn->query($clothing_sql);
+
+// Fetch deleted members
+$members_sql = "SELECT * FROM deleted_members ORDER BY deleted_at DESC";
+$members_result = $conn->query($members_sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -190,74 +202,160 @@ $result = $conn->query($sql);
         }
         ?>
 
-        <!-- Deleted Items Table -->
-        <div class="table-container">
-            <h2 class="section-title">Deleted Items</h2>
-            
-            <?php
-            // Display success message if set
-            if (isset($_SESSION['success_message'])) {
-                echo '<div class="alert success-alert" style="background-color: rgba(76, 175, 80, 0.8); color: white; padding: 12px; margin-bottom: 15px; border-radius: 5px; text-align: center;">';
-                echo '<i class="fas fa-check-circle"></i> ' . $_SESSION['success_message'];
-                echo '</div>';
-                unset($_SESSION['success_message']); // Clear the message after displaying
-            }
-            
-            // Display error message if set
-            if (isset($_SESSION['error_message'])) {
-                echo '<div class="alert error-alert" style="background-color: rgba(244, 67, 54, 0.8); color: white; padding: 12px; margin-bottom: 15px; border-radius: 5px; text-align: center;">';
-                echo '<i class="fas fa-exclamation-triangle"></i> ' . $_SESSION['error_message'];
-                echo '</div>';
-                unset($_SESSION['error_message']); // Clear the message after displaying
-            }
-            ?>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Type</th>
-                        <th>Item Name</th>
-                        <th>Quantity</th>
-                        <th>Condition</th>
-                        <th>Reason for Deletion</th>
-                        <th>Deleted By</th>
-                        <th>Deleted At</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                            echo "<tr>";
-                            
-                            // Image column
-                            $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
-                            echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
-                            
-                            // Item type with styled badge
-                            echo "<td>";
-                            $type = $row['item_type'];
-                            echo "<span class='type-badge type-" . $type . "'>" . ucfirst($type) . "</span>";
-                            echo "</td>";
-                            
-                            echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
-                            
-                            // Reason column
-                            echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
-                            
-                            echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='8' style='text-align: center;'>No deleted items found</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+       <!-- Deleted Instruments Table -->
+       <h2 class="section-title">Deleted Instruments</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Condition</th>
+                                    <th>Reason</th>
+                                    <th>Deleted By</th>
+                                    <th>Deleted At</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($instruments_result->num_rows > 0) {
+                                    while($row = $instruments_result->fetch_assoc()) {
+                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                        echo "<tr>";
+                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                        echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                                       
+                                       
+                            echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7' style='text-align: center;'>No deleted instruments found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+
+                         <!-- Deleted Accessories Table -->
+                         <h2 class="section-title">Deleted Accessories</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Condition</th>
+                                    <th>Reason</th>
+                                    <th>Deleted By</th>
+                                    <th>Deleted At</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($accessories_result->num_rows > 0) {
+                                    while($row = $accessories_result->fetch_assoc()) {
+                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                        echo "<tr>";
+                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                        echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                                       
+                                       
+                            echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7' style='text-align: center;'>No deleted accessories found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+
+                         <!-- Deleted Clothing Table -->
+                         <h2 class="section-title">Deleted Clothing</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Condition</th>
+                                    <th>Reason</th>
+                                    <th>Deleted By</th>
+                                    <th>Deleted At</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($clothing_result->num_rows > 0) {
+                                    while($row = $clothing_result->fetch_assoc()) {
+                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                        echo "<tr>";
+                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                        echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                                        
+                                      
+                            echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7' style='text-align: center;'>No deleted clothing found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+
+                        <!-- Deleted Member Table -->
+                        <h2 class="section-title">Deleted Members</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Member Name</th>
+                                    <th>Reason</th>
+                                    <th>Deleted By</th>
+                                    <th>Deleted At</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($members_result->num_rows > 0) {
+                                    while($row = $members_result->fetch_assoc()) {
+                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                        echo "<tr>";
+                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                        echo "<td>" . htmlspecialchars($row['full_name']) . "</td>";
+                                     
+                                        
+                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                                       
+
+                                       
+                            echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7' style='text-align: center;'>No deleted members found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
         </div>
     </div>
 
