@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 16, 2025 at 03:56 AM
+-- Generation Time: May 19, 2025 at 01:05 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -107,6 +107,63 @@ INSERT INTO `clothing_size` (`size_id`, `clothing_size`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `deleted_accessories`
+--
+
+CREATE TABLE `deleted_accessories` (
+  `id` int(11) NOT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `condition_status` varchar(255) DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(255) DEFAULT NULL,
+  `reason` text DEFAULT NULL,
+  `details` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deleted_clothing`
+--
+
+CREATE TABLE `deleted_clothing` (
+  `id` int(11) NOT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `condition_status` varchar(255) DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(255) DEFAULT NULL,
+  `reason` text DEFAULT NULL,
+  `details` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deleted_instruments`
+--
+
+CREATE TABLE `deleted_instruments` (
+  `id` int(11) NOT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `condition_status` varchar(255) DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(255) DEFAULT NULL,
+  `reason` text DEFAULT NULL,
+  `details` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `deleted_items`
 --
 
@@ -121,6 +178,32 @@ CREATE TABLE `deleted_items` (
   `deleted_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `deleted_by` varchar(100) DEFAULT NULL,
   `reason` varchar(255) DEFAULT NULL,
+  `details` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `deleted_items`
+--
+
+INSERT INTO `deleted_items` (`id`, `item_id`, `item_name`, `item_type`, `quantity`, `condition_status`, `image_path`, `deleted_at`, `deleted_by`, `reason`, `details`) VALUES
+(38, 21, 'Guitar', '0', 1, '0', '', '2025-05-19 08:52:04', 'Tamara Verdan', 'awdawd', '{\"original_table\":\"instruments\",\"original_id\":\"21\",\"instrument_name\":\"Guitar\",\"condition\":\"\",\"quantity\":1}'),
+(39, 13, 'Tambol', '0', 10, '0', '', '2025-05-19 08:52:10', 'Tamara Verdan', 'adwad', '{\"original_table\":\"accessories\",\"original_id\":\"13\",\"deco_name\":\"Tambol\",\"condition\":\"\",\"quantity\":10}'),
+(41, 23, 'Guitar', '0', 1, '0', '', '2025-05-19 09:32:03', 'Tamara Verdan', 'awdawd', '{\"original_table\":\"instruments\",\"original_id\":\"23\",\"instrument_name\":\"Guitar\",\"condition\":\"GOOD\",\"quantity\":1}');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deleted_members`
+--
+
+CREATE TABLE `deleted_members` (
+  `id` int(11) NOT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `full_name` varchar(255) DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` varchar(255) DEFAULT NULL,
+  `reason` text DEFAULT NULL,
   `details` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -147,6 +230,14 @@ CREATE TABLE `history` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `history`
+--
+
+INSERT INTO `history` (`history_id`, `type`, `borrowed_by`, `date`, `date_return`, `category`, `item_name`, `quantity`, `sn`, `condition`, `status`, `remarks`, `is_approved`, `created_at`) VALUES
+(27, 'BORROW', 'Hans', '2025-05-16', '2025-05-17', 'Instruments', 'Korg KROSS2-88 Keyboard', 1, '20231020406', 'good', 'working', '', 1, '2025-05-16 07:19:09'),
+(28, 'REPORT', 'Tamara Verdan', '2025-05-16', NULL, 'Accessories', 'Tambol', 10, '20231020406', 'good', '', 'Nagasgas', 1, '2025-05-16 07:24:56');
+
 -- --------------------------------------------------------
 
 --
@@ -171,7 +262,8 @@ INSERT INTO `instruments` (`instru_id`, `instrument_name`, `quantity`, `conditio
 (4, 'Keyboard Stand', 1, 'GOOD', NULL),
 (5, 'Keyboard Case', 1, 'GOOD', NULL),
 (6, 'Music Sheet Stand', 1, 'GOOD', 'picture-1.png'),
-(7, 'CREATIVE Speakers', 1, '', 'picture-1.png');
+(7, 'CREATIVE Speakers', 1, '', 'picture-1.png'),
+(28, 'Guitar', 1, 'GOOD', NULL);
 
 -- --------------------------------------------------------
 
@@ -193,8 +285,8 @@ CREATE TABLE `login` (
 
 INSERT INTO `login` (`login_id`, `username`, `password`, `full_name`, `email`) VALUES
 (1, 'admin', 'admin', 'Tamara Verdan', 'maamtammy@edu.ph'),
-(2, 'user', 'password', 'Rinnel Pacinos', 'kuyarinnel@cdm.edu.ph');
-(3, 'admin2', 'password', 'Rinnel Pacinos', 'kuyarinnel@cdm.edu.ph');
+(2, 'user', 'password', 'Rinnel Pacinos', 'kuyarinnel@cdm.edu.ph'),
+(3, 'admin2', 'password', '', '');
 
 -- --------------------------------------------------------
 
@@ -217,7 +309,7 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`member_id`, `members_name`, `program`, `position`, `birthdate`, `address`, `image_path`) VALUES
-(2, 'BACULINAO, REGINA MARIE L.', 'CE', 'Member', '11/20/2003', '145 CALAMANSI ST. TRAMO HEIGHTS PUROK 6, BRGY. SUCAT, MUNTINLUPA CITY', NULL),
+(2, 'BACULINAO, REGINA MARIE L.', 'CE', 'Member', '11/20/2003', '145 CALAMANSI ST. TRAMO HEIGHTS PUROK 6, BRGY. SUCAT, MUNTINLUPA CITY', ''),
 (3, 'BARCELON, JOHN BRYAN B.', 'CPE', 'Member', '2/23/2004', 'LIRIO #3 EXTENSION ST., BRGY. CAA, LAS PIÑAS CITY', NULL),
 (4, 'CARPIZ, LEMUEL JAY I.', 'AR', 'Member', '2006-05-17', 'BLK 1 LOT 15 GENESIS ST. TEOSEJO SUBDIVISION, BRGY. TUNASAN, MUNTINLUPA CITY', 'member_profiles/member_4_1745846904.jpg'),
 (5, 'CONSTANTINO, MIKAELA COLEEN D.', 'CPE', 'Member', '4/4/2005', '#95 NATIONAL ROAD, BRGY. PUTATAN, MUNTINLUPA CITY', ''),
@@ -263,7 +355,10 @@ CREATE TABLE `pending_users` (
 --
 
 INSERT INTO `pending_users` (`id`, `username`, `password`, `email`, `full_name`, `requested_at`, `status`, `approved_by`, `approved_at`) VALUES
-(11, 'newuser', 'password', 'vinceluces@cdm.edu', 'Vince Luces', '2025-05-15 07:49:15', 'approved', 'user', '2025-05-15 07:50:00');
+(11, 'newuser', 'password', 'vinceluces@cdm.edu', 'Vince Luces', '2025-05-15 07:49:15', 'approved', 'user', '2025-05-15 07:50:00'),
+(14, 'hellopo', 'password', 'hansipe0413@yahoo.com.ph', 'Vince Luces', '2025-05-16 02:23:12', 'approved', 'admin', '2025-05-16 02:23:46'),
+(15, 'nagu', 'nagu04', 'vinceluces@cdm.edu', 'Vince Luces', '2025-05-16 06:36:50', 'approved', 'admin', '2025-05-16 06:37:02'),
+(16, 'donnlingo', 'password', 'pogiako123@yahoo.com', 'Sir Donn Lingo Pogi', '2025-05-16 07:30:04', 'approved', 'admin', '2025-05-16 07:31:52');
 
 -- --------------------------------------------------------
 
@@ -284,8 +379,9 @@ CREATE TABLE `user_login` (
 --
 
 INSERT INTO `user_login` (`id_user_login`, `username`, `password`, `full_name`, `email`) VALUES
-(1, 'user', 'user', 'Hans', 'sese.hans.pythagoras@gmail.com'),
-(2, 'newuser', 'password', 'Vince Luces', 'vinceluces@cdm.edu');
+(1, 'user', 'newpassword', 'Hans', 'hanssese@yahoo.com'),
+(4, 'nagu', 'nagu04', 'Vince Luces', 'vinceluces@cdm.edu'),
+(5, 'donnlingo', 'password', 'Sir Donn Lingo Super Pogi', 'pogiako123@yahoo.com');
 
 --
 -- Indexes for dumped tables
@@ -310,9 +406,33 @@ ALTER TABLE `clothing_size`
   ADD PRIMARY KEY (`size_id`);
 
 --
+-- Indexes for table `deleted_accessories`
+--
+ALTER TABLE `deleted_accessories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `deleted_clothing`
+--
+ALTER TABLE `deleted_clothing`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `deleted_instruments`
+--
+ALTER TABLE `deleted_instruments`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `deleted_items`
 --
 ALTER TABLE `deleted_items`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `deleted_members`
+--
+ALTER TABLE `deleted_members`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -361,55 +481,79 @@ ALTER TABLE `user_login`
 -- AUTO_INCREMENT for table `accessories`
 --
 ALTER TABLE `accessories`
-  MODIFY `deco_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `deco_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `clothing`
 --
 ALTER TABLE `clothing`
-  MODIFY `clothing_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `clothing_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `deleted_accessories`
+--
+ALTER TABLE `deleted_accessories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `deleted_clothing`
+--
+ALTER TABLE `deleted_clothing`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `deleted_instruments`
+--
+ALTER TABLE `deleted_instruments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `deleted_items`
 --
 ALTER TABLE `deleted_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT for table `deleted_members`
+--
+ALTER TABLE `deleted_members`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `instruments`
 --
 ALTER TABLE `instruments`
-  MODIFY `instru_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `instru_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `pending_users`
 --
 ALTER TABLE `pending_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `user_login`
 --
 ALTER TABLE `user_login`
-  MODIFY `id_user_login` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user_login` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
