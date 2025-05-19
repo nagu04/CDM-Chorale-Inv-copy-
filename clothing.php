@@ -339,7 +339,7 @@ session_start();
                 
                 <div class="form-group">
                     <label for="editQuantity">Quantity:</label>
-                    <input type="number" id="editQuantity" name="quantity" required min="1">
+                    <input type="number" id="editQuantity" name="quantity">
                 </div>
                 
                 <div class="form-group">

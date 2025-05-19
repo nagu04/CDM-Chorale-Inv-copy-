@@ -1,24 +1,36 @@
 <?php
-// permanent_delete_all.php - Permanently deletes all items from the deleted_* tables
+// permanent_delete_all.php - Permanently deletes all items from the selected deleted_* table
 session_start();
 include 'db_connect.php';
 
-// Delete all records from each deleted table
-$success = true;
-$tables = ['deleted_instruments', 'deleted_accessories', 'deleted_clothing', 'deleted_members'];
-foreach ($tables as $table) {
-    if (!$conn->query("DELETE FROM $table")) {
-        $success = false;
-        $_SESSION['error_message'] = "Error emptying $table: " . $conn->error;
+$type = $_GET['type'] ?? '';
+
+$table = '';
+switch ($type) {
+    case 'instruments':
+        $table = 'deleted_instruments';
         break;
-    }
+    case 'accessories':
+        $table = 'deleted_accessories';
+        break;
+    case 'clothing':
+        $table = 'deleted_clothing';
+        break;
+    case 'members':
+        $table = 'deleted_members';
+        break;
+    default:
+        $_SESSION['error_message'] = "Invalid trash type specified.";
+        header("Location: deleted_items.php");
+        exit();
 }
 
-if ($success) {
-    $_SESSION['success_message'] = "Trash emptied successfully! All deleted items permanently removed.";
+if ($conn->query("DELETE FROM $table")) {
+    $_SESSION['success_message'] = ucfirst($type) . " trash emptied successfully!";
+} else {
+    $_SESSION['error_message'] = "Error emptying trash: " . $conn->error;
 }
 
-// Redirect back to deleted items page
 header("Location: deleted_items.php");
 exit();
 ?> 

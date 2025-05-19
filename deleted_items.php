@@ -150,6 +150,35 @@ $members_result = $conn->query($members_sql);
             transform: translateX(5px);
             width: 170px;
         }
+        /* Tabs styles */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .tab-btn {
+            background: #2c2474;
+            color: #fff;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            font-size: 16px;
+            outline: none;
+            transition: background 0.2s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: #ffcc00;
+            color: #2c2474;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -216,36 +245,45 @@ $members_result = $conn->query($members_sql);
             }
             ?>
             
-            <!-- Deleted Instruments Table -->
-                        <h2 class="section-title">Deleted Instruments</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Item Name</th>
-                                    <th>Quantity</th>
-                                    <th>Condition</th>
-                                    <th>Reason</th>
-                                    <th>Deleted By</th>
-                                    <th>Deleted At</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($instruments_result->num_rows > 0) {
-                                    while($row = $instruments_result->fetch_assoc()) {
-                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
-                                        echo "<tr>";
-                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
-                                        echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
-                                       
-                                        echo "<td>
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab(event, 'instruments')">Instruments</button>
+                <button class="tab-btn" onclick="showTab(event, 'accessories')">Accessories</button>
+                <button class="tab-btn" onclick="showTab(event, 'clothing')">Clothing</button>
+                <button class="tab-btn" onclick="showTab(event, 'members')">Members</button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div id="tab-instruments" class="tab-content active">
+                <h2 class="section-title">Deleted Instruments</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Condition</th>
+                            <th>Reason</th>
+                            <th>Deleted By</th>
+                            <th>Deleted At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($instruments_result->num_rows > 0) {
+                            while($row = $instruments_result->fetch_assoc()) {
+                                $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                echo "<tr>";
+                                echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                               
+                                echo "<td>
                                     <button class='edit-btn' onclick='restoreInstrument(" . $row['id'] . ")'>
                                         <i class='fas fa-undo'></i> Restore
                                     </button>
@@ -261,37 +299,38 @@ $members_result = $conn->query($members_sql);
                                 ?>
                             </tbody>
                         </table>
+            </div>
 
-                         <!-- Deleted Accessories Table -->
-                         <h2 class="section-title">Deleted Accessories</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Item Name</th>
-                                    <th>Quantity</th>
-                                    <th>Condition</th>
-                                    <th>Reason</th>
-                                    <th>Deleted By</th>
-                                    <th>Deleted At</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($accessories_result->num_rows > 0) {
-                                    while($row = $accessories_result->fetch_assoc()) {
-                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
-                                        echo "<tr>";
-                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
-                                        echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
-                                       
-                                        echo "<td>
+            <div id="tab-accessories" class="tab-content">
+                <h2 class="section-title">Deleted Accessories</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Condition</th>
+                            <th>Reason</th>
+                            <th>Deleted By</th>
+                            <th>Deleted At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($accessories_result->num_rows > 0) {
+                            while($row = $accessories_result->fetch_assoc()) {
+                                $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                echo "<tr>";
+                                echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                               
+                                echo "<td>
                                     <button class='edit-btn' onclick='restoreAccessory(" . $row['id'] . ")'>
                                         <i class='fas fa-undo'></i> Restore
                                     </button>
@@ -307,37 +346,38 @@ $members_result = $conn->query($members_sql);
                                 ?>
                             </tbody>
                         </table>
+            </div>
 
-                         <!-- Deleted Clothing Table -->
-                         <h2 class="section-title">Deleted Clothing</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Item Name</th>
-                                    <th>Quantity</th>
-                                    <th>Condition</th>
-                                    <th>Reason</th>
-                                    <th>Deleted By</th>
-                                    <th>Deleted At</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($clothing_result->num_rows > 0) {
-                                    while($row = $clothing_result->fetch_assoc()) {
-                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
-                                        echo "<tr>";
-                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
-                                        echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
-                                        
-                                        echo "<td>
+            <div id="tab-clothing" class="tab-content">
+                <h2 class="section-title">Deleted Clothing</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Condition</th>
+                            <th>Reason</th>
+                            <th>Deleted By</th>
+                            <th>Deleted At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($clothing_result->num_rows > 0) {
+                            while($row = $clothing_result->fetch_assoc()) {
+                                $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                echo "<tr>";
+                                echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['condition_status']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                                
+                                echo "<td>
                                     <button class='edit-btn' onclick='restoreClothing(" . $row['id'] . ")'>
                                         <i class='fas fa-undo'></i> Restore
                                     </button>
@@ -353,36 +393,37 @@ $members_result = $conn->query($members_sql);
                                 ?>
                             </tbody>
                         </table>
+            </div>
 
-                        <!-- Deleted Member Table -->
-                        <h2 class="section-title">Deleted Members</h2>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Member Name</th>
-                                    <th>Reason</th>
-                                    <th>Deleted By</th>
-                                    <th>Deleted At</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($members_result->num_rows > 0) {
-                                    while($row = $members_result->fetch_assoc()) {
-                                        $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
-                                        echo "<tr>";
-                                        echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
-                                        echo "<td>" . htmlspecialchars($row['full_name']) . "</td>";
-                                     
-                                        
-                                        echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
-                                       
+            <div id="tab-members" class="tab-content">
+                <h2 class="section-title">Deleted Members</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Member Name</th>
+                            <th>Reason</th>
+                            <th>Deleted By</th>
+                            <th>Deleted At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($members_result->num_rows > 0) {
+                            while($row = $members_result->fetch_assoc()) {
+                                $imagePath = !empty($row['image_path']) ? $row['image_path'] : 'picture-1.png';
+                                echo "<tr>";
+                                echo "<td><img src='" . $imagePath . "' class='item-image' alt='Item image'></td>";
+                                echo "<td>" . htmlspecialchars($row['full_name']) . "</td>";
+                             
+                                
+                                echo "<td>" . htmlspecialchars($row['reason'] ?? 'No reason provided') . "</td>";
+                                echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+                               
 
-                                        echo "<td>
+                                echo "<td>
                                     <button class='edit-btn' onclick='restoreMember(" . $row['id'] . ")'>
                                         <i class='fas fa-undo'></i> Restore
                                     </button>
@@ -398,13 +439,14 @@ $members_result = $conn->query($members_sql);
                                 ?>
                             </tbody>
                         </table>
-                            
+            </div>
 
             <div style="text-align: right; margin-top: 20px;">
-                <button class="delete-btn" onclick="confirmDeleteAll()" style="background-color: #f44336; padding: 10px 15px;">
+                <button class="delete-btn" id="emptyTrashBtn" onclick="confirmDeleteAll()" style="background-color: #f44336; padding: 10px 15px;">
                     <i class="fas fa-trash-alt"></i> Empty Trash
                 </button>
             </div>
+            <input type="hidden" id="currentTrashType" value="instruments">
         </div>
     </div>
 
@@ -455,6 +497,22 @@ $members_result = $conn->query($members_sql);
     var itemToRestore = null;
     var itemToDelete = null;
 
+    function showTab(event, tab) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(function(el) {
+            el.classList.remove('active');
+        });
+        // Remove active from all buttons
+        document.querySelectorAll('.tab-btn').forEach(function(el) {
+            el.classList.remove('active');
+        });
+        // Show selected tab and activate button
+        document.getElementById('tab-' + tab).classList.add('active');
+        event.target.classList.add('active');
+        // Set the current type for Empty Trash
+        document.getElementById('currentTrashType').value = tab;
+    }
+
     function restoreInstrument(id) {
         itemToRestore = id;
         modal.style.display = "flex";
@@ -463,8 +521,6 @@ $members_result = $conn->query($members_sql);
         confirmButton.onclick = function() {
             window.location.href = 'restore_deleted_item.php?type=instrument&id=' + itemToRestore;
         }
-
-        //RESTORE ITEMS
     }
     function restoreAccessory(id) {
         itemToRestore = id;
@@ -543,10 +599,10 @@ $members_result = $conn->query($members_sql);
 
     function confirmDeleteAll() {
         deleteAllModal.style.display = "flex";
-        
         // Set up the confirmation button
         confirmDeleteAllButton.onclick = function() {
-            window.location.href = 'permanent_delete_all.php';
+            var type = document.getElementById('currentTrashType').value;
+            window.location.href = 'permanent_delete_all.php?type=' + type;
         }
     }
 
