@@ -1,0 +1,571 @@
+/* General Styling */
+body {
+    font-family: Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background: url('bgpic2.png') no-repeat center center fixed; /* Default background image */
+    background-size: cover;
+    overflow-x: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 80px;
+    background-color: rgba(44, 36, 116, 0.9); /* Semi-transparent blue background */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    position: fixed;
+    left: 0;
+    border-right: 4px solid #ffcc00; /* Yellow line at the right edge */
+    
+    transition: width 0.3s ease-in-out;
+}
+
+/* Sidebar Icons */
+.icon-btn {
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: 60px;
+    padding: 30px;
+    background-color: rgba(5, 5, 5, 0.637); /* Semi-transparent white background */
+    min-height: 100vh;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(44, 36, 116, 0.9); /* Semi-transparent blue background */
+    color: white;
+    padding: 10px 30px; /* Adjusted padding for better alignment */
+    border-radius: 0;
+    margin: -30px -30px 20px -10px;
+    position: relative;
+    border-bottom: 4px solid #ffcc00; /* Yellow line at the bottom */
+    
+    transition: margin-left 0.3s ease-in-out;
+}
+
+.header-logo {
+    position: relative; /* Changed from absolute to relative */
+    width: 50px;
+    height: auto;
+    margin-right: 20px; /* Add margin to separate from title */
+}
+
+.header h2 {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 30px;
+    font-weight: normal;
+}
+
+/* Section Indicator */
+.section-indicator {
+    background-color: #ffcc00;
+    color: #000066;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    margin-right: 20px;
+}
+
+/* Log Out Button */
+.logout {
+    background-color: #000066;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    margin-left: 20px; /* Add margin to separate from title */
+}
+
+.logout:hover {
+    background-color: #000044;
+}
+
+h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #000;
+}
+
+.add-btn i {
+    margin-right: 5px;
+}
+
+.add-btn:hover {
+    background-color: #000044;
+}
+
+/* Card Container */
+.card-container {
+    background-color: rgba(5, 5, 5, 0.637); /* Light gray background */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; /* Changed from space-between to reduce horizontal gaps */
+    padding: 20px;
+    gap: 5px 0; /* Add minimal horizontal gap but no vertical gap */
+}
+
+/* Card Styling */
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #b3b3b3f5; /* Light gray background */
+    border-radius: 15px; /* Increased from 8px for more curved edges */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow: deeper, more spread */
+    margin: 15px 5px;
+    padding: 8px;
+    width: 40%;
+    text-align: center;
+    box-sizing: border-box;
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effect */
+    
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Even stronger shadow on hover */
+}
+
+.card img {
+    width: 40%; /* Reduced image size from 60% to 40% */
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    margin: 10px 0;
+    font-size: 20px; /* Reduced font size */
+}
+
+.card p {
+    margin: 5px 0;
+    font-size: 13px; /* Reduced font size */
+    color: #050505;
+    font-weight: bold;
+}
+
+.borrow-btn {
+    background-color: #ffcc00;
+    color: #000;
+    border: none;
+    padding: 8px 15px; /* Reduced padding */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px; /* Reduced font size */
+    margin-top: 8px;
+}
+
+.borrow-btn:hover {
+    background-color: #e6b800;
+}
+
+/* Add styling for disabled buttons */
+.borrow-btn.disabled {
+    background-color: #cccccc;
+    color: #888888;
+    cursor: not-allowed;
+    border: 1px solid #aaaaaa;
+}
+
+.borrow-btn.disabled:hover {
+    background-color: #cccccc;
+    transform: none;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+/* When modal is shown */
+.modal.show {
+    display: flex !important;
+}
+
+.modal-content {
+    background-color: #e6e6e6;
+    padding: 30px;
+    width: 500px;
+    max-width: 90%;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    position: relative;
+    margin: 40px auto;
+    animation: modalopen 0.4s;
+}
+
+/* Animation for modal opening */
+@keyframes modalopen {
+    from {opacity: 0; transform: scale(0.8);}
+    to {opacity: 1; transform: scale(1);}
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #666;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+.modal-content h2 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #000;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+.form-group label {
+    width: 100px; /* Ensure the label width is consistent */
+    text-align: left;
+    font-weight: normal;
+    margin-right: 15px;
+    color: #000;
+}
+
+.form-group input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    height: 25px;
+}
+
+.form-group textarea {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    height: 150px;
+    resize: none;
+}
+
+/* Special styling for quantity and SN fields */
+.form-group.quantity-sn {
+    display: flex;
+    gap: 20px;
+}
+
+.form-group.quantity-sn .quantity-group,
+.form-group.quantity-sn .sn-group {
+    display: flex;
+    align-items: center;
+}
+
+.form-group.quantity-sn .quantity-group {
+    width: 40%;
+}
+
+.form-group.quantity-sn .sn-group {
+    width: 60%;
+}
+
+.form-group.quantity-sn label {
+    width: auto;
+    margin-right: 10px;
+}
+
+.form-group.quantity-sn input {
+    width: 100%;
+}
+
+.submit-container {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.submit-btn {
+    background-color: #ffcc00;
+    color: #000;
+    border: none;
+    padding: 8px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.submit-btn:hover {
+    background-color: #e6b800;
+}
+
+/* Action Buttons */
+.edit-btn, .remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0 5px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+
+.edit-btn:hover {
+    background-color: #2e59d9;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.remove-btn {
+    color: #ff4444;
+    transition: all 0.3s ease;
+}
+
+.remove-btn:hover {
+    transform: scale(1.1);
+    color: #ff0000;
+}
+
+/* Add smooth transitions for all buttons */
+.borrow-btn, .submit-btn, .add-button, .delete-button {
+    transition: all 0.3s ease;
+}
+
+.borrow-btn:hover, .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.add-button:hover, .delete-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Add active state for buttons */
+.borrow-btn:active, .submit-btn:active, .edit-btn:active, 
+.add-button:active, .delete-button:active, .remove-btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+/* Table Action Column */
+td:last-child {
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Styling for select dropdown */
+.form-select {
+    flex-grow: 1; /* Allow the select to grow and fill the space */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    height: 41px; /* Match the height of other input fields */
+    font-size: 14px; /* Ensure font size is consistent */
+}
+
+/* Increase dropdown size and add padding */
+.form-group select {
+    flex-grow: 1;
+    padding: 8px 12px; /* Increase horizontal padding */
+    height: 41px;
+}
+
+/* Action Buttons Container */
+.action-buttons {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 900; /* Ensure it's on top of other content */
+}
+
+/* Add Button */
+.add-button {
+    background-color: #ffcc00;
+    color: #000;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 901; /* Ensure clickability */
+}
+
+.add-button:hover {
+    background-color: #e6b800;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.delete-btn:hover {
+    background-color: #e60000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.add-button i, .delete-button i {
+    margin-right: 8px;
+}
+
+/* Alert Messages */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert .close {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    opacity: 0.5;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 10px;
+}
+
+.alert .close:hover {
+    opacity: 0.75;
+}
+
+/* Card button styles */
+.edit-btn, .delete-btn{
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+    flex: 1;
+    max-width: 100px;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.edit-btn {
+    background-color: #4285f4;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #3367d6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.delete-btn {
+    background-color: #ff4444;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Create a container for the buttons */
+.card-buttons {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Selected item for deletion */
+.selected-item-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff4444;
+    text-align: center;
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    border-left: 4px solid #ff4444;
+}

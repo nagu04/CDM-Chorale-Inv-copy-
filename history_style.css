@@ -1,0 +1,257 @@
+/* General Styling */
+body {
+    font-family: Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background: url('bgpic2.png') no-repeat center center fixed; /* Default background image */
+    background-size: cover;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 80px;
+    background-color: rgba(44, 36, 116, 0.9); /* Semi-transparent blue background */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    position: fixed;
+    left: 0;
+    border-right: 4px solid #ffcc00; /* Yellow line at the right edge */
+}
+
+/* Sidebar Icons */
+.icon-btn {
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.3s ease-in-out;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: 60px;
+    padding: 30px;
+    background-color: rgba(19, 18, 18, 0.836); /* Semi-transparent white background */
+    min-height: 100vh;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(44, 36, 116, 0.9); /* Semi-transparent blue background */
+    color: white;
+    padding: 10px 30px; /* Adjusted padding for better alignment */
+    border-radius: 0;
+    margin: -30px -30px 20px -10px;
+    position: relative;
+    border-bottom: 4px solid #ffcc00; /* Yellow line at the bottom */
+}
+
+.header-logo {
+    position: relative; /* Changed from absolute to relative */
+    width: 50px;
+    height: auto;
+    margin-right: 20px; /* Add margin to separate from title */
+}
+
+.header h2 {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 30px;
+    font-weight: normal;
+}
+
+/* Log Out Button */
+.logout {
+    background-color: #000066;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    margin-left: 20px; /* Add margin to separate from title */
+}
+
+.logout:hover {
+    background-color: #000044;
+}
+
+h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #000;
+}
+
+.add-btn i {
+    margin-right: 5px;
+}
+
+.add-btn:hover {
+    background-color: #000044;
+}
+
+
+
+/* Card Container */
+.card-container {
+    background-color: rgba(226, 219, 219, 0.89); /* Light gray background */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; /* Changed from space-between to reduce horizontal gaps */
+    padding: 20px;
+    gap: 5px 0; /* Add minimal horizontal gap but no vertical gap */
+}
+
+/* Card Styling */
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #b3b3b3; /* Light gray background */
+    border-radius: 15px; /* Increased from 8px for more curved edges */
+    box-shadow: 0 6px 12px rgba(10, 10, 10, 0.15); /* Enhanced shadow: deeper, more spread */
+    margin: 15px 5px;
+    padding: 8px;
+    width: 40%;
+    text-align: center;
+    box-sizing: border-box;
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effect */
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Even stronger shadow on hover */
+}
+
+.card img {
+    width: 40%; /* Reduced image size from 60% to 40% */
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    margin: 10px 0;
+    font-size: 20px; /* Reduced font size */
+}
+
+.card p {
+    margin: 5px 0;
+    font-size: 13px; /* Reduced font size */
+    color: #c9c6c6;
+    font-weight: bold;
+}
+
+.borrow-btn {
+    background-color: #ffcc00;
+    color: #000;
+    border: none;
+    padding: 8px 15px; /* Reduced padding */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px; /* Reduced font size */
+    margin-top: 8px;
+}
+
+.borrow-btn:hover {
+    background-color: #e6b800;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: #ddd;
+    margin: 5% auto;
+    padding: 20px;
+    width: 450px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.modal-content h2 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #070707;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.form-group label {
+    width: 100px;
+    text-align: left;
+    font-weight: bold;
+    margin-right: 10px;
+    color: #000;
+}
+
+.form-group input, .form-group textarea {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.submit-container {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.submit-btn {
+    background-color: #ffcc00;
+    color: #000;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.submit-btn:hover {
+    background-color: #e6b800;
+}
