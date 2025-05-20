@@ -14,13 +14,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['member_id'])) {
     
     if ($row = $result->fetch_assoc()) {
         $image_path = $row['image_path'] ?? '';
-        $member_name = $row['members_name'];
+        // Build full_name from new columns if available
+        if (!empty($row['last_name']) && !empty($row['given_name'])) {
+            $full_name = $row['last_name'] . ', ' . $row['given_name'];
+            if (!empty($row['middle_initial'])) {
+                $full_name .= ' ' . $row['middle_initial'] . '.';
+            }
+            if (!empty($row['extension'])) {
+                $full_name .= ' ' . $row['extension'];
+            }
+        } elseif (!empty($row['members_name'])) {
+            $full_name = $row['members_name'];
+        } else {
+            $full_name = 'Unknown';
+        }
         
         // Convert to JSON for additional details
         $details = json_encode([
             'original_table' => 'members',
             'original_id' => $member_id,
-            'member_name' => $member_name,
+            'member_name' => $full_name,
             'program' => $row['program'] ?? '',
             'position' => $row['position'] ?? '',
             'birthdate' => $row['birthdate'] ?? '',
@@ -48,9 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['member_id'])) {
         }
         
         // Store in deleted_items table
-        $save_stmt = $conn->prepare("INSERT INTO deleted_members (member_id, full_name, image_path, deleted_by, reason, deleted_at) VALUES (?, ?, ?, ?, ?, NOW())");
+        $save_stmt = $conn->prepare("INSERT INTO deleted_members (member_id, full_name, image_path, deleted_by, reason, deleted_at, program, position, birthdate, address, last_name, given_name, middle_initial, extension) VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?)");
         $item_type = 'member';
-        $save_stmt->bind_param("issss", $member_id, $member_name, $image_path, $deleted_by, $delete_reason);
+        $save_stmt->bind_param("issssssssssss", $member_id, $full_name, $image_path, $deleted_by, $delete_reason, $row['program'], $row['position'], $row['birthdate'], $row['address'], $row['last_name'], $row['given_name'], $row['middle_initial'], $row['extension']);
         $save_stmt->execute();
         $save_stmt->close();
     }

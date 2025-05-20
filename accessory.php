@@ -137,7 +137,7 @@ session_start();
             <?php
             include 'db_connect.php';
             // Fetch instruments from database
-            $sql = "SELECT * FROM accessories";
+            $sql = "SELECT * FROM accessories ORDER BY deco_name ASC";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {

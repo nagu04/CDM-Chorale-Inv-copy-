@@ -98,7 +98,10 @@ session_start();
             <i class="fas fa-trash-alt"></i>
             <span>Archives</span>
         </a>
+    
+       
     </div>
+
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
@@ -123,13 +126,14 @@ session_start();
         }
         ?>
 
-        
+         
+
         <!-- Card Section -->
         <div class="card-container">
             <?php
             include 'db_connect.php';
             // Fetch members from database
-            $sql = "SELECT * FROM members";
+            $sql = "SELECT * FROM members ORDER BY last_name, given_name";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -137,18 +141,31 @@ session_start();
                     // Determine the image to display
                     $imagePath = !empty($row["image_path"]) ? $row["image_path"] : 'default image.jpg';
                     
+                    // Replace the members_name references with the new name format
+                    $display_name = $row['last_name'] . ', ' . $row['given_name'];
+                    if (!empty($row['middle_initial'])) {
+                        $display_name .= ' ' . $row['middle_initial'] . '.';
+                    }
+                    if (!empty($row['extension'])) {
+                        $display_name .= ' ' . $row['extension'];
+                    }
+                    
                     echo "<div class='card'>";
-                    echo "<img src='" . $imagePath . "' alt='Member'>";
-                    echo "<h3>" . $row["members_name"] . "</h3>";
+                    echo "<img src='" . $imagePath . "' alt='Member'>"; 
+                    echo "<h3>" . htmlspecialchars($display_name) . "</h3>";
                 
                     echo "<p>Program: " . $row["program"] . "</p>";
                     echo "<p>Position: " . $row["position"] . "</p>";
                     echo "<button class='borrow-btn' data-id='" . $row["member_id"] . "' 
-                          data-name='" . $row["members_name"] . "' 
+                          data-name='" . htmlspecialchars($display_name) . "' 
                           data-program='" . $row["program"] . "' 
                           data-position='" . $row["position"] . "' 
                           data-birthdate='" . (isset($row["birthdate"]) ? $row["birthdate"] : "") . "' 
                           data-address='" . (isset($row["address"]) ? $row["address"] : "") . "'>View Profile</button>";
+                    echo "<div class='card-buttons'>";
+                   
+                   
+                    echo "</div>";
                     echo "</div>";
                 }
             } else {
@@ -192,16 +209,14 @@ session_start();
         </div>
     </div>
 
+    
     <script>
-    // Get the modal
-    var modal = document.getElementById("profileModal");
-
-    // Get all buttons that should open the modal
-    var btns = document.getElementsByClassName("borrow-btn");
-
-    // When the user clicks on a button, open the modal with member data
-    for (var i = 0; i < btns.length; i++) {
-        btns[i].onclick = function() {
+    // Profile Modal
+    var profileModal = document.getElementById("profileModal");
+    var profileBtns = document.getElementsByClassName("borrow-btn");
+    
+    for (var i = 0; i < profileBtns.length; i++) {
+        profileBtns[i].onclick = function() {
             var memberId = this.getAttribute("data-id");
             var memberName = this.getAttribute("data-name");
             var memberProgram = this.getAttribute("data-program");
@@ -209,26 +224,113 @@ session_start();
             var memberBirthdate = this.getAttribute("data-birthdate");
             var memberAddress = this.getAttribute("data-address");
             
-            // Set the values in the modal
             document.getElementById("memberName").textContent = memberName;
             document.getElementById("memberProgram").textContent = memberProgram;
             document.getElementById("memberPosition").textContent = memberPosition;
             document.getElementById("memberBirthdate").textContent = memberBirthdate || "Not available";
             document.getElementById("memberAddress").textContent = memberAddress || "Not available";
             
-            modal.style.display = "flex"; // Use flex to center the modal
+            profileModal.style.display = "flex";
         }
     }
-
-    // Close button functionality
+    
     document.getElementById("closeProfileBtn").onclick = function() {
-        modal.style.display = "none";
+        profileModal.style.display = "none";
     }
 
-    // When the user clicks anywhere outside of the modal content, close it
+    // Edit Modal
+    var editModal = document.getElementById("editModal");
+    var editBtns = document.getElementsByClassName("edit-btn");
+    
+    for (var i = 0; i < editBtns.length; i++) {
+        editBtns[i].onclick = function() {
+            var memberId = this.getAttribute("data-id");
+            var lastName = this.getAttribute("data-last_name");
+            var givenName = this.getAttribute("data-given_name");
+            var middleInitial = this.getAttribute("data-middle_initial");
+            var extension = this.getAttribute("data-extension");
+            var memberProgram = this.getAttribute("data-program");
+            var memberPosition = this.getAttribute("data-position");
+            var memberBirthdate = this.getAttribute("data-birthdate");
+            var memberAddress = this.getAttribute("data-address");
+            
+            // Populate the edit form with member data
+            document.getElementById("editMemberId").value = memberId;
+            document.getElementById("editLastName").value = lastName || "";
+            document.getElementById("editGivenName").value = givenName || "";
+            document.getElementById("editMiddleInitial").value = middleInitial || "";
+            document.getElementById("editExtension").value = extension || "";
+            document.getElementById("editProgram").value = memberProgram;
+            document.getElementById("editPosition").value = memberPosition;
+            document.getElementById("editBirthdate").value = memberBirthdate || "";
+            document.getElementById("editAddress").value = memberAddress || "";
+            
+            // Reset remove image checkbox
+            document.getElementById("removeImage").checked = false;
+            document.getElementById("editProfileImage").disabled = false;
+            
+            editModal.style.display = "flex";
+        }
+    }
+    
+    // Handle checkbox for removing image
+    document.getElementById('removeImage').addEventListener('change', function() {
+        document.getElementById('editProfileImage').disabled = this.checked;
+        
+        // Clear the file input if checkbox is checked
+        if (this.checked) {
+            document.getElementById('editProfileImage').value = '';
+        }
+    });
+    
+    // Handle file input for uploading image
+    document.getElementById('editProfileImage').addEventListener('change', function() {
+        if (this.value) {
+            document.getElementById('removeImage').disabled = true;
+        } else {
+            document.getElementById('removeImage').disabled = false;
+        }
+    });
+    
+    // Add Modal
+    var addModal = document.getElementById("addModal");
+    var addButton = document.getElementById("addButton");
+    
+    addButton.onclick = function() {
+        addModal.style.display = "flex";
+    }
+    
+    // Delete Modal
+    var deleteModal = document.getElementById("deleteModal");
+    var deleteBtns = document.getElementsByClassName("delete-btn");
+    
+    for (var i = 0; i < deleteBtns.length; i++) {
+        deleteBtns[i].onclick = function() {
+            // Get the member id from data attributes
+            var memberId = this.getAttribute("data-id");
+            
+            // Set the value in the delete confirmation form
+            document.getElementById("deleteMemberId").value = memberId;
+            
+            // Show the delete confirmation modal
+            deleteModal.style.display = "flex";
+            return false; // Prevent default behavior
+        }
+    }
+    
+    // Close modals when clicking outside
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == profileModal) {
+            profileModal.style.display = "none";
+        }
+        if (event.target == addModal) {
+            addModal.style.display = "none";
+        }
+        if (event.target == deleteModal) {
+            deleteModal.style.display = "none";
+        }
+        if (event.target == editModal) {
+            editModal.style.display = "none";
         }
     }
     document.addEventListener('DOMContentLoaded', function() {

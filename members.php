@@ -142,7 +142,7 @@ session_start();
             <?php
             include 'db_connect.php';
             // Fetch members from database
-            $sql = "SELECT * FROM members";
+            $sql = "SELECT * FROM members ORDER BY last_name, given_name";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -150,26 +150,39 @@ session_start();
                     // Determine the image to display
                     $imagePath = !empty($row["image_path"]) ? $row["image_path"] : 'default image.jpg';
                     
+                    // Replace the members_name references with the new name format
+                    $display_name = $row['last_name'] . ', ' . $row['given_name'];
+                    if (!empty($row['middle_initial'])) {
+                        $display_name .= ' ' . $row['middle_initial'] . '.';
+                    }
+                    if (!empty($row['extension'])) {
+                        $display_name .= ' ' . $row['extension'];
+                    }
+                    
                     echo "<div class='card'>";
                     echo "<img src='" . $imagePath . "' alt='Member'>"; 
-                    echo "<h3>" . $row["members_name"] . "</h3>";
+                    echo "<h3>" . htmlspecialchars($display_name) . "</h3>";
                 
                     echo "<p>Program: " . $row["program"] . "</p>";
                     echo "<p>Position: " . $row["position"] . "</p>";
                     echo "<button class='borrow-btn' data-id='" . $row["member_id"] . "' 
-                          data-name='" . $row["members_name"] . "' 
+                          data-name='" . htmlspecialchars($display_name) . "' 
                           data-program='" . $row["program"] . "' 
                           data-position='" . $row["position"] . "' 
                           data-birthdate='" . (isset($row["birthdate"]) ? $row["birthdate"] : "") . "' 
                           data-address='" . (isset($row["address"]) ? $row["address"] : "") . "'>View Profile</button>";
                     echo "<div class='card-buttons'>";
-                    echo "<button class='edit-btn' data-id='" . $row["member_id"] . "' 
-                          data-name='" . $row["members_name"] . "' 
+                    echo "<button class='edit-btn' 
+                          data-id='" . $row["member_id"] . "' 
+                          data-last_name='" . htmlspecialchars($row["last_name"]) . "'
+                          data-given_name='" . htmlspecialchars($row["given_name"]) . "'
+                          data-middle_initial='" . htmlspecialchars($row["middle_initial"]) . "'
+                          data-extension='" . htmlspecialchars($row["extension"]) . "'
                           data-program='" . $row["program"] . "' 
                           data-position='" . $row["position"] . "' 
                           data-birthdate='" . (isset($row["birthdate"]) ? $row["birthdate"] : "") . "' 
                           data-address='" . (isset($row["address"]) ? $row["address"] : "") . "'>Edit</button>";
-                    echo "<button class='delete-btn' data-id='" . $row["member_id"] . "' data-name='" . $row["members_name"] . "'>Delete</button>";
+                    echo "<button class='delete-btn' data-id='" . $row["member_id"] . "' data-name='" . htmlspecialchars($display_name) . "'>Delete</button>";
                     echo "</div>";
                     echo "</div>";
                 }
@@ -220,13 +233,35 @@ session_start();
             <h2>Add Member</h2>
             <form action="save_member.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="addName">Name:</label>
-                    <input type="text" id="addName" name="members_name" required>
+                    <label for="addLastName">Last Name</label>
+                    <input type="text" id="addLastName" name="last_name" required oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div class="form-group">
+                    <label for="addGivenName">Given Name</label>
+                    <input type="text" id="addGivenName" name="given_name" required oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div class="form-group">
+                    <label for="addMiddleInitial">Middle Initial</label>
+                    <input type="text" id="addMiddleInitial" name="middle_initial" maxlength="1" oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div class="form-group">
+                    <label for="addExtension">Extension (Jr., Sr., III, etc.)</label>
+                    <input type="text" id="addExtension" name="extension" oninput="this.value = this.value.toUpperCase()">
                 </div>
                 
                 <div class="form-group">
                     <label for="addProgram">Program:</label>
-                    <input type="text" id="addProgram" name="program" required>
+                    <select id="addProgram" name="program" required>
+                        <option value="">Select Program</option>
+                        <option value="Architecture">Architecture</option>
+                        <option value="Civil Engineering">Civil Engineering</option>
+                        <option value="Computer Engineering">Computer Engineering</option>
+                        <option value="Electrical Engineering">Electrical Engineering</option>
+                        <option value="Electronics Engineering">Electronics Engineering</option>
+                        <option value="Environmental and Sanitary Engineering">Environmental and Sanitary Engineering</option>
+                        <option value="Industrial Engineering">Industrial Engineering</option>
+                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -286,13 +321,35 @@ session_start();
             <form action="update_member.php" method="POST" enctype="multipart/form-data">
                 <input type="hidden" id="editMemberId" name="member_id">
                 <div class="form-group">
-                    <label for="editName">Name:</label>
-                    <input type="text" id="editName" name="members_name" required>
+                    <label for="editLastName">Last Name</label>
+                    <input type="text" id="editLastName" name="last_name" required oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div class="form-group">
+                    <label for="editGivenName">Given Name</label>
+                    <input type="text" id="editGivenName" name="given_name" required oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div class="form-group">
+                    <label for="editMiddleInitial">Middle Initial</label>
+                    <input type="text" id="editMiddleInitial" name="middle_initial" maxlength="1" oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div class="form-group">
+                    <label for="editExtension">Extension (Jr., Sr., III, etc.)</label>
+                    <input type="text" id="editExtension" name="extension" oninput="this.value = this.value.toUpperCase()">
                 </div>
                 
                 <div class="form-group">
                     <label for="editProgram">Program:</label>
-                    <input type="text" id="editProgram" name="program" required>
+                    <select id="editProgram" name="program" required>
+                        <option value="">Select Program</option>
+                        <option value="Architecture">Architecture</option>
+                        <option value="Civil Engineering">Civil Engineering</option>
+                        <option value="Computer Engineering">Computer Engineering</option>
+                        <option value="Electrical Engineering">Electrical Engineering</option>
+                        <option value="Electronics Engineering">Electronics Engineering</option>
+                        <option value="Environmental and Sanitary Engineering">Environmental and Sanitary Engineering</option>
+                        <option value="Industrial Engineering">Industrial Engineering</option>
+                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -365,7 +422,10 @@ session_start();
     for (var i = 0; i < editBtns.length; i++) {
         editBtns[i].onclick = function() {
             var memberId = this.getAttribute("data-id");
-            var memberName = this.getAttribute("data-name");
+            var lastName = this.getAttribute("data-last_name");
+            var givenName = this.getAttribute("data-given_name");
+            var middleInitial = this.getAttribute("data-middle_initial");
+            var extension = this.getAttribute("data-extension");
             var memberProgram = this.getAttribute("data-program");
             var memberPosition = this.getAttribute("data-position");
             var memberBirthdate = this.getAttribute("data-birthdate");
@@ -373,7 +433,10 @@ session_start();
             
             // Populate the edit form with member data
             document.getElementById("editMemberId").value = memberId;
-            document.getElementById("editName").value = memberName;
+            document.getElementById("editLastName").value = lastName || "";
+            document.getElementById("editGivenName").value = givenName || "";
+            document.getElementById("editMiddleInitial").value = middleInitial || "";
+            document.getElementById("editExtension").value = extension || "";
             document.getElementById("editProgram").value = memberProgram;
             document.getElementById("editPosition").value = memberPosition;
             document.getElementById("editBirthdate").value = memberBirthdate || "";

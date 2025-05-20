@@ -87,10 +87,25 @@ switch ($type) {
         $stmt->execute();
         $deleted = $stmt->get_result()->fetch_assoc();
         if ($deleted) {
-            $insert = $conn->prepare("INSERT INTO members (members_name, image_path) VALUES (?, ?)");
+            $last_name = $deleted['last_name'] ?? '';
+            $given_name = $deleted['given_name'] ?? '';
+            $middle_initial = $deleted['middle_initial'] ?? '';
+            $extension = $deleted['extension'] ?? '';
+            $program = $deleted['program'] ?? '';
+            $position = $deleted['position'] ?? '';
+            $birthdate = $deleted['birthdate'] ?? '';
+            $address = $deleted['address'] ?? '';
+            $insert = $conn->prepare("INSERT INTO members (last_name, given_name, middle_initial, extension, program, position, birthdate, address, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $insert->bind_param(
-                "ss",
-                $deleted['full_name'],
+                "sssssssss",
+                $last_name,
+                $given_name,
+                $middle_initial,
+                $extension,
+                $program,
+                $position,
+                $birthdate,
+                $address,
                 $deleted['image_path']
             );
             if ($insert->execute()) {

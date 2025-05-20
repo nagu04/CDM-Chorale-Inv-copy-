@@ -134,7 +134,7 @@ session_start();
             <?php
             include 'db_connect.php';
             // Fetch clothing from database
-            $sql = "SELECT * FROM clothing";
+            $sql = "SELECT * FROM clothing ORDER BY clothing_name ASC";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {

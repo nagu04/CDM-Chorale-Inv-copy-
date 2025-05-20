@@ -144,7 +144,7 @@ if (!isset($_SESSION['username'])) {
             <?php
             include 'db_connect.php';
             // Fetch instruments from database
-            $sql = "SELECT * FROM instruments";
+            $sql = "SELECT * FROM instruments ORDER BY instrument_name ASC";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
