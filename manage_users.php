@@ -69,6 +69,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $error = "Error updating user.";
         }
+    } elseif (isset($_POST['add_user'])) {
+        $new_username = trim($_POST['new_username']);
+        $new_password = trim($_POST['new_password']);
+        $new_full_name = trim($_POST['new_full_name']);
+        $new_email = trim($_POST['new_email']);
+        $add_sql = "INSERT INTO user_login (username, password, full_name, email) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($add_sql);
+        $stmt->bind_param("ssss", $new_username, $new_password, $new_full_name, $new_email);
+        if ($stmt->execute()) {
+            $success = "User added successfully!";
+        } else {
+            $error = "Error adding user: " . $conn->error;
+        }
+        $stmt->close();
     }
 }
 ?>
@@ -356,7 +370,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </table>
 
             <!-- User List Section -->
-            <h2 class="section-title">All Users</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 class="section-title" style="margin-bottom: 0;">All Users</h2>
+                <button id="addUserBtn" style="background: #ffcc00; color: #000066; border: none; border-radius: 5px; padding: 8px 16px; font-weight: bold; cursor: pointer; font-size: 16px; margin-bottom: 10px;"><i class="fas fa-user-plus"></i> Add User</button>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -410,6 +427,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); align-items:center; justify-content:center; z-index:1000;">
+        <div style="background:#fff; color:#222; padding:32px 24px; border-radius:10px; min-width:320px; max-width:90vw; position:relative;">
+            <button id="closeAddUserModal" style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:20px; color:#888; cursor:pointer;"><i class="fas fa-times"></i></button>
+            <h3 style="color:#000066; margin-bottom:18px;">Add New User</h3>
+            <form method="POST" id="addUserForm">
+                <input type="text" name="new_username" placeholder="Username" required style="width:100%; padding:8px; margin-bottom:10px; border-radius:4px; border:1px solid #ccc;">
+                <input type="text" name="new_password" placeholder="Password" required style="width:100%; padding:8px; margin-bottom:10px; border-radius:4px; border:1px solid #ccc;">
+                <input type="text" name="new_full_name" placeholder="Full Name" required style="width:100%; padding:8px; margin-bottom:10px; border-radius:4px; border:1px solid #ccc;">
+                <input type="email" name="new_email" placeholder="Email" required style="width:100%; padding:8px; margin-bottom:18px; border-radius:4px; border:1px solid #ccc;">
+                <button type="submit" name="add_user" style="background:#28a745; color:white; border:none; border-radius:5px; padding:10px 20px; font-weight:bold; font-size:16px; cursor:pointer;">Add User</button>
+            </form>
+        </div>
+    </div>
+
     <script>
     function showEditForm(userId) {
         document.getElementById('edit-form-' + userId).style.display = 'table-row';
@@ -435,6 +467,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header.style.marginLeft = '-10px';
     });
 });
+    // Add User Modal logic
+    document.getElementById('addUserBtn').onclick = function() {
+        document.getElementById('addUserModal').style.display = 'flex';
+    };
+    document.getElementById('closeAddUserModal').onclick = function() {
+        document.getElementById('addUserModal').style.display = 'none';
+    };
+    window.onclick = function(event) {
+        var modal = document.getElementById('addUserModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
     </script>
 </body>
 </html>

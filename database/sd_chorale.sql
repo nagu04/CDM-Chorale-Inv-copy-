@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 19, 2025 at 01:05 PM
+-- Generation Time: May 20, 2025 at 12:58 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,7 +31,7 @@ CREATE TABLE `accessories` (
   `deco_id` int(11) NOT NULL,
   `deco_name` varchar(50) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
-  `condition` enum('GOOD','BAD') DEFAULT 'GOOD',
+  `condition` varchar(50) DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -58,7 +58,7 @@ CREATE TABLE `clothing` (
   `quantity` varchar(45) DEFAULT NULL,
   `clothing_color` varchar(45) DEFAULT NULL,
   `clothing_size_id` varchar(11) DEFAULT NULL,
-  `condition` enum('GOOD','BAD') DEFAULT 'GOOD',
+  `condition` varchar(50) DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -204,7 +204,15 @@ CREATE TABLE `deleted_members` (
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` varchar(255) DEFAULT NULL,
   `reason` text DEFAULT NULL,
-  `details` text DEFAULT NULL
+  `details` text DEFAULT NULL,
+  `program` varchar(255) DEFAULT NULL,
+  `position` varchar(255) DEFAULT NULL,
+  `birthdate` date DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `given_name` varchar(255) DEFAULT NULL,
+  `middle_initial` varchar(10) DEFAULT NULL,
+  `extension` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -235,8 +243,7 @@ CREATE TABLE `history` (
 --
 
 INSERT INTO `history` (`history_id`, `type`, `borrowed_by`, `date`, `date_return`, `category`, `item_name`, `quantity`, `sn`, `condition`, `status`, `remarks`, `is_approved`, `created_at`) VALUES
-(27, 'BORROW', 'Hans', '2025-05-16', '2025-05-17', 'Instruments', 'Korg KROSS2-88 Keyboard', 1, '20231020406', 'good', 'working', '', 1, '2025-05-16 07:19:09'),
-(28, 'REPORT', 'Tamara Verdan', '2025-05-16', NULL, 'Accessories', 'Tambol', 10, '20231020406', 'good', '', 'Nagasgas', 1, '2025-05-16 07:24:56');
+(32, 'BORROW', 'Hans', '2025-05-20', '2025-05-21', 'Instruments', 'Korg KROSS2-88 Keyboard', 1, '20231020406', 'good', 'working', '', 1, '2025-05-20 10:56:20');
 
 -- --------------------------------------------------------
 
@@ -248,7 +255,7 @@ CREATE TABLE `instruments` (
   `instru_id` int(11) NOT NULL,
   `instrument_name` varchar(75) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
-  `condition` enum('BAD','GOOD') DEFAULT 'GOOD',
+  `condition` varchar(50) DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -257,13 +264,12 @@ CREATE TABLE `instruments` (
 --
 
 INSERT INTO `instruments` (`instru_id`, `instrument_name`, `quantity`, `condition`, `image_path`) VALUES
-(1, 'Korg KROSS2-88 Keyboard', 1, 'GOOD', 'picture-1.png'),
+(1, 'Korg KROSS2-88 Keyboard', 0, 'GOOD', 'picture-1.png'),
 (3, 'Korg KROSS2-88 Charger', 1, 'GOOD', NULL),
 (4, 'Keyboard Stand', 1, 'GOOD', NULL),
 (5, 'Keyboard Case', 1, 'GOOD', NULL),
 (6, 'Music Sheet Stand', 1, 'GOOD', 'picture-1.png'),
-(7, 'CREATIVE Speakers', 1, '', 'picture-1.png'),
-(28, 'Guitar', 1, 'GOOD', NULL);
+(7, 'CREATIVE Speakers', 1, 'Good', 'picture-1.png');
 
 -- --------------------------------------------------------
 
@@ -284,7 +290,7 @@ CREATE TABLE `login` (
 --
 
 INSERT INTO `login` (`login_id`, `username`, `password`, `full_name`, `email`) VALUES
-(1, 'admin', 'admin', 'Tamara Verdan', 'maamtammy@edu.ph'),
+(1, 'admin', 'admin', 'VERDAN, TAMARA ARIELLE C.', 'maamtammy@edu.ph'),
 (2, 'user', 'password', 'Rinnel Pacinos', 'kuyarinnel@cdm.edu.ph'),
 (3, 'admin2', 'password', '', '');
 
@@ -296,7 +302,10 @@ INSERT INTO `login` (`login_id`, `username`, `password`, `full_name`, `email`) V
 
 CREATE TABLE `members` (
   `member_id` int(11) NOT NULL,
-  `members_name` varchar(60) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `given_name` varchar(50) DEFAULT NULL,
+  `middle_initial` char(1) DEFAULT NULL,
+  `extension` varchar(10) DEFAULT NULL,
   `program` varchar(50) DEFAULT NULL,
   `position` varchar(45) DEFAULT NULL,
   `birthdate` varchar(50) DEFAULT NULL,
@@ -308,29 +317,29 @@ CREATE TABLE `members` (
 -- Dumping data for table `members`
 --
 
-INSERT INTO `members` (`member_id`, `members_name`, `program`, `position`, `birthdate`, `address`, `image_path`) VALUES
-(2, 'BACULINAO, REGINA MARIE L.', 'CE', 'Member', '11/20/2003', '145 CALAMANSI ST. TRAMO HEIGHTS PUROK 6, BRGY. SUCAT, MUNTINLUPA CITY', ''),
-(3, 'BARCELON, JOHN BRYAN B.', 'CPE', 'Member', '2/23/2004', 'LIRIO #3 EXTENSION ST., BRGY. CAA, LAS PIÑAS CITY', NULL),
-(4, 'CARPIZ, LEMUEL JAY I.', 'AR', 'Member', '2006-05-17', 'BLK 1 LOT 15 GENESIS ST. TEOSEJO SUBDIVISION, BRGY. TUNASAN, MUNTINLUPA CITY', 'member_profiles/member_4_1745846904.jpg'),
-(5, 'CONSTANTINO, MIKAELA COLEEN D.', 'CPE', 'Member', '4/4/2005', '#95 NATIONAL ROAD, BRGY. PUTATAN, MUNTINLUPA CITY', ''),
-(6, 'DAYPUYART, REUBEN B.', 'ECE', 'Trainee', '2006-01-02', 'ST. CATHERINE COMPOUND, BRGY. PUTATAN, MUNTINLUPA CITY', 'member_profiles/member_6_1745847220.jpg'),
-(7, 'DE CASTRO, JUSTIN ALLEN M.', 'AR', 'Member', '2005-09-05', 'PHASE 1 BLOCK 10 LOT 29 SOUTHVILLE3', 'member_profiles/member_7_1745847256.png'),
-(8, 'ENCARNACION, LADYMAE A.', 'CE', 'Member', '10/8/2003', 'SOUTHVILLE 3A EXT, BRGY. SAN ANTONIO, SAN PEDRO  CITY, LAGUNA', NULL),
-(9, 'FAJARDO, ENRICO CHARLES E.', 'CE', 'Member', '2002-02-12', '#25 151 LUBACON APARTMENT PUROK 2, BRGY. CUPANG, MUNTINLUPA CITY', 'member_profiles/member_9_1745847279.png'),
-(10, 'GACUTAN, KIMMI VICTORIA P.', 'ECE', 'Trainee', '2006-10-07', '136 WALING-WALING ST. LODORA VILLAGE, BRGY. TUNASAN, MUNTINLUPA CITY', 'member_profiles/member_10_1745847298.png'),
-(11, 'GALICA, CLARK KENT C.', 'CE', 'Member', '7/10/2003', '#3-G PUROK 1 ADIA ST., BRGY. BAGUMBAYAN, TAGUIG CITY', NULL),
-(12, 'ILAGAN, ROGELIO I I.', 'CPE', 'Member', '2003-02-02', 'B5 L26, VERONA ST., CAMELLA HOMES 2D, SOLDIERS HILLS VILLAGE, PUTATAN, MUNTINLUPA CITY', 'member_profiles/member_12_1745847318.png'),
-(13, 'MANUEL, UKRAINE KIEV V.', 'IE', 'Trainee', '2005-04-11', '162 ESTEHONOR COMPOUND WAWA STREET, BRGY. ALABANG, MUNTINLUPA CITY', 'member_profiles/member_13_1745847337.png'),
-(14, 'NOBLEZA, JOHN MICHAEL C.', 'ECE', 'Member', '2004-06-14', '15 CAMIA ST L & B COMPOUND 1, BRGY. ALABANG MUNTINLUPA CITY', 'member_profiles/member_14_1745847364.png'),
-(15, 'PACINOS, JOHN RINNEL L.', 'ECE', 'Member', '2002-09-13', '295 MONTILLANO ST., BRGY. ALABANG, MUNTINLUPA CITY', 'member_profiles/member_15_1745847420.png'),
-(16, 'QUIZON, JILL ERIKA D.', 'AR', 'Member', '2005-02-16', 'LOT 31 ACACIA COMPOUND ORCHIDS ST. SGHV, BRGY. PUTATAN MUNTINLUPA', 'member_profiles/member_16_1745847449.png'),
-(17, 'RAMIREZ, KIM D.', 'ECE', 'Trainee', '2005-05-18', '218 VIÑALON ST. BRGY. CUPANG, MUNTINLUPA CITY', 'member_profiles/member_17_1745847470.png'),
-(18, 'RED, CLIFFORD KEN A.', 'CE', 'Trainee', '2003-12-01', 'BLK 4 LOT 11 BRGY. MAGSAYSAY, SAN PEDRO CITY, LAGUNA', 'member_profiles/member_18_1745847500.png'),
-(19, 'RIVERA, RONNIE JR. S.', 'CE', 'Member', '2004-08-31', '782 BERGANTIÑOS COMPOUND, BRGY. CUYAB, SAN PEDRO CITY, LAGUNA.', 'member_profiles/member_19_1745847525.png'),
-(20, 'ROSAURO, BENEDICT M.', 'ME', 'Member', '2005-06-25', 'PH. 3, BLOCK 49, LOT 16, SOUTHVILLE 3, POBLACION, MUNT. CITY', 'member_profiles/member_20_1745847541.png'),
-(21, 'TOLEDO, PRECIOUS MAE G.', 'CE', 'Trainee', '11/1/2005', 'BRGY. BULI, MUNTINLUPA CITY', NULL),
-(22, 'TORRELIZA, JANRHEY G.', 'CE', 'Member', '2005-01-02', 'BLK 31 LOT 17 LINDEN ST. BRGY. LANGGAM, SAN PEDRO, LAGUNA.', 'member_profiles/member_22_1745847560.png'),
-(24, 'ALDAYA, ALEXANDRA LIEN S.', 'AR', 'Member', '2006-12-29', 'BLK 78 LOT 4 A MABINI ST., BRGY. LARAM, SAN PEDRO CITY', 'member_profiles/member_1745846421_7615.jpg');
+INSERT INTO `members` (`member_id`, `last_name`, `given_name`, `middle_initial`, `extension`, `program`, `position`, `birthdate`, `address`, `image_path`) VALUES
+(2, 'BACULINAO', 'REGINA MARIE', 'L', '', 'Civil Engineering', 'Member', '', '145 CALAMANSI ST. TRAMO HEIGHTS PUROK 6, BRGY. SUCAT, MUNTINLUPA CITY', ''),
+(3, 'BARCELON', 'JOHN BRYAN', 'J', '', 'Computer Engineering', 'Member', '', 'LIRIO #3 EXTENSION ST., BRGY. CAA, LAS PIÑAS CITY', NULL),
+(4, 'CARPIZ', 'LEMUEL JAY', 'I', '', 'Architecture', 'Member', '2006-05-17', 'BLK 1 LOT 15 GENESIS ST. TEOSEJO SUBDIVISION, BRGY. TUNASAN, MUNTINLUPA CITY', 'member_profiles/member_4_1745846904.jpg'),
+(5, 'CONSTANTINO', 'MIKAELA COLEEN', 'D', '', 'Computer Engineering', 'Member', '', '#95 NATIONAL ROAD, BRGY. PUTATAN, MUNTINLUPA CITY', ''),
+(6, 'DAYPUYART', 'REUBEN', 'B', '', 'Electronics Engineering', 'Trainee', '2006-01-02', 'ST. CATHERINE COMPOUND, BRGY. PUTATAN, MUNTINLUPA CITY', 'member_profiles/member_6_1745847220.jpg'),
+(7, 'DE CASTRO', 'JUSTIN ALLEN', 'M', '', 'Architecture', 'Member', '2005-09-05', 'PHASE 1 BLOCK 10 LOT 29 SOUTHVILLE3', 'member_profiles/member_7_1745847256.png'),
+(8, 'ENCARNACION', 'LADYMAE', 'A', '', 'Civil Engineering', 'Member', '', 'SOUTHVILLE 3A EXT, BRGY. SAN ANTONIO, SAN PEDRO  CITY, LAGUNA', NULL),
+(9, 'FAJARDO', 'ENRICO CHARLES', 'E', '', 'Civil Engineering', 'Member', '2002-02-12', '#25 151 LUBACON APARTMENT PUROK 2, BRGY. CUPANG, MUNTINLUPA CITY', 'member_profiles/member_9_1745847279.png'),
+(10, 'GACUTAN', 'KIMMI VICTORIA', 'P', '', 'Electronics Engineering', 'Trainee', '2006-10-07', '136 WALING-WALING ST. LODORA VILLAGE, BRGY. TUNASAN, MUNTINLUPA CITY', 'member_profiles/member_10_1745847298.png'),
+(11, 'GALICA', 'CLARK KENT', 'C', '', 'Civil Engineering', 'Member', '', '#3-G PUROK 1 ADIA ST., BRGY. BAGUMBAYAN, TAGUIG CITY', NULL),
+(12, 'ILAGAN', 'ROGELIO I', 'I', '', 'Computer Engineering', 'Member', '2003-02-02', 'B5 L26, VERONA ST., CAMELLA HOMES 2D, SOLDIERS HILLS VILLAGE, PUTATAN, MUNTINLUPA CITY', 'member_profiles/member_12_1745847318.png'),
+(13, 'MANUEL', 'UKRAINE KIEV', 'V', '', 'Industrial Engineering', 'Trainee', '2005-04-11', '162 ESTEHONOR COMPOUND WAWA STREET, BRGY. ALABANG, MUNTINLUPA CITY', 'member_profiles/member_13_1745847337.png'),
+(14, 'NOBLEZA', 'JOHN MICHAEL', 'C', '', 'Electronics Engineering', 'Member', '2004-06-14', '15 CAMIA ST L & B COMPOUND 1, BRGY. ALABANG MUNTINLUPA CITY', 'member_profiles/member_14_1745847364.png'),
+(15, 'PACINOS', 'JOHN RINNEL', 'L', '', 'Electronics Engineering', 'Member', '2002-09-13', '295 MONTILLANO ST., BRGY. ALABANG, MUNTINLUPA CITY', 'member_profiles/member_15_1745847420.png'),
+(16, 'QUIZON', 'JILL ERIKA', 'D', '', 'Architecture', 'Member', '2005-02-16', 'LOT 31 ACACIA COMPOUND ORCHIDS ST. SGHV, BRGY. PUTATAN MUNTINLUPA', 'member_profiles/member_16_1745847449.png'),
+(17, 'RAMIREZ', 'KIM', 'D', '', 'Electronics Engineering', 'Trainee', '2005-05-18', '218 VIÑALON ST. BRGY. CUPANG, MUNTINLUPA CITY', 'member_profiles/member_17_1745847470.png'),
+(18, 'RED', 'CLIFFORD KEN', 'A', '', 'Civil Engineering', 'Trainee', '2003-12-01', 'BLK 4 LOT 11 BRGY. MAGSAYSAY, SAN PEDRO CITY, LAGUNA', 'member_profiles/member_18_1745847500.png'),
+(19, 'RIVERA', 'RONNIE', 'S', 'JR.', 'Civil Engineering', 'Member', '2004-08-31', '782 BERGANTIÑOS COMPOUND, BRGY. CUYAB, SAN PEDRO CITY, LAGUNA.', 'member_profiles/member_19_1745847525.png'),
+(20, 'ROSAURO', 'BENEDICT', 'M', '', 'Mechanical Engineering', 'Member', '2005-06-25', 'PH. 3, BLOCK 49, LOT 16, SOUTHVILLE 3, POBLACION, MUNT. CITY', 'member_profiles/member_20_1745847541.png'),
+(21, 'TOLEDO', 'PRECIOUS MAE', 'G', '', 'Civil Engineering', 'Trainee', '', 'BRGY. BULI, MUNTINLUPA CITY', NULL),
+(22, 'TORRELIZA', 'JANRHEY', 'G', '', 'Civil Engineering', 'Member', '2005-01-02', 'BLK 31 LOT 17 LINDEN ST. BRGY. LANGGAM, SAN PEDRO, LAGUNA.', 'member_profiles/member_22_1745847560.png'),
+(24, 'ALDAYA', 'ALEXANDRA LIEN', 'S', '', 'Architecture', 'Member', '2006-12-29', 'BLK 78 LOT 4 A MABINI ST., BRGY. LARAM, SAN PEDRO CITY', 'member_profiles/member_1745846421_7615.jpg');
 
 -- --------------------------------------------------------
 
@@ -358,7 +367,9 @@ INSERT INTO `pending_users` (`id`, `username`, `password`, `email`, `full_name`,
 (11, 'newuser', 'password', 'vinceluces@cdm.edu', 'Vince Luces', '2025-05-15 07:49:15', 'approved', 'user', '2025-05-15 07:50:00'),
 (14, 'hellopo', 'password', 'hansipe0413@yahoo.com.ph', 'Vince Luces', '2025-05-16 02:23:12', 'approved', 'admin', '2025-05-16 02:23:46'),
 (15, 'nagu', 'nagu04', 'vinceluces@cdm.edu', 'Vince Luces', '2025-05-16 06:36:50', 'approved', 'admin', '2025-05-16 06:37:02'),
-(16, 'donnlingo', 'password', 'pogiako123@yahoo.com', 'Sir Donn Lingo Pogi', '2025-05-16 07:30:04', 'approved', 'admin', '2025-05-16 07:31:52');
+(16, 'donnlingo', 'password', 'pogiako123@yahoo.com', 'Sir Donn Lingo Pogi', '2025-05-16 07:30:04', 'approved', 'admin', '2025-05-16 07:31:52'),
+(17, 'hanssese', 'hanssmosh13', 'hanssese@yahoo.com', 'Hans Sese', '2025-05-20 09:49:07', 'approved', 'admin', '2025-05-20 09:49:18'),
+(18, 'newuser', 'password', 'hanssese@yahoo.com', 'Hans Sese', '2025-05-20 10:15:10', 'approved', 'admin', '2025-05-20 10:15:23');
 
 -- --------------------------------------------------------
 
@@ -379,9 +390,7 @@ CREATE TABLE `user_login` (
 --
 
 INSERT INTO `user_login` (`id_user_login`, `username`, `password`, `full_name`, `email`) VALUES
-(1, 'user', 'newpassword', 'Hans', 'hanssese@yahoo.com'),
-(4, 'nagu', 'nagu04', 'Vince Luces', 'vinceluces@cdm.edu'),
-(5, 'donnlingo', 'password', 'Sir Donn Lingo Super Pogi', 'pogiako123@yahoo.com');
+(8, 'user', 'user', 'Hans', 'hanssese@yahoo.com');
 
 --
 -- Indexes for dumped tables
@@ -481,7 +490,7 @@ ALTER TABLE `user_login`
 -- AUTO_INCREMENT for table `accessories`
 --
 ALTER TABLE `accessories`
-  MODIFY `deco_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `deco_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `clothing`
@@ -493,7 +502,7 @@ ALTER TABLE `clothing`
 -- AUTO_INCREMENT for table `deleted_accessories`
 --
 ALTER TABLE `deleted_accessories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `deleted_clothing`
@@ -505,7 +514,7 @@ ALTER TABLE `deleted_clothing`
 -- AUTO_INCREMENT for table `deleted_instruments`
 --
 ALTER TABLE `deleted_instruments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `deleted_items`
@@ -517,19 +526,19 @@ ALTER TABLE `deleted_items`
 -- AUTO_INCREMENT for table `deleted_members`
 --
 ALTER TABLE `deleted_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `instruments`
 --
 ALTER TABLE `instruments`
-  MODIFY `instru_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `instru_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `login`
@@ -541,19 +550,19 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `pending_users`
 --
 ALTER TABLE `pending_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `user_login`
 --
 ALTER TABLE `user_login`
-  MODIFY `id_user_login` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_user_login` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -10,6 +10,10 @@ $borrowed_result = $conn->query($borrowed_sql);
 // Fetch reported items
 $reported_sql = "SELECT history_id, type, borrowed_by, date, date_return, category, item_name, quantity, sn, status, remarks, created_at, is_approved FROM history WHERE type = 'REPORT' ORDER BY created_at DESC";
 $reported_result = $conn->query($reported_sql);
+
+// Fetch approved borrowed items
+$approved_borrowed_sql = "SELECT history_id, type, borrowed_by, date, date_return, category, item_name, quantity, sn, status, remarks, created_at, is_approved FROM history WHERE type = 'BORROW' AND is_approved = 1 ORDER BY created_at DESC";
+$approved_borrowed_result = $conn->query($approved_borrowed_sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -206,6 +210,7 @@ $reported_result = $conn->query($reported_sql);
                     <?php
                     if ($borrowed_result->num_rows > 0) {
                         while($row = $borrowed_result->fetch_assoc()) {
+                            if ($row['is_approved']) continue; // Only show unapproved here
                             echo "<tr>";
                             echo "<td>" . htmlspecialchars($row['borrowed_by']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['date']) . "</td>";
@@ -214,7 +219,6 @@ $reported_result = $conn->query($reported_sql);
                             echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['sn']) . "</td>";
-                            
                             echo "<td>" . htmlspecialchars($row['remarks']) . "</td>";
                             echo "<td>" . ($row['is_approved'] ? "Approved" : "Pending") . "</td>";
                             echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
@@ -225,6 +229,58 @@ $reported_result = $conn->query($reported_sql);
                                     </button>";
                             }
                                echo "<button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
+                                    <i class='fas fa-edit'></i>
+                                </button>
+
+                                <button class='remove-btn' onclick='confirmDelete(" . $row['history_id'] . ")'>
+                                    <i class='fas fa-trash'></i>
+                                </button>
+
+                              </td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='10' style='text-align: center;'>No borrowed items found</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+
+            <!-- Borrowed Items Table (Approved) -->
+            <h2 class="section-title">Borrowed Items</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Borrowed By</th>
+                        <th>Date to Borrow</th>
+                        <th>Date to Return</th>
+                        <th>Category</th>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Student Number</th>
+                        <th>Remarks</th>
+                        <th>Approval</th>
+                        <th>Date Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($approved_borrowed_result->num_rows > 0) {
+                        while($row = $approved_borrowed_result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($row['borrowed_by']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['date_return']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['item_name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['quantity']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['sn']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['remarks']) . "</td>";
+                            echo "<td>Approved</td>";
+                            echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
+                            echo "<td>";
+                            echo "<button class='edit-btn' onclick='openEditModal(" . $row['history_id'] . ", " . json_encode($row) . ")'>
                                     <i class='fas fa-edit'></i>
                                 </button>
 

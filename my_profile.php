@@ -158,11 +158,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!file_exists('member_profiles')) {
                     mkdir('member_profiles', 0777, true);
                 }
-                
                 $file_ext = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
                 $filename = 'member_' . (isset($member_info['member_id']) ? $member_info['member_id'] : time()) . '_' . time() . '.' . $file_ext;
                 $target_file = "member_profiles/" . $filename;
-                
                 if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $target_file)) {
                     if (!empty($image_path) && file_exists($image_path) && 
                         $image_path != 'default image.jpg' && $image_path != 'picture-1.png') {
@@ -171,35 +169,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $image_path = $target_file;
                 }
             }
-            
-            // Update or insert member information
-            if ($member_info) {
-                // Update existing member
-                $sql = "UPDATE members SET last_name=?, given_name=?, middle_initial=?, extension=?, program=?, position=?, birthdate=?, address=?, image_path=? WHERE member_id=?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("sssssssssi", $last_name, $given_name, $middle_initial, $extension, $program, $position, $birthdate, $address, $image_path, $member_info['member_id']);
+            // Check for existing member by name
+            $check_stmt = $conn->prepare("SELECT member_id, image_path FROM members WHERE last_name = ? AND given_name = ? AND middle_initial = ? AND extension = ?");
+            $check_stmt->bind_param("ssss", $last_name, $given_name, $middle_initial, $extension);
+            $check_stmt->execute();
+            $check_result = $check_stmt->get_result();
+            if ($check_result && $check_result->num_rows > 0) {
+                // Member exists, update instead of insert
+                $row = $check_result->fetch_assoc();
+                $member_id = $row['member_id'];
+                $current_image_path = $row['image_path'];
+                // If no new image uploaded, keep current image
+                if (empty($image_path)) {
+                    $image_path = $current_image_path;
+                } else {
+                    // If new image uploaded, delete old image if not default
+                    if (!empty($current_image_path) && file_exists($current_image_path) && $current_image_path != 'default image.jpg' && $current_image_path != 'picture-1.png') {
+                        unlink($current_image_path);
+                    }
+                }
+                $update_stmt = $conn->prepare("UPDATE members SET last_name=?, given_name=?, middle_initial=?, extension=?, program=?, position=?, birthdate=?, address=?, image_path=? WHERE member_id=?");
+                $update_stmt->bind_param("sssssssssi", $last_name, $given_name, $middle_initial, $extension, $program, $position, $birthdate, $address, $image_path, $member_id);
+                if ($update_stmt->execute()) {
+                    $success = 'Member already exists. Information updated!';
+                    // Refresh member info
+                    $sql = "SELECT * FROM members WHERE member_id=?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param('i', $member_id);
+                    $stmt->execute();
+                    $member_info = $stmt->get_result()->fetch_assoc();
+                } else {
+                    $error = 'Error updating member profile. ' . $conn->error;
+                }
+                $update_stmt->close();
             } else {
                 // Insert new member
                 $sql = "INSERT INTO members (last_name, given_name, middle_initial, extension, program, position, birthdate, address, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("sssssssss", $last_name, $given_name, $middle_initial, $extension, $program, $position, $birthdate, $address, $image_path);
-            }
-            
-            if ($stmt->execute()) {
-                $success = 'Member profile updated successfully!';
-                
-                // Refresh member info
-                if (!$member_info) {
+                if ($stmt->execute()) {
+                    $success = 'Member profile updated successfully!';
+                    // Refresh member info
                     $member_info = array('member_id' => $stmt->insert_id);
+                    $sql = "SELECT * FROM members WHERE member_id=?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param('i', $member_info['member_id']);
+                    $stmt->execute();
+                    $member_info = $stmt->get_result()->fetch_assoc();
+                } else {
+                    $error = 'Error updating member profile. ' . $stmt->error;
                 }
-                $sql = "SELECT * FROM members WHERE member_id=?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param('i', $member_info['member_id']);
-                $stmt->execute();
-                $member_info = $stmt->get_result()->fetch_assoc();
-            } else {
-                $error = 'Error updating member profile. ' . $stmt->error;
             }
+            $check_stmt->close();
         }
     }
 }
